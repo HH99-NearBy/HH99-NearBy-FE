@@ -1,12 +1,27 @@
-import React from "react";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 
 function CategoryList() {
+  const categorylist = useRef(["홈", "랭킹", "이용방법"]);
+  const [activateIdx, setActivateIdx] = useState<number>(0);
+
+  const handleClickCategory = (e: React.MouseEvent<HTMLLIElement>): void => {
+    const targetIdx = categorylist.current.indexOf(e.currentTarget.innerHTML);
+    setActivateIdx(targetIdx);
+  };
   return (
     <StListContainer>
-      <li className="selected">홈</li>
-      <li>랭킹</li>
-      <li>이용방법</li>
+      {categorylist.current.map((category, idx) => {
+        return (
+          <li
+            key={`${idx}.${category}`}
+            className={idx === activateIdx ? "selected" : undefined}
+            onClick={handleClickCategory}
+          >
+            {category}
+          </li>
+        );
+      })}
     </StListContainer>
   );
 }
