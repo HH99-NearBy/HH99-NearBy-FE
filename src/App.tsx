@@ -1,13 +1,13 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
 import GlobalStyle from "./global/GlobalStyle";
 import Router from "./routers/Router";
+import Header from "./global/Header";
 
 function App() {
   return (
     <>
       <GlobalStyle />
+      <Header />
       <Router />
     </>
   );
