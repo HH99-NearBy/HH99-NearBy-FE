@@ -6,7 +6,7 @@ function PostingBtn() {
 }
 
 const StPostingBtn = styled.button`
-  width: 16rem;
+  width: 18rem;
   height: 6rem;
   font-size: 2rem;
   border-radius: 20px;

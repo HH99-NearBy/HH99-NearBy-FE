@@ -54,6 +54,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .selected {
+    color: red;
    border-bottom: 0.5rem solid red !important;
   }
 `;
