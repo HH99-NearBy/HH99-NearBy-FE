@@ -5,7 +5,7 @@ import UserIcon from "../../elements/UserIcon";
 function UserInfoCard() {
   return (
     <StCardContainer>
-      <UserIcon />
+      <UserIcon size="medium" />
       <StInfoSection>
         <span className="user_nickname">강태훈강태훈강태훈</span>
         <StInfoFooter>
