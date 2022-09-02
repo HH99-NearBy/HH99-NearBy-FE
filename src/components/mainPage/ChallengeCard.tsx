@@ -53,7 +53,7 @@ const StCardContainer = styled.div`
   height: 42.2rem;
   display: flex;
   flex-direction: column;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   ${(props: StyleProps) => {
     switch (props.status) {
       case "doing":
@@ -70,6 +70,10 @@ const StCardContainer = styled.div`
             width: 100%;
             height: 21.1rem;
             background-color: purple;
+          }
+          .modal_open_btn {
+            background-color: #e1e1e1;
+            color: #323232;
           }
         `;
       case "recruit":
@@ -107,6 +111,7 @@ const StCardContents = styled.div`
       align-items: center;
       font-size: 1.6rem;
       height: 3.5rem;
+      color: #323232;
       svg {
         margin-right: 0.5rem;
       }
@@ -121,6 +126,7 @@ const StCardContents = styled.div`
       display: flex;
       font-size: 1.6rem;
       height: 3rem;
+      color: #323232;
       span {
         display: flex;
         align-items: center;
@@ -139,6 +145,7 @@ const StCardContents = styled.div`
     border: none;
     font-size: 2rem;
     letter-spacing: 0.1rem;
+    cursor: pointer;
   }
 `;
 

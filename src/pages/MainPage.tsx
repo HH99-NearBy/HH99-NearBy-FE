@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallengeContainer";
+import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
 
 function MainPage() {
   const handleScrollPage = (e: React.WheelEvent<HTMLDivElement>) => {
@@ -10,6 +11,7 @@ function MainPage() {
     <StMainContents onScroll={handleScrollPage}>
       <StContentsWrapper>
         <MyChallengeContainer />
+        <RecruitContainer />
       </StContentsWrapper>
       ;
     </StMainContents>
@@ -17,17 +19,13 @@ function MainPage() {
 }
 
 const StMainContents = styled.div`
-  height: calc(100vh - 10rem);
-
-  background-color: green;
+  background-color: #f5f5f5;
   overflow-y: scroll;
 `;
 
 const StContentsWrapper = styled.div`
   width: 128rem;
-  height: 100vh;
   margin: 0 auto;
-  background-color: skyblue;
 `;
 
 export default MainPage;
