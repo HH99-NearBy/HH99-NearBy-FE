@@ -7,11 +7,11 @@ function UserInfoCard() {
     <StCardContainer>
       <UserIcon size="medium" />
       <StInfoSection>
-        <span className="user_nickname">강태훈강태훈강태훈</span>
         <StInfoFooter>
-          <span className="user_tier">🐣플레티넘5</span>
+          <span className="user_tier">LV.23</span>
           <div className="toggle_navigate">{">"}</div>
         </StInfoFooter>
+        <span className="user_nickname">강태훈강태훈강태훈</span>
       </StInfoSection>
     </StCardContainer>
   );

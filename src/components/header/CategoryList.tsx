@@ -1,13 +1,17 @@
 import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
+import { IoIosTrophy } from "react-icons/io";
+import { RiErrorWarningFill } from "react-icons/ri";
+import { IconContext } from "react-icons";
 
 function CategoryList() {
-  const categorylist = useRef(["홈", "랭킹", "이용방법"]);
+  const categorylist = useRef(["랭킹", "이용방법"]);
   const [activateIdx, setActivateIdx] = useState<number>(0);
-
   const handleClickCategory = (e: React.MouseEvent<HTMLLIElement>): void => {
-    const targetIdx = categorylist.current.indexOf(e.currentTarget.innerHTML);
+    console.log(e.currentTarget);
+    const targetIdx = categorylist.current.indexOf(e.currentTarget.innerText);
     setActivateIdx(targetIdx);
+    console.log(targetIdx);
   };
   return (
     <StListContainer>
@@ -19,6 +23,15 @@ function CategoryList() {
             onClick={handleClickCategory}
           >
             {category}
+            {idx === 0 ? (
+              idx === activateIdx ? (
+                <IoIosTrophy className="selected_icon" />
+              ) : (
+                <IoIosTrophy />
+              )
+            ) : (
+              <RiErrorWarningFill />
+            )}
           </li>
         );
       })}
@@ -27,7 +40,7 @@ function CategoryList() {
 }
 
 const StListContainer = styled.ul`
-  width: 40rem;
+  width: 30rem;
   height: 10rem;
   /* background-color: green; */
   display: flex;
@@ -38,16 +51,19 @@ const StListContainer = styled.ul`
   margin-left: 5rem;
   li {
     height: 100%;
-    margin: 0 0.7rem;
     flex-grow: 1;
-    font-size: 3rem;
+    margin: 0 2rem;
+    font-size: 2.5rem;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 1rem;
+    justify-content: space-around;
+    align-items: center;
     border-bottom: 0.5rem solid #fff;
+    svg {
+      width: 3rem;
+      height: 3rem;
+    }
     :hover {
-      color: red;
+      color: var(--purple-color);
     }
   }
 `;
