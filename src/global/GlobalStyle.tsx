@@ -61,6 +61,9 @@ const GlobalStyle = createGlobalStyle`
   .block_scroll {
     overflow-y: hidden;
   }
+  .static_scroll {
+    scroll-behavior: auto !important;
+  }
 `;
 
 export default GlobalStyle;

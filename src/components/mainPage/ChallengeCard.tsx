@@ -8,6 +8,8 @@ import { MdOutlineTimer } from "react-icons/md";
 interface StyleProps {
   status: string;
   thumbnailImg?: string;
+  challengeTitle?: string;
+  ref?: any;
 }
 
 function ChallengeCard(props: StyleProps) {
@@ -24,7 +26,7 @@ function ChallengeCard(props: StyleProps) {
               </>
             )}
           </div>
-          <div className="body_info">모집중인 챌릭지 제목입니다.</div>
+          <div className="body_info">{props.challengeTitle}</div>
           <div className="footer_info">
             <span className="start_date">
               <BiCalendarCheck />
@@ -165,4 +167,4 @@ const StCardContents = styled.div`
   }
 `;
 
-export default ChallengeCard;
+export default React.memo(ChallengeCard);
