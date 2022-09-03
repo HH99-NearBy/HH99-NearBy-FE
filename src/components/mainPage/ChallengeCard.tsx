@@ -17,8 +17,12 @@ function ChallengeCard(props: StyleProps) {
       <StCardContents>
         <div className="card_body">
           <div className="header_info">
-            <BsFillPersonFill />
-            모집중 19/30
+            {props.status === "running" && "진행중!"}
+            {props.status !== "running" && (
+              <>
+                <BsFillPersonFill /> "모집중 19/30"
+              </>
+            )}
           </div>
           <div className="body_info">모집중인 챌릭지 제목입니다.</div>
           <div className="footer_info">
@@ -91,7 +95,19 @@ const StCardContainer = styled.div`
           }
         `;
       case "running":
-        return css``;
+        return css`
+          width: 61.1rem;
+          height: 21.1rem;
+          flex-direction: row;
+          img {
+            width: 21.1rem;
+            height: 21.1rem;
+            background-color: red;
+          }
+          .modal_open_btn {
+            background-color: #ffa115;
+          }
+        `;
     }
   }}
 `;

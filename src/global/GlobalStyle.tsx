@@ -30,6 +30,7 @@ const GlobalStyle = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
+    
   }
   
   // :: 로고 폰트 기본 세팅
@@ -56,6 +57,9 @@ const GlobalStyle = createGlobalStyle`
   }
   .selected_icon {
     color: #6627f5 !important;
+  }
+  .block_scroll {
+    overflow-y: hidden;
   }
 `;
 

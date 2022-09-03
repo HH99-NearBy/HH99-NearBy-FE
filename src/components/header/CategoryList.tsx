@@ -2,11 +2,10 @@ import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { IoIosTrophy } from "react-icons/io";
 import { RiErrorWarningFill } from "react-icons/ri";
-import { IconContext } from "react-icons";
 
 function CategoryList() {
-  const categorylist = useRef(["랭킹", "이용방법"]);
-  const [activateIdx, setActivateIdx] = useState<number>(0);
+  const categorylist = useRef(["쓱관왕", "이용방법"]);
+  const [activateIdx, setActivateIdx] = useState<number>(-1);
   const handleClickCategory = (e: React.MouseEvent<HTMLLIElement>): void => {
     console.log(e.currentTarget);
     const targetIdx = categorylist.current.indexOf(e.currentTarget.innerText);
@@ -22,7 +21,8 @@ function CategoryList() {
             className={idx === activateIdx ? "selected" : undefined}
             onClick={handleClickCategory}
           >
-            {category}
+            <span>{category}</span>
+
             {idx === 0 ? (
               idx === activateIdx ? (
                 <IoIosTrophy className="selected_icon" />
@@ -40,7 +40,7 @@ function CategoryList() {
 }
 
 const StListContainer = styled.ul`
-  width: 30rem;
+  width: 33rem;
   height: 10rem;
   /* background-color: green; */
   display: flex;
@@ -58,7 +58,14 @@ const StListContainer = styled.ul`
     justify-content: space-around;
     align-items: center;
     border-bottom: 0.5rem solid #fff;
+    span {
+      height: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+    }
     svg {
+      margin-left: 0.5rem;
       width: 3rem;
       height: 3rem;
     }

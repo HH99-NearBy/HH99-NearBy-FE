@@ -4,11 +4,8 @@ import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallenge
 import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
 
 function MainPage() {
-  const handleScrollPage = (e: React.WheelEvent<HTMLDivElement>) => {
-    console.log(e);
-  };
   return (
-    <StMainContents onScroll={handleScrollPage}>
+    <StMainContents>
       <StContentsWrapper>
         <MyChallengeContainer />
         <RecruitContainer />
