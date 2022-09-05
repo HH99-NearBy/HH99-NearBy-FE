@@ -18,6 +18,7 @@ function MainPage() {
 const StMainContents = styled.div`
   background-color: #f5f5f5;
   overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const StContentsWrapper = styled.div`

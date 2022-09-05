@@ -1,41 +1,59 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { IoIosTrophy } from "react-icons/io";
 import { RiErrorWarningFill } from "react-icons/ri";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 function CategoryList() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const categorylist = useRef(["쓱관왕", "이용방법"]);
+
   const [activateIdx, setActivateIdx] = useState<number>(-1);
   const handleClickCategory = (e: React.MouseEvent<HTMLLIElement>): void => {
-    console.log(e.currentTarget);
     const targetIdx = categorylist.current.indexOf(e.currentTarget.innerText);
     setActivateIdx(targetIdx);
-    console.log(targetIdx);
+    if (targetIdx === 0) {
+      navigate("/ranking");
+    }
   };
+  useEffect(() => {
+    if (pathname !== "/ranking") {
+      setActivateIdx(-1);
+    }
+  }, [pathname]);
   return (
-    <StListContainer>
-      {categorylist.current.map((category, idx) => {
-        return (
-          <li
-            key={`${idx}.${category}`}
-            className={idx === activateIdx ? "selected" : undefined}
-            onClick={handleClickCategory}
-          >
-            <span>{category}</span>
+    <>
+      <StListContainer>
+        {categorylist.current.map((category, idx) => {
+          return (
+            <li
+              key={`${idx}.${category}`}
+              className={idx === activateIdx ? "selected" : undefined}
+              onClick={handleClickCategory}
+            >
+              <span>{category}</span>
 
-            {idx === 0 ? (
-              idx === activateIdx ? (
-                <IoIosTrophy className="selected_icon" />
+              {idx === 0 ? (
+                idx === activateIdx ? (
+                  <IoIosTrophy className="selected_icon" />
+                ) : (
+                  <IoIosTrophy />
+                )
               ) : (
-                <IoIosTrophy />
-              )
-            ) : (
-              <RiErrorWarningFill />
-            )}
-          </li>
-        );
-      })}
-    </StListContainer>
+                <RiErrorWarningFill />
+              )}
+            </li>
+          );
+        })}
+      </StListContainer>
+      {}
+    </>
   );
 }
 
