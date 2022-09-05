@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallengeContainer";
 import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
+import ModalPortal from "../components/mainPage/detailModal/ModalPortal";
 
 function MainPage() {
+  const [modalShow, setModalShow] = useState<boolean>(false);
+  const handleToggleModal = () => {
+    setModalShow(!modalShow);
+  };
+  console.log(modalShow);
   return (
     <StMainContents>
       <StContentsWrapper>
-        <MyChallengeContainer />
-        <RecruitContainer />
+        <MyChallengeContainer handleToggleModal={handleToggleModal} />
+        <RecruitContainer handleToggleModal={handleToggleModal} />
       </StContentsWrapper>
-      ;
+      {modalShow && <ModalPortal handleToggleModal={handleToggleModal} />}
     </StMainContents>
   );
 }

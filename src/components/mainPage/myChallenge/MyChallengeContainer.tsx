@@ -2,7 +2,11 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ChallengeCard from "../ChallengeCard";
 
-function MyChallengeContainer() {
+function MyChallengeContainer({
+  handleToggleModal,
+}: {
+  handleToggleModal: () => void;
+}) {
   const [testArr, setTestArr] = useState([0, 1, 2, 3, 4, 5, 6]);
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(true);
   const listRef = useRef<HTMLDivElement>(null);
@@ -64,6 +68,7 @@ function MyChallengeContainer() {
               key={`${el} + ${idx}`}
               status="recruit"
               challengeTitle={String(el)}
+              handleToggleModal={handleToggleModal}
             />
           );
         })}

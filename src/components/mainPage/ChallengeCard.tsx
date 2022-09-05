@@ -10,6 +10,7 @@ interface StyleProps {
   thumbnailImg?: string;
   challengeTitle?: string;
   ref?: any;
+  handleToggleModal?: () => void;
 }
 
 function ChallengeCard(props: StyleProps) {
@@ -42,7 +43,7 @@ function ChallengeCard(props: StyleProps) {
             </span>
           </div>
         </div>
-        <button className="modal_open_btn">
+        <button className="modal_open_btn" onClick={props.handleToggleModal}>
           {props.status === "doing"
             ? "도전하기"
             : props.status === "done"

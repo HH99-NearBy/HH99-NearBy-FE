@@ -2,16 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import ChallengeCard from "../ChallengeCard";
 
-function RecruitContainer() {
+function RecruitContainer({
+  handleToggleModal,
+}: {
+  handleToggleModal: () => void;
+}) {
   return (
     <StContentsWrapper>
       <h2>쓱-하는 챌린지</h2>
       <StCardList>
-        <ChallengeCard status="doing" />
-        <ChallengeCard status="done" />
-        <ChallengeCard status="doing" />
-        <ChallengeCard status="done" />
-        <ChallengeCard status="done" />
+        <ChallengeCard status="doing" handleToggleModal={handleToggleModal} />
+        <ChallengeCard status="done" handleToggleModal={handleToggleModal} />
+        <ChallengeCard status="doing" handleToggleModal={handleToggleModal} />
+        <ChallengeCard status="done" handleToggleModal={handleToggleModal} />
+        <ChallengeCard status="done" handleToggleModal={handleToggleModal} />
       </StCardList>
     </StContentsWrapper>
   );
