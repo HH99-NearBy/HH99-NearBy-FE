@@ -1,1 +1,456 @@
-import React from "react";
+import React,{useState, useCallback} from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import AWS from 'aws-sdk'
+
+
+function RegisterForm() {
+
+// interface Config {
+//   bucket : string,
+//   region : string,
+//   accessKeyId : string,
+//   secretAccessKey : string
+// }
+
+  const  Config = {
+    bucketName : "ssggwan",
+    region : "ap-northeast-2",
+    accessKeyId : "AKIARVHCGCIJVAQPZJ4A",
+    secretAccessKey : "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"
+  }
+
+
+  const regin ="ap-northeast-2";
+  const bucket ="ssggwan";
+
+  AWS.config.update({
+    region:regin,
+    accessKeyId : "AKIARVHCGCIJVAQPZJ4A",
+    secretAccessKey : "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"
+  })
+
+
+  const handleImageChange = (e :React.ChangeEvent<HTMLInputElement>) => {
+
+
+
+    const fileList = e.target.files
+    if(!fileList) return;
+    setProfileImg(fileList[0])
+    console.log(fileList[0])
+    
+    const upload = new AWS.S3.ManagedUpload({
+      params : {
+          Bucket : bucket,
+          Key : fileList[0].name,
+          Body :fileList[0]
+      }
+    })
+
+    const promise = upload.promise()
+
+    promise.then(
+      function(data) {
+        alert("이미지 업로드에 성공했습니다.")
+        setUpload(data.Location)
+        setIsimg(true)
+        console.log(data.Location)
+      },
+      function (err) {
+        return alert (err) 
+      }
+    )
+  
+
+  }
+
+
+
+
+
+  
+  
+ 
+
+
+  //이메일,닉네임,비밀번호,비밀번호 확인,이미지UrL
+  const [email, setEmail] = useState<string>('');
+  const [nickname, setNickname] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [checkpw, setCheckpw] = useState<string>('');
+  const [profileImg,setProfileImg] = useState<File>()
+  const [upload,setUpload] = useState<string>('')
+
+  //오류메세지 상태저장
+  const [emailMessage, setEmailMessage] = useState<string>('');
+  const [NicknameMessage, setNicknameMessage] = useState<string>('');
+  const [passwordMessage, setPasswordMessage] = useState<string>('');
+  const [checkpwMessage, setCheckpwMessage] = useState<string>('');
+
+  //유효성 검사
+  const [isEmail, setIsEmail] = useState<boolean>(false)
+  const [isNickname, setIsNick] =  useState<boolean>(false)
+  const [isPassword, setIspassword] = useState<boolean>(false)
+  const [isCheckpw, setIsCheckpw] = useState<boolean>(false)
+  const [isImg, setIsimg] = useState<boolean>(false)
+
+  //중복확인
+  const [emailCheck, setEmailCheck] = useState<boolean>(false)
+  const [nickCheck,setNickCheck] = useState<boolean>(false)
+
+  //비밀번호 보이기,숨기기
+  const [showPw, setShowpw] = useState<boolean>(false)
+
+  //이메일
+  const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const emailRegex = /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+    const emailCurrent = e.target.value
+    setEmail(emailCurrent)
+
+    if(!emailRegex.test(emailCurrent)) {
+      setEmailMessage('이메일 형식이 틀렸습니다!')
+      setIsEmail(false)
+    }else {
+      setEmailMessage("올바른 이메일 형식입니다")
+      setIsEmail(true)
+    }
+  },[])
+
+
+
+  //닉네임
+  const onChangeNick = useCallback ((e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setNickname(e.target.value)
+
+    if(e.target.value.length < 2 || e.target.value.length > 5) {
+      setNicknameMessage('2글자 이상 5글자 미만으로 입력해주세요.')
+      setIsNick(false)
+    }else {
+      setNicknameMessage('올바른 닉네임 형식입니다.')
+      setIsNick(true)
+    }
+  },[]) 
+
+
+
+  //비밀번호
+  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/
+    const passwordCurrent = e.target.value
+    setPassword(passwordCurrent)
+
+    if(!passwordRegex.test(passwordCurrent)) {
+      setPasswordMessage('숫자+영문자+특수문자 조합 8자리 이상 입력해주세요.')
+      setIspassword(false)
+    } else {
+      setPasswordMessage('안전한 비밀번호 입니다.')
+      setIspassword(true)
+    }
+  },[])
+
+
+
+  //비밀번호 확인
+  const onChangeCheckpw = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const passwordConfirmCurrent = e.target.value
+    setCheckpw(passwordConfirmCurrent)
+
+    if(password === passwordConfirmCurrent) {
+      setCheckpwMessage('비밀번호가 같습니다')
+      setIsCheckpw(true)
+    }else {
+      setCheckpwMessage('비밀번호가 다릅니다. 다시 확인해주세요.')
+      setIsCheckpw(false)
+    }
+  },[password])
+
+  // const onChangeImg = useCallback((e: React.ChangeEvent<HTMLInput>) => {
+  //   const 
+  // })
+
+  const EmailCheck = useCallback(
+    async (e : React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      try {
+        const response = await axios.post('http://ssggwan.site/api/emailcheck',{
+          email: email
+        })
+          setEmailCheck(!emailCheck)
+          alert('가입 가능한 이메일입니다.')
+          console.log(response)
+      }catch (err) {
+        console.error(err)
+      }
+    },[email])
+
+    const NicknameCheck = useCallback(
+      async (e : React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        try {
+         const response = await axios.post('http://ssggwan.site/api/nicknamecheck',{
+            nickname: nickname
+          })
+            setNickCheck(!nickCheck)
+            alert('가입 가능한 닉네임입니다.')
+            console.log(response)
+        }catch (err) {
+          alert('중복된 닉네임 입니다.')
+          console.error(err)
+        }
+      },[nickname])
+
+  const onSubmit = useCallback(
+    async (e : React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      try {
+        const response = await axios.post("http://ssggwan.site/api/signup" , {
+          email: email,
+          nickname : nickname,
+          password:password,
+          profileImg:upload
+        })
+          alert('회원가입을 축하드립니다!')
+          console.log(response)
+      }catch (err) {
+        console.error(err)
+      }
+    },[email,nickname,password,upload])
+  
+  const toggleHidePassword = () => {
+    setShowpw(!showPw)
+  }
+
+  return (
+     <>
+        <SignupContainer>
+        <LogoBox>
+          <p>쓱관</p>
+          쓱 만드는 습관
+        </LogoBox>
+        <FormBox onSubmit={onSubmit}>
+        <SignupBox>
+          <ImgBox>
+          <TitleBox>회원가입</TitleBox>
+            <FileBox>
+              {isImg ? <img src = {upload} /> : <img src = "https://ifh.cc/g/RCtOo7.png"/>}
+              <label htmlFor = "input-file" >사진 등록하기</label>
+             <input type="file" id="input-file" placeholder = "사진추가"  accept='image/*' onChange={handleImageChange}/> 
+            </FileBox>
+          </ImgBox>
+          <TetxBox>
+            <TextP>아이디</TextP> 
+            <TextP>닉네임</TextP> 
+            <TextP>비밀번호</TextP>
+            <TextP>비밀번호 확인</TextP>
+            </TetxBox> 
+          <SignBox2>
+            <CheckBox>
+              <div>
+              <InputSt name = 'email' id='eamil' type="id" placeholder = "이메일을 입력해 주세요." value={email} onChange={onChangeEmail}/>
+              <CheckBtn onClick={EmailCheck}>중복확인</CheckBtn>
+              {email.length > 0 && <p className={`message ${isEmail ? 'success' : 'error'}`}>{emailMessage}</p>}
+              </div>
+            </CheckBox>
+            <CheckBox>
+              <div>
+              <InputSt type="text" placeholder = "닉네임을 입력해 주세요." value={nickname} onChange={onChangeNick}/>
+              <CheckBtn onClick={NicknameCheck}>중복확인</CheckBtn>
+              {nickname.length > 0 && <p className={`message ${isNickname ? 'success' : 'error'}`}>{NicknameMessage}</p>}
+              </div>
+            </CheckBox>
+            <CheckBox>
+              <div>
+              <InputSt type={showPw ? "text" : "password"} placeholder = "비밀번호를 입력해 주세요." value ={password} onChange ={onChangePassword}/>
+              {showPw ? <CheckBtn onClick={toggleHidePassword}>HIDE</CheckBtn> : <CheckBtn onClick={toggleHidePassword}>SHOW</CheckBtn>}
+              {password.length > 0 && <p className={`message ${isPassword ? 'success' : 'error'}`}>{passwordMessage}</p>}
+              </div>
+            </CheckBox>
+            <CheckBox>
+              <div>
+              <InputSt type={showPw ? "text" : "password"} placeholder = "비밀번호 확인" value = {checkpw} onChange ={onChangeCheckpw}/>
+              {showPw ? <CheckBtn onClick={toggleHidePassword}>HIDE</CheckBtn> : <CheckBtn onClick={toggleHidePassword}>SHOW</CheckBtn>}
+              {checkpw.length > 0 && <p className={`message ${isCheckpw ? 'success' : 'error'}`}>{checkpwMessage}</p>}
+              </div>
+            </CheckBox>         
+          </SignBox2>
+        </SignupBox>
+          <SubmitBtn>
+          <input type ="submit"  value= "확인" disabled={!(isEmail && isNickname && isPassword && isCheckpw && emailCheck && nickCheck)}/>
+          </SubmitBtn>
+        </FormBox> 
+            
+      </SignupContainer>
+      
+    </>
+  );
+}
+
+export default RegisterForm;
+
+const SignupContainer = styled.div`
+  border: 1px solid black;
+  width: 100rem;
+  padding-top: 10rem;
+    padding-right: 0rem;
+    padding-bottom: 1rem;
+    padding-left: 0rem;
+  margin: 2rem auto;
+  display: flex;
+`
+
+const SignupBox =styled.div`
+  border: 1px solid blue;
+  margin: auto 2rem;
+  display: flex;
+`
+
+const ImgBox = styled.div`
+  border: 1px solid red;
+  float: left;
+  width: 21rem;
+  padding: 5rem;
+  margin: 0 auto;
+`
+
+const FileBox = styled.div`
+   display: inline-block;
+    height: 314px;
+    width: 363px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    color: #999999;
+    img {
+      width: 363px;
+      height: 250;
+    }
+    label {
+      background-color: #6627F5;
+      color: white;
+      padding: 15px 131px;
+      position: relative;
+      top: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    input[type="file"] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+`
+
+const SignBox2 = styled.div`
+  border: 1px solid green;
+  width: 21rem;
+  padding: 5rem;
+  float: right;
+  margin: auto;
+  flex-direction: row;
+  align-items: center;
+`
+
+const CheckBox = styled.div`
+  position: relative;
+  p{
+    font-size: small;
+    margin: -10px auto;
+    &.success {
+      color: green;
+    }
+    &.error {
+      color : red;
+    }
+  }
+  div{
+    padding: 1rem 0;
+  }
+`
+
+const CheckBtn = styled.button`
+  position: absolute;
+  width: 117px;
+  height: 52px;
+  top: 0;
+  bottom: 0;
+  right: -23px;
+  margin: auto 0;
+  background-color: #777777;
+  border: solid white;
+  color: white;
+  font-size: medium;
+  font-weight: 500;
+  cursor: pointer;
+    &:hover{
+      background-color: #6627F5;
+      transition: 0.5s ease-out;
+    }
+`
+
+
+const InputSt = styled.input`
+    width: 27rem;
+    height: 3rem;
+    margin: 1rem -5rem;
+    background-color: #F5F5F5;
+    border: solid white;
+    font-size: medium;
+    outline: none;
+`
+
+const LogoBox =styled.div`
+  border: 1px solid black;
+  width: 200px;
+  height: 100px;
+  position: relative;
+    top: -9rem;
+    left: 45rem;
+    text-align: center;
+`
+
+const TetxBox = styled.div`
+  border: 1px solid black;
+  width: 8rem;
+  margin: 39px auto;
+`
+
+const TextP =styled.p`
+  font-size: large;
+  font-weight: bold;
+  margin: 6rem auto
+`
+const TitleBox = styled.div`
+  border: 1px solid black;
+  width: 160px;
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+
+`
+const SubmitBtn = styled.div`
+  margin: 0rem 21rem;
+  input[type="submit"] {
+      width: 31rem;
+      height: 3rem;
+      background-color:#6627F5 ;
+      border: 1px solid white;
+      color: white;
+      font-size: xx-large;
+      font-weight: bold;
+      &:disabled {
+        background-color: gray;
+      }
+      cursor: pointer;
+    }
+ 
+`
+const FormBox = styled.form`
+  border: 1px solid red;
+   
+`

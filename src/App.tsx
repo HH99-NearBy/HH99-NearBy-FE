@@ -2,13 +2,19 @@ import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import GlobalStyle from "./global/GlobalStyle";
-import Router from "./routers/Router";
+import Routers from "./routers/Routers";
+import RegisterForm from "./components/registerPage/RegisterForm";
+import LoginForm from "./components/loginPage/LoginForm";
+
+
 
 function App() {
   return (
     <>
+      <Routers/>
       <GlobalStyle />
-      <Router />
+      <RegisterForm/>
+      {/* <LoginForm/> */}
     </>
   );
 }
