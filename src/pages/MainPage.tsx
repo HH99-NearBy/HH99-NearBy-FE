@@ -16,7 +16,9 @@ function MainPage() {
         <MyChallengeContainer handleToggleModal={handleToggleModal} />
         <RecruitContainer handleToggleModal={handleToggleModal} />
       </StContentsWrapper>
-      {modalShow && <ModalPortal handleToggleModal={handleToggleModal} />}
+      {modalShow && (
+        <ModalPortal handleToggleModal={handleToggleModal} postId={1} />
+      )}
     </StMainContents>
   );
 }

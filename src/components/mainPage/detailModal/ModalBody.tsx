@@ -1,31 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useQuery, useQueryClient } from "react-query";
+import { getChallengeDetail } from "../../../api/challengeDetail/api";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
+import { GetModalDetail } from "../../../api/challengeDetail/types";
 
-function ModalBody({ handleToggleModal }: { handleToggleModal: () => void }) {
+function ModalBody({
+  handleToggleModal,
+  postId,
+}: {
+  handleToggleModal: () => void;
+  postId: number;
+}) {
+  const [body, setBody] = useState<GetModalDetail | null>(null);
+  const req = useQuery(
+    "CHALLENGE_DETAIL",
+    async () => {
+      const res = await getChallengeDetail(postId);
+      setBody(res);
+    },
+    {
+      retry: 2,
+    }
+  );
+
+  const hour = body?.detailModal.startTime.slice(0, 2);
+  const minute = body?.detailModal.startTime.slice(3, 5);
+  console.log(minute);
+
   return (
     <StModalContainer>
       <StModalBody>
         <StModalHeader>
           <button onClick={handleToggleModal}>X</button>
-          <span>LV.20 방장이름</span>
-          <h1>챌린지제목입니드아아아아이게되네ㅔㅔ</h1>
+          <span>
+            {body?.detailModal.level}
+            {body?.detailModal.writer}
+          </span>
+          <h1>{body?.detailModal.title}</h1>
         </StModalHeader>
         <StModalContentsContainer>
           <StSummeryContainer>
             <img
-              src=""
+              src={body?.detailModal.challengeImg}
               alt="챌린지 썸네일이미지입니다"
               className="challenge_detail_thumbnail"
             />
             <StSummeryInfoContainer>
-              <li>{<BiCalendarCheck />}2022-10-01</li>
-              <li>{<IoMdAlarm />}오전 09:20</li>
-              <li>{<MdOutlineTimer />}240분</li>
-              <li>{<BsFillPersonFill />}모집 19/30</li>
+              <li>
+                {<BiCalendarCheck />}
+                {body?.detailModal.startDay}
+              </li>
+              <li>
+                {<IoMdAlarm />}
+                {typeof hour === "string" && parseInt(hour) < 12
+                  ? `오전 ${hour}:${minute}`
+                  : typeof hour === "string" &&
+                    `오후 ${parseInt(hour) - 12}:${minute}`}
+              </li>
+              <li>
+                {<MdOutlineTimer />}
+                {`${body?.detailModal.targetTime}분`}
+              </li>
+              <li>
+                {<BsFillPersonFill />}
+                {`모집 ${body?.detailModal.participatePeople}/${body?.detailModal.limitPeople}`}
+              </li>
             </StSummeryInfoContainer>
             <StButtonGroup className="footer_button_group">
               <button>입장하기</button>
@@ -35,32 +78,11 @@ function ModalBody({ handleToggleModal }: { handleToggleModal: () => void }) {
           <StChallengeInfoContainer>
             <div className="detail_description">
               <h2>내용</h2>
-              <span>
-                사용자가 입력하는 챌린지 내용입니다 사용자가 입력하는 챌린지
-                내용입니다 사용자가 입력하는 챌린지 내용입니다 사용자가 입력하는
-                챌린지 내용입니다 사용자가 입력하는 챌린지 내용입니다 사용자가
-                입력하는 챌린지 내용입니다 사용자가 입력하는 챌린지 내용입니다
-                사용자가 입력하는 챌린지 내용입니다 사용자가 입력하는 챌린지
-                내용입니다 사용자가 입력하는 챌린지 내용입니다 사용자가 입력하는
-                챌린지 내용입니다 사용자가 입력하는 챌린지 내용입니다 사용자가
-                입력하는 챌린지 내용입니다 사용자가 입력하는 챌린지 내용입니다
-                사용자가 입력하는 챌린지 내용입니다 사용자가 입력하는 챌린지
-                내용입니다사용자가 입력하는 챌린지 내용입니다 사용자가 입력하는
-                챌린지 내용입니다 사용자가 입력하는 챌린지 내용입니다사용자가
-                입력하는 챌린지 내용입니다 사용자가 입력하는 챌린지
-                내용입니다사용자가 입력하는 챌린지 내용입니다사용자가 입력하는
-                챌린지 내용입니다 사용자가 입력하는 챌린지 내용입니다
-              </span>
+              <span>{body?.detailModal.content}</span>
             </div>
             <div className="detail_notification">
               <h2>공지사항</h2>
-              <ul>
-                <li>1</li>
-                <li>2</li>
-                <li>3</li>
-                <li>4</li>
-                <li>5</li>
-              </ul>
+              <span> {body?.detailModal.notice}</span>
             </div>
             <ul className="detail_tag"></ul>
           </StChallengeInfoContainer>
@@ -205,11 +227,8 @@ const StChallengeInfoContainer = styled.div`
       font-size: 2.7rem;
       padding-bottom: 2rem;
     }
-    ul {
+    span {
       font-size: 1.7rem;
-      li {
-        list-style: inside;
-      }
     }
   }
   .detail_tag {
