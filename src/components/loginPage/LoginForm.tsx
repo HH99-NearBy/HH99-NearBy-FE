@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import axios from "axios";
+import React, {useState,useCallback} from "react";
 import styled from "styled-components";
 
 function LoginForm() {
@@ -19,6 +20,20 @@ const onChange2 = (e : React.ChangeEvent<HTMLInputElement>) => {
   console.log(password)
 }
 
+const onSubmit = useCallback (
+  async ( e :React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    try {
+      const response = await axios.post("http://ssggwan.site/api/login", {
+        email :email,
+        password : password
+      })
+      console.log(response)
+    }catch (err) {
+      console.error(err)
+    }
+  },[email,password])
+
 
   return (
     <>
@@ -28,15 +43,17 @@ const onChange2 = (e : React.ChangeEvent<HTMLInputElement>) => {
     </InfoContainer>
     <LoginContainer>
       <TitleBox>로그인</TitleBox>
+        <form onSubmit={onSubmit}>
         <LoginBox>
           <LoginInput type = "text" placeholder="이메일" value={email} onChange ={onChange1}/>
           <LoginInput type = "text" placeholder="비밀번호" value={password} onChange ={onChange2}/>
-          <LoginBtn>로그인</LoginBtn>
+          <LoginBtn type="submit">로그인</LoginBtn>
            <AutoLogin>
             <label htmlFor="chk">자동 로그인</label>
            <input type ='checkbox' id = "chk"/>
            </AutoLogin>
         </LoginBox>
+        </form>
       <UnderBox>
       <UnderBar/>SNS 계정으로 간편하게 로그인 하세요<UnderBar2/>
       </UnderBox>
@@ -84,8 +101,8 @@ const LoginContainer = styled.div`
 const TitleBox = styled.div`
   border: 1px solid black;
   position: relative;
-    top: 4rem;
-    left: 20rem;
+    top: 5rem;
+    left: 21rem;
     width: 13rem;
     height: 4rem;
     font-size: xxx-large;
@@ -152,6 +169,7 @@ const LoginInput = styled.input`
     height: 3rem;
     margin: 0.5rem auto;
     background-color: #F5F5F5;
+    outline: none;
     border: solid white;
     font-size: medium;
 `

@@ -13,8 +13,8 @@ function App() {
     <>
       <Routers/>
       <GlobalStyle />
-      <RegisterForm/>
-      {/* <LoginForm/> */}
+      {/* <RegisterForm/> */}
+      <LoginForm/>
     </>
   );
 }
