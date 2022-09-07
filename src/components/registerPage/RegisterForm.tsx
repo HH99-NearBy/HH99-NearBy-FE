@@ -2,7 +2,7 @@ import React,{useState, useCallback} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import AWS from 'aws-sdk'
-
+import imageCompression from 'browser-image-compression';
 
 function RegisterForm() {
 
@@ -30,25 +30,33 @@ function RegisterForm() {
     secretAccessKey : "J2QQ1Fs+LiGN1QxPX8q4gDeswrtRS/kQ1wx4phaG"
   })
 
+  
+  
 
-  const handleImageChange = (e :React.ChangeEvent<HTMLInputElement>) => {
-
-
+  const handleImageChange = async(e :React.ChangeEvent<HTMLInputElement>) => {
 
     const fileList = e.target.files
-    if(!fileList) return;
-    setProfileImg(fileList[0])
-    console.log(fileList[0])
-    
+    if(fileList && fileList[0]) {
+      const options:any = {
+        maxSizeMb : 1,
+        maxWidthOrHeight :300,
+        useWebWorker: true,
+      }
+      const reImg = await imageCompression(fileList[0],options)
+      setProfileImg(reImg)
+      console.log(reImg)
+
+
+        
     const upload = new AWS.S3.ManagedUpload({
       params : {
           Bucket : bucket,
-          Key : fileList[0].name,
-          Body :fileList[0]
+          Key : reImg.name,
+          Body :reImg
       }
     })
 
-    const promise = upload.promise()
+      const promise = upload.promise()
 
     promise.then(
       function(data) {
@@ -61,9 +69,18 @@ function RegisterForm() {
         return alert (err) 
       }
     )
+    }
+  
+      
+    
+
+    
+    
+    }
   
 
-  }
+  
+
 
 
 
