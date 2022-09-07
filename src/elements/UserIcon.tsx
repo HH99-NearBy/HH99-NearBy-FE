@@ -8,13 +8,13 @@ function UserIcon({ size }: { size: string }) {
 const StIcon = styled.div<{ size: string }>`
   width: ${(props) =>
     props.size === "medium"
-      ? "7.5rem"
+      ? "6.5rem"
       : props.size === "large"
       ? "10rem"
       : "5rem"};
   height: ${(props) =>
     props.size === "medium"
-      ? "7.5rem"
+      ? "6.5rem"
       : props.size === "large"
       ? "10rem"
       : "5rem"};

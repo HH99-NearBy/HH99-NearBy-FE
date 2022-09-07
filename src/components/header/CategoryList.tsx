@@ -1,33 +1,64 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { IoIosTrophy } from "react-icons/io";
+import { RiErrorWarningFill } from "react-icons/ri";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 
 function CategoryList() {
-  const categorylist = useRef(["홈", "랭킹", "이용방법"]);
-  const [activateIdx, setActivateIdx] = useState<number>(0);
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const categorylist = useRef(["쓱관왕", "이용방법"]);
 
+  const [activateIdx, setActivateIdx] = useState<number>(-1);
   const handleClickCategory = (e: React.MouseEvent<HTMLLIElement>): void => {
-    const targetIdx = categorylist.current.indexOf(e.currentTarget.innerHTML);
+    const targetIdx = categorylist.current.indexOf(e.currentTarget.innerText);
     setActivateIdx(targetIdx);
+    if (targetIdx === 0) {
+      navigate("/ranking");
+    }
   };
+  useEffect(() => {
+    if (pathname !== "/ranking") {
+      setActivateIdx(-1);
+    }
+  }, [pathname]);
   return (
-    <StListContainer>
-      {categorylist.current.map((category, idx) => {
-        return (
-          <li
-            key={`${idx}.${category}`}
-            className={idx === activateIdx ? "selected" : undefined}
-            onClick={handleClickCategory}
-          >
-            {category}
-          </li>
-        );
-      })}
-    </StListContainer>
+    <>
+      <StListContainer>
+        {categorylist.current.map((category, idx) => {
+          return (
+            <li
+              key={`${idx}.${category}`}
+              className={idx === activateIdx ? "selected" : undefined}
+              onClick={handleClickCategory}
+            >
+              <span>{category}</span>
+
+              {idx === 0 ? (
+                idx === activateIdx ? (
+                  <IoIosTrophy className="selected_icon" />
+                ) : (
+                  <IoIosTrophy />
+                )
+              ) : (
+                <RiErrorWarningFill />
+              )}
+            </li>
+          );
+        })}
+      </StListContainer>
+      {}
+    </>
   );
 }
 
 const StListContainer = styled.ul`
-  width: 40rem;
+  width: 33rem;
   height: 10rem;
   /* background-color: green; */
   display: flex;
@@ -38,16 +69,26 @@ const StListContainer = styled.ul`
   margin-left: 5rem;
   li {
     height: 100%;
-    margin: 0 0.7rem;
     flex-grow: 1;
-    font-size: 3rem;
+    margin: 0 2rem;
+    font-size: 2.5rem;
     display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 1rem;
+    justify-content: space-around;
+    align-items: center;
     border-bottom: 0.5rem solid #fff;
+    span {
+      height: 3rem;
+      display: flex;
+      justify-content: center;
+      align-items: baseline;
+    }
+    svg {
+      margin-left: 0.5rem;
+      width: 3rem;
+      height: 3rem;
+    }
     :hover {
-      color: red;
+      color: var(--purple-color);
     }
   }
 `;
