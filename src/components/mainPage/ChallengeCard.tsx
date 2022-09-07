@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useReducer, useContext } from "react";
 import styled, { css } from "styled-components";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
+import { AppContext } from "../../api/context/index";
 
 interface StyleProps {
   status: string;
@@ -14,6 +15,10 @@ interface StyleProps {
 }
 
 function ChallengeCard(props: StyleProps) {
+  const { state, dispatch } = useContext(AppContext);
+  const handleReadCahllengeId = (id: number) => {
+    dispatch({ type: "READ_CHALLENGE_ID", payload: id });
+  };
   return (
     <StCardContainer status={props.status}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
@@ -43,7 +48,14 @@ function ChallengeCard(props: StyleProps) {
             </span>
           </div>
         </div>
-        <button className="modal_open_btn" onClick={props.handleToggleModal}>
+        <button
+          className="modal_open_btn"
+          onClick={() => {
+            if (typeof props.handleToggleModal !== "undefined")
+              props.handleToggleModal();
+            handleReadCahllengeId(2);
+          }}
+        >
           {props.status === "doing"
             ? "도전하기"
             : props.status === "done"

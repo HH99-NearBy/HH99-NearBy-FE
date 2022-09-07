@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useQuery, useQueryClient } from "react-query";
 import { getChallengeDetail } from "../../../api/challengeDetail/api";
@@ -7,6 +7,7 @@ import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
 import { GetModalDetail } from "../../../api/challengeDetail/types";
+import { AppContext } from "../../../api/context/index";
 
 function ModalBody({
   handleToggleModal,
@@ -16,10 +17,11 @@ function ModalBody({
   postId: number;
 }) {
   const [body, setBody] = useState<GetModalDetail | null>(null);
+  const { state, dispatch } = useContext(AppContext);
   const req = useQuery(
     "CHALLENGE_DETAIL",
     async () => {
-      const res = await getChallengeDetail(postId);
+      const res = await getChallengeDetail(state.challengeId);
       setBody(res);
     },
     {
@@ -29,7 +31,6 @@ function ModalBody({
 
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
-  console.log(minute);
 
   return (
     <StModalContainer>
