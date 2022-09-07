@@ -28,8 +28,10 @@ const onSubmit = useCallback (
         email :email,
         password : password
       })
+      alert("로그인 완료")
       console.log(response)
     }catch (err) {
+      alert("로그인 실패")
       console.error(err)
     }
   },[email,password])
@@ -80,12 +82,12 @@ const AllContainer =styled.div`
 
 const InfoContainer =styled.div`
   border: 1px solid red;
-  width: 81.6rem;
-  height: 57.5rem;
+  width: 100rem;
+  height: 94rem;
   float: left;
   background:linear-gradient(#F5F1FF, white) ;
   img {
-    width: 50rem;
+    width: 88rem;
     margin: 9rem 7rem;
   }
 
@@ -93,45 +95,47 @@ const InfoContainer =styled.div`
 
 const LoginContainer = styled.div`
   border: 1px solid black;
-  width: 66rem;
-  height: 58rem;
+  width: 90rem;
+  height: 94rem;
   float: right;
   left: 5rem;
 `
 const TitleBox = styled.div`
-  border: 1px solid black;
-  position: relative;
+    border: 1px solid black;
+    position: relative;
     top: 5rem;
-    left: 21rem;
-    width: 13rem;
-    height: 4rem;
+    margin: 0 37rem;
+    width: 16rem;
+    height: 6rem;
     font-size: xxx-large;
     font-weight: bold;
     text-align: center;
 `
 const UnderBar = styled.hr`
   position: relative;
-  width: 5rem;
+  width: 11rem;
   float: left;
-  top: 3px;
-  left: 5rem;
+  top: 16px;
+  left: -2rem;
   border: 1px solid white;
   border-top-color: black;
 `
 
 const UnderBar2 = styled.hr`
   position: relative;
-  width: 5rem;
+  width: 11rem;
   float: right;
-  top: 3px;
-  right: 5rem;
+  top: 16px;
+  left: 2rem;
   border: 1px solid white;
   border-top-color: black;
 `
 
 const UnderBox = styled.div`
   position: relative;
-  top: 10rem;
+  top: 8rem;
+  margin: 0 16rem;
+  font-size: 2rem;
   display: flex;
 `
 
@@ -147,26 +151,26 @@ const SocialBox = styled.div`
   border: 1px solid blue;
   position: relative;
   top: 12rem;
-  left: 1rem;
+  left: 0rem;
   display: flex;
   flex-direction: column;
   button {
     position: relative;
     left: 12rem;
-    width: 29rem;
-    height: 4rem;
-    margin: 0.5rem 0;
+    width: 43rem;
+    height: 6rem;
+    margin: 1rem 11rem;
     background-color: white;
     border: solid white;
     cursor: pointer;
   }
   img{
-    width: 29rem;
+    width: 43rem;
   }
 `
 const LoginInput = styled.input`
-    width: 27rem;
-    height: 3rem;
+    width: 44rem;
+    height: 6rem;
     margin: 0.5rem auto;
     background-color: #F5F5F5;
     outline: none;
@@ -175,9 +179,9 @@ const LoginInput = styled.input`
 `
 
 const LoginBtn = styled.button`
-    width: 27.5rem;
-    height: 3.5rem;
-    margin: 1rem 14rem;
+    width: 44rem;
+    height: 5rem;
+    margin: 2rem 23rem;
     background-color:#6627F5 ;
     border: 1px solid white;
     color: white;
@@ -186,12 +190,12 @@ const LoginBtn = styled.button`
     cursor: pointer;
 `
 const AutoLogin = styled.div`
-  border: 1px solid black;
-  width: 7rem;
+    border: 1px solid black;
+    width: 10rem;
     height: 2rem;
     position: relative;
-    top: 0rem;
-    left: 14rem;
+    top: -1rem;
+    left: 23rem;
     label {
       font-size: medium;
       font-weight: 500;
@@ -200,15 +204,15 @@ const AutoLogin = styled.div`
 
 const SignUpBox = styled.div`
   border: 1px solid black;
-  width: 13rem;
+  width: 48rem;
   position: relative;
   text-align: center;
   top: 14rem;
   left: 21rem;
   button {
-    width: 27.5rem;
-    height: 3.5rem;
-    margin: 1rem -7rem;
+    width: 45rem;
+    height: 5rem;
+    margin: 1rem 1rem;
     background-color: #6627F5;
     border: 1px solid white;
     color: white;
@@ -219,6 +223,7 @@ const SignUpBox = styled.div`
   p {
     position: relative;
     top: 1rem;
+    font-size: 2rem;
   }
  
 `

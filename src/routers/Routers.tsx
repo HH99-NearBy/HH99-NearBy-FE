@@ -4,11 +4,12 @@ import LoginForm from "../components/loginPage/LoginForm";
 
 function Routers() {
   return (
-   <BrowserRouter> 
-    {/* <Router>
-        <Route path="/" element ={<LoginForm/>} />
-    </Router> */}
-  </BrowserRouter> 
+    <></>
+  //  <BrowserRouter> 
+  //   <Router>
+  //       <Route path="/" element ={<LoginForm/>} />
+  //   </Router>
+  // </BrowserRouter> 
   )
 }
 

@@ -177,6 +177,7 @@ function RegisterForm() {
           alert('가입 가능한 이메일입니다.')
           console.log(response)
       }catch (err) {
+        alert('중복된 이메일입니다.')
         console.error(err)
       }
     },[email])
@@ -287,46 +288,46 @@ export default RegisterForm;
 
 const SignupContainer = styled.div`
   border: 1px solid black;
-  width: 100rem;
-  padding-top: 10rem;
+  width: 167rem;
+    padding-top: 15rem;
     padding-right: 0rem;
-    padding-bottom: 1rem;
-    padding-left: 0rem;
-  margin: 2rem auto;
+    padding-bottom: 14rem;
+    padding-left: 28rem;
+    margin: 8rem auto;
   display: flex;
 `
 
 const SignupBox =styled.div`
   border: 1px solid blue;
+  width: 150rem;
+  height: 49rem;
   margin: auto 2rem;
   display: flex;
 `
 
 const ImgBox = styled.div`
-  border: 1px solid red;
-  float: left;
-  width: 21rem;
-  padding: 5rem;
-  margin: 0 auto;
+     border: 1px solid red;
+    float: left;
+    width: 44rem;
+    padding: 5rem;
+    margin: 0 8rem;
 `
 
 const FileBox = styled.div`
-   display: inline-block;
-    height: 314px;
-    width: 363px;
+    display: inline-block;
+    height: 30rem;
+    width: 45rem;
     vertical-align: middle;
-    border: 1px solid #dddddd;
-    color: #999999;
+    border: 1px solid white;
     img {
-      width: 363px;
-      height: 250;
+      width: 36rem;
     }
     label {
       background-color: #6627F5;
       color: white;
-      padding: 15px 131px;
+      padding: 1rem 12.5rem;
       position: relative;
-      top: 6px;
+      font-size: large;
       font-weight: bold;
       cursor: pointer;
     }
@@ -335,7 +336,7 @@ const FileBox = styled.div`
       width: 0;
       height: 0;
       padding: 0;
-      margin: -1px;
+      margin: 0;
       overflow: hidden;
       clip: rect(0, 0, 0, 0);
       border: 0;
@@ -344,7 +345,7 @@ const FileBox = styled.div`
 
 const SignBox2 = styled.div`
   border: 1px solid green;
-  width: 21rem;
+  width: 74rem;
   padding: 5rem;
   float: right;
   margin: auto;
@@ -364,19 +365,13 @@ const CheckBox = styled.div`
       color : red;
     }
   }
-  div{
-    padding: 1rem 0;
-  }
 `
 
 const CheckBtn = styled.button`
   position: absolute;
-  width: 117px;
-  height: 52px;
-  top: 0;
-  bottom: 0;
-  right: -23px;
-  margin: auto 0;
+  width: 12rem;
+    height: 6rem;
+    margin: 2.2rem 0;
   background-color: #777777;
   border: solid white;
   color: white;
@@ -391,9 +386,9 @@ const CheckBtn = styled.button`
 
 
 const InputSt = styled.input`
-    width: 27rem;
-    height: 3rem;
-    margin: 1rem -5rem;
+    width: 50rem;
+    height: 6rem;
+    margin: 2.2rem -5rem;
     background-color: #F5F5F5;
     border: solid white;
     font-size: medium;
@@ -402,24 +397,24 @@ const InputSt = styled.input`
 
 const LogoBox =styled.div`
   border: 1px solid black;
-  width: 200px;
-  height: 100px;
-  position: relative;
-    top: -9rem;
-    left: 45rem;
+   width: 20rem;
+    height: 10rem;
+    position: relative;
+    top: -13rem;
+    left: 48rem;
     text-align: center;
 `
 
 const TetxBox = styled.div`
-  border: 1px solid black;
-  width: 8rem;
-  margin: 39px auto;
+     border: 1px solid black;
+     width: 12rem;
+     margin: 1rem 0;
 `
 
 const TextP =styled.p`
   font-size: large;
   font-weight: bold;
-  margin: 6rem auto
+  margin: 8rem auto;
 `
 const TitleBox = styled.div`
   border: 1px solid black;
@@ -430,10 +425,10 @@ const TitleBox = styled.div`
 
 `
 const SubmitBtn = styled.div`
-  margin: 0rem 21rem;
+      margin: 1rem 53rem;
   input[type="submit"] {
-      width: 31rem;
-      height: 3rem;
+     width: 45rem;
+      height: 4rem;
       background-color:#6627F5 ;
       border: 1px solid white;
       color: white;
@@ -448,5 +443,7 @@ const SubmitBtn = styled.div`
 `
 const FormBox = styled.form`
   border: 1px solid red;
+  position: relative;
+    right: 21rem;
    
 `

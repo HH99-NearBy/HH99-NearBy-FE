@@ -7,3 +7,4 @@ function PostingPage() {
 }
 
 export default PostingPage
+
