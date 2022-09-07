@@ -25,3 +25,4 @@ const StIcon = styled.div<{ size: string }>`
   background-size: cover;
 `;
 export default UserIcon;
+
