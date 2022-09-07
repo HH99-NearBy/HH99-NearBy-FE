@@ -1,15 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import CategoryList from "../components/header/CategoryList";
 import UserInfoCard from "../components/header/UserInfoCard";
 import PostingBtn from "../components/header/PostingBtn";
+import MAINLOGO from "../static/main_logo.png";
 
 function Header() {
   return (
     <StHeaderContainer>
       <StcontentsWrapper>
         <div className="navigate_section">
-          <img src="" placeholder="로고" />
+          <Link to="/">
+            <img src={MAINLOGO} alt="로고" />
+          </Link>
+
           <CategoryList />
         </div>
         <div className="interface_section">
@@ -45,7 +50,7 @@ const StcontentsWrapper = styled.div`
   }
   img {
     width: 12rem;
-    height: 8rem;
+    height: 6rem;
   }
 `;
 

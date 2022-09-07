@@ -16,10 +16,8 @@ const GlobalStyle = createGlobalStyle`
   // :: Basic Font import
   :root {
     --bg-color: #F5ECE9;
-    --red-color: #ff5442;
+    --purple-color: #6627f5;
     --focus-color: #343740;
-    --yellow-color: #ffeb33;
-    --kakao-color: #423630;
     --text-color: #000000;
     --border-style: 2px solid #000000;
     /* --english-font:'Ubuntu', sans-serif; */
@@ -28,11 +26,11 @@ const GlobalStyle = createGlobalStyle`
   
   * {
     font-family: var(--basic-font);
-    color: var(--text-color);
     margin: 0; 
     padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
+    
   }
   
   // :: 로고 폰트 기본 세팅
@@ -54,8 +52,17 @@ const GlobalStyle = createGlobalStyle`
   }
 
   .selected {
-    color: red;
-   border-bottom: 0.5rem solid red !important;
+    color: #6627f5;
+   border-bottom: 0.5rem solid #6627f5 !important;
+  }
+  .selected_icon {
+    color: #6627f5 !important;
+  }
+  .block_scroll {
+    overflow-y: hidden;
+  }
+  .static_scroll {
+    scroll-behavior: auto !important;
   }
 `;
 
