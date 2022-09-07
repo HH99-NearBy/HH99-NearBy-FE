@@ -1,7 +1,10 @@
-import React from "react";
+import React from 'react'
 
 function PostingPage() {
-  return <></>;
+  return (
+    <div>PostingPage</div>
+  )
 }
 
-export default PostingPage;
+export default PostingPage
+

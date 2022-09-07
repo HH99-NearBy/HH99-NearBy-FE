@@ -1,14 +1,18 @@
 import React from "react";
 import GlobalStyle from "./global/GlobalStyle";
-import Router from "./routers/Router";
-import Header from "./global/Header";
+import Routers from "./routers/Routers";
+import RegisterForm from "./components/registerPage/RegisterForm";
+import LoginForm from "./components/loginPage/LoginForm";
+
 
 function App() {
   return (
     <>
+      <Routers/>
       <GlobalStyle />
-      <Header />
-      <Router />
+      {/* <RegisterForm/> */}
+      <LoginForm/>
+
     </>
   );
 }
