@@ -1,4 +1,5 @@
 import axios from "axios";
+import apis from "../api";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URI,
@@ -15,6 +16,32 @@ instance.interceptors.request.use(
   },
   (err) => {
     return Promise.reject(err);
+  }
+);
+
+instance.interceptors.response.use(
+  function (res) {
+    return res;
+  },
+  async function (error) {
+    try {
+      const originalRequest = error.config;
+      let requestRes;
+      let refreshToken;
+      if (typeof localStorage.getItem("refreshtoken") === "string") {
+        refreshToken = localStorage.getItem("refreshtoken");
+      }
+      if (typeof refreshToken === "string") {
+        requestRes = await apis.reissue(refreshToken);
+        localStorage.setItem("accessToken", requestRes.authorization);
+        localStorage.setItem("refreshtoken", requestRes["refresh-token"]);
+        originalRequest.headers["Authorization"] = requestRes.authorization;
+      }
+      return await instance.request(originalRequest);
+    } catch (error) {
+      localStorage.removeItem("accessToken");
+      return console.log(error);
+    }
   }
 );
 

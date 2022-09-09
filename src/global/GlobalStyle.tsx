@@ -50,6 +50,9 @@ const GlobalStyle = createGlobalStyle`
   ul li, ol li {
     list-style: none;
   }
+  .hidden {
+    display: none !important;
+  }
 
   .selected {
     color: #6627f5;
