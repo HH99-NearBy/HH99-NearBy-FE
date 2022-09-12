@@ -1,7 +1,8 @@
 import React from "react";
+import MyChart from "../components/Chart";
 
 function RankingPage() {
-  return <div>rankingPage</div>;
+  return <MyChart></MyChart>;
 }
 
 export default RankingPage;

@@ -11,6 +11,8 @@ function UserVideoCard({ streamManager }: { streamManager: any }) {
 }
 
 const StVideoCardContainer = styled.div`
+  width: calc(100% / 4);
+  height: calc(100% / 4);
   background-color: purple;
 `;
 

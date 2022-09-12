@@ -11,11 +11,13 @@ const apis = {
   },
   getOVToken: async (callback: (token: string) => {}) => {
     try {
-      const reqRes = await instance.get("/api/openvidu/getToken");
-      callback(reqRes.data);
-      return reqRes.data;
+      const reqRes = await instance.post("/api-sessions/get-token", {
+        sessionName: "sessionName",
+      });
+      console.log(reqRes.data[0]);
+      callback(reqRes.data[0]);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   },
   getMyChallengeList: async () => {
