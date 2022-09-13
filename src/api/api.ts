@@ -12,8 +12,9 @@ const apis = {
   getOVToken: async (callback: (token: string) => {}) => {
     try {
       const reqRes = await instance.post("/api-sessions/get-token", {
-        sessionName: "sessionName",
+        sessionName: "newSession",
       });
+      console.log(reqRes);
       console.log(reqRes.data[0]);
       callback(reqRes.data[0]);
     } catch (error) {

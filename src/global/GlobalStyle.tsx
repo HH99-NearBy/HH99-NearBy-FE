@@ -67,6 +67,11 @@ const GlobalStyle = createGlobalStyle`
   .static_scroll {
     scroll-behavior: auto !important;
   }
+
+  .video_container {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 export default GlobalStyle;

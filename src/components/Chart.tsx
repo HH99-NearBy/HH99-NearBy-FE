@@ -1,50 +1,53 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
+import styled from "styled-components";
 
 function MyChart() {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     if (chartRef.current !== null) {
       const ctx = chartRef.current;
+      ctx.style.backgroundColor = "white";
       const myChart = new Chart(ctx, {
         type: "line",
         data: {
           labels: ["1", "2", "3", "4", "5", "6", "7"],
           datasets: [
             {
-              label: "# of Votes",
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                "rgba(255, 99, 132, 0.2)",
-                "rgba(54, 162, 235, 0.2)",
-                "rgba(255, 206, 86, 0.2)",
-                "rgba(75, 192, 192, 0.2)",
-                "rgba(153, 102, 255, 0.2)",
-                "rgba(255, 159, 64, 0.2)",
-              ],
-              borderColor: [
-                "rgba(255, 99, 132, 1)",
-                "rgba(54, 162, 235, 1)",
-                "rgba(255, 206, 86, 1)",
-                "rgba(75, 192, 192, 1)",
-                "rgba(153, 102, 255, 1)",
-                "rgba(255, 159, 64, 1)",
-              ],
-              borderWidth: 1,
+              data: [12, 30, 3, 5, 2, 3, 7],
+              borderColor: ["#6627f5"],
+              borderWidth: 2,
+              pointBorderWidth: 0,
             },
           ],
         },
         options: {
+          responsive: false,
           scales: {
             y: {
               beginAtZero: true,
+              display: false,
+            },
+            x: {
+              display: false,
+            },
+          },
+
+          plugins: {
+            legend: {
+              display: false,
             },
           },
         },
       });
     }
   }, [chartRef.current]);
-  return <canvas ref={chartRef} width="400" height="200"></canvas>;
+  return <ChartBody ref={chartRef}></ChartBody>;
 }
+
+const ChartBody = styled.canvas`
+  width: 400px;
+  height: 100px !important;
+`;
 
 export default MyChart;

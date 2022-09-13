@@ -7,8 +7,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (req) => {
-    const accessToken =
-      "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkaGF1ZHdvMUBkYXVtLm5ldCIsImF1dGgiOiJtZW1iZXIiLCJleHAiOjE2NjI5ODU0MDV9.pX2Y5erIgztbiDN5TZv4tZQxzU93Emm7LfcHByM1dKk";
+    const accessToken = "";
     if (typeof accessToken === "string" && typeof req.headers !== "undefined") {
       req.headers.authorization = accessToken;
     }
