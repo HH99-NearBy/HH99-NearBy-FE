@@ -5,6 +5,7 @@ import React, { useState, useCallback, useEffect, useContext } from "react";
 import styled from "styled-components";
 import UserVideoCard from "./videoSection/UserVideoCard";
 import apis from "../../api/api";
+import ovApis from "../../api/openvidu/api";
 import { Publisher } from "openvidu-browser/lib/OpenVidu/Publisher";
 import { AppContext } from "../../api/context/index";
 
@@ -37,7 +38,7 @@ function VideoSection() {
   // dispatch({ type: "READ_SUBSCRIBERS", payload: -1, subscribe: subscribers });
   const connection = useCallback(() => {
     if (session !== undefined && ov !== undefined) {
-      apis.getOVToken(async (token: string) => {
+      ovApis.getOVToken(async (token: string) => {
         session
           .connect(token, { clientData: Math.random() })
           .then(async () => {

@@ -5,13 +5,19 @@ interface ContextAction {
   type: string;
   payload: number;
   subscribe?: any;
+  userName?: string;
 }
 
 type ContextDispatch = Dispatch<ContextAction>;
 
-const ContextState: { challengeId: number; ovSubscribers: any } = {
+const ContextState: {
+  challengeId: number;
+  ovSubscribers: any;
+  userName: string | undefined;
+} = {
   challengeId: -1,
   ovSubscribers: [],
+  userName: "",
 };
 
 // const StateContext = React.createContext<typeof ContextState | null>(null);
@@ -36,6 +42,12 @@ function reducer(state: typeof ContextState, action: ContextAction) {
         ovSubscribers: [...state.ovSubscribers, action.subscribe],
       };
     }
+    case "SYNC_USER_DATA": {
+      return {
+        ...state,
+        userName: action.userName,
+      };
+    }
     default: {
       console.log("머하노");
       return state;
@@ -47,6 +59,7 @@ export function ContextProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(reducer, {
     challengeId: -1,
     ovSubscribers: [],
+    userName: "",
   });
   return (
     <AppContext.Provider value={{ state, dispatch }}>

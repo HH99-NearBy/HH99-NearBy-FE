@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import instance from "./core/axiosInstance";
 const apis = {
   reissue: async (refreshToken: string) => {
@@ -8,6 +9,62 @@ const apis = {
     });
 
     return requestRes.headers;
+  },
+  userRegister: async ({
+    email,
+    nickname,
+    password,
+    profileImg,
+  }: {
+    email: string;
+    nickname: string;
+    password: string;
+    profileImg: string;
+  }) => {
+    try {
+      const reqRes = await instance.post("/api/signup", {
+        email,
+        nickname,
+        password,
+        profileImg,
+      });
+      return reqRes;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userNicknameValidationCheck: async (nickname: string) => {
+    try {
+      const reqRes = await instance.post("api/nicknamecheck", {
+        nickname,
+      });
+      return reqRes;
+    } catch (error) {}
+  },
+  userEmailValidationCheck: async (nickname: string) => {
+    try {
+      const reqRes = await instance.post("api/emailcheck", {
+        nickname,
+      });
+      return reqRes;
+    } catch (error) {}
+  },
+  userLogin: async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const reqRes = await instance.post("/api/login", {
+        email,
+        password,
+      });
+      return reqRes;
+    } catch (error) {
+      throw error;
+    }
   },
   getOVToken: async (callback: (token: string) => {}) => {
     try {
@@ -29,9 +86,11 @@ const apis = {
       throw error;
     }
   },
-  getFUllChallengeList: async (pageNum: number) => {
+  getFUllChallengeList: async (pageNum: number, sizeNum: number) => {
     try {
-      const reqRes = await instance.get(`/api/posts?pagenum=${pageNum}`);
+      const reqRes = await instance.get(
+        `/api/posts?pageNum=${pageNum}&size=${sizeNum}`
+      );
       return reqRes.data;
     } catch (error) {
       throw error;
