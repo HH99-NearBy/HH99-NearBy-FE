@@ -1,25 +1,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function ChallengTimeContainer() {
+function MyRank() {
   return (
-    <TimeContainer>
+    <RankContainer>
       <TitleBox>
-      습관을 위한시간
+      쓱-관왕
       </TitleBox>
-      <TimeBox>
-        190시간 20분
-      </TimeBox>
-    </TimeContainer>
+      <RankBox>
+        210990등
+      </RankBox>
+    </RankContainer>
   )
 }
 
-export default ChallengTimeContainer
+export default MyRank
 
-const TimeContainer = styled.div`
-  border: 1px solid blue;
+const RankContainer = styled.div`
+  border: 1px solid pink;
   width: 35rem;
   height: 15rem;
+  position: relative;
+  left: 35rem;
+  top: 15rem;
 `
 
 const TitleBox = styled.div`
@@ -32,8 +35,9 @@ const TitleBox = styled.div`
   position: relative;
   top: 2rem;
   left: 10.5rem;
+  padding-top: 0.5rem;
 `
-const TimeBox = styled.div`
+const RankBox = styled.div`
   border: 1px solid black;
   width: 41rem;
   height: 5rem;
@@ -43,4 +47,5 @@ const TimeBox = styled.div`
     right: 7rem;
     font-size: xx-large;
     color: #6627F5;
+    padding-top: 0.5rem;
 `
