@@ -50,6 +50,9 @@ const GlobalStyle = createGlobalStyle`
   ul li, ol li {
     list-style: none;
   }
+  .hidden {
+    display: none !important;
+  }
 
   .selected {
     color: #6627f5;
@@ -63,6 +66,11 @@ const GlobalStyle = createGlobalStyle`
   }
   .static_scroll {
     scroll-behavior: auto !important;
+  }
+
+  .video_container {
+    width: 100%;
+    height: 100%;
   }
 `;
 

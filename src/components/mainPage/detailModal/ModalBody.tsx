@@ -8,6 +8,7 @@ import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
 import { GetModalDetail } from "../../../api/challengeDetail/types";
 import { AppContext } from "../../../api/context/index";
+import { useNavigate } from "react-router";
 
 function ModalBody({
   handleToggleModal,
@@ -18,6 +19,7 @@ function ModalBody({
 }) {
   const [body, setBody] = useState<GetModalDetail | null>(null);
   const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
   const req = useQuery(
     "CHALLENGE_DETAIL",
     async () => {
@@ -31,7 +33,9 @@ function ModalBody({
 
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
-
+  const handleEnterRoom = (challengeId: number) => {
+    navigate(`/challenging/${postId}`);
+  };
   return (
     <StModalContainer>
       <StModalBody>
@@ -72,7 +76,7 @@ function ModalBody({
               </li>
             </StSummeryInfoContainer>
             <StButtonGroup className="footer_button_group">
-              <button>입장하기</button>
+              <button onClick={() => handleEnterRoom(postId)}>입장하기</button>
               <button>취소하기</button>
             </StButtonGroup>
           </StSummeryContainer>
@@ -168,7 +172,7 @@ const StSummeryContainer = styled.div`
       height: 100%;
       font-size: 2rem;
       color: #fff;
-
+      cursor: pointer;
       :nth-of-type(1) {
         background-color: #ffa115;
       }
