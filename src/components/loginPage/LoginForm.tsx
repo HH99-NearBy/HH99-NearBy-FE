@@ -1,10 +1,14 @@
 import axios from "axios";
 import React, {useState,useCallback} from "react";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom"
+import {KAKAO_AUTH_URL} from "./KakaoForm"
 
 function LoginForm() {
 
-// const localToken = localStorage.getItem()
+const navigate = useNavigate();
+
+
 
 const [email, setEmail] = useState<string>('');
 const [password, setPassword] = useState<string>('');
@@ -36,6 +40,9 @@ const onSubmit = useCallback (
     }
   },[email,password])
 
+// const KakaoLogin = useCallback(e: React.MouseEvent<HTMLButtonElement>) => {
+//   location:Location.href = KAKAO_AUTH_URL
+// }
 
   return (
     <>
@@ -60,8 +67,8 @@ const onSubmit = useCallback (
       <UnderBar/>SNS 계정으로 간편하게 로그인 하세요<UnderBar2/>
       </UnderBox>
       <SocialBox>
-        <button><img src = "https://ifh.cc/g/17Vbfz.png"/></button>
-        <button><img src = "https://ifh.cc/g/P3OtOC.png"/></button>
+        <a><img src = "https://ifh.cc/g/17Vbfz.png"/></a>
+        <a href={KAKAO_AUTH_URL}><img src = "https://ifh.cc/g/P3OtOC.png"/></a>
       </SocialBox>
       <SignUpBox>
           <p>아직 회원이 아니신가요?</p>
@@ -154,7 +161,7 @@ const SocialBox = styled.div`
   left: 0rem;
   display: flex;
   flex-direction: column;
-  button {
+  a {
     position: relative;
     left: 12rem;
     width: 43rem;

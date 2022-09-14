@@ -216,7 +216,7 @@ function RegisterForm() {
       },[nickname])
 
   const onSubmit = useCallback(
-    async (e : React.FormEvent<HTMLFormElement>) => {
+    async (e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       try {
         const response = await axios.post("http://ssggwan.site/api/signup" , {
