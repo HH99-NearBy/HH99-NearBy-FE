@@ -6,6 +6,7 @@ import Header from "./global/Header";
 import { ContextProvider } from "../src/api/context/index";
 
 function App() {
+
   const queryClient = new QueryClient();
 
   return (
