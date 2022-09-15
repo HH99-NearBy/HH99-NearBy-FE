@@ -66,18 +66,6 @@ const apis = {
       throw error;
     }
   },
-  getOVToken: async (callback: (token: string) => {}) => {
-    try {
-      const reqRes = await instance.post("/api-sessions/get-token", {
-        sessionName: "newSession",
-      });
-      console.log(reqRes);
-      console.log(reqRes.data[0]);
-      callback(reqRes.data[0]);
-    } catch (error) {
-      throw error;
-    }
-  },
   getMyChallengeList: async () => {
     try {
       const reqRes = await instance.get("/api/myList");
@@ -113,27 +101,34 @@ const apis = {
   },
   postChallenge: async ({
     title,
-    postImg,
-    password,
+    challengeImg,
+    startDay,
     startTime,
     targetTime,
-    description,
+    content,
+    notice,
+    challengeTag,
   }: {
     title: string;
-    postImg: string;
-    password: string;
+    challengeImg: string;
+    startDay: string;
     startTime: string;
-    targetTime: string;
-    description: string;
+    targetTime: number;
+    content: string;
+    notice: string;
+    challengeTag: string[];
   }) => {
     try {
       const reqRes = await instance.post("/api/challenge", {
         title,
-        postImg,
-        password,
+        challengeImg,
+        startDay,
         startTime,
         targetTime,
-        description,
+        content,
+        notice,
+        challengeTag,
+        limit: 16,
       });
       return reqRes.data;
     } catch (error) {

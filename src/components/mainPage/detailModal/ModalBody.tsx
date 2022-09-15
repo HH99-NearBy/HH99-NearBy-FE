@@ -30,12 +30,16 @@ function ModalBody({
       retry: 2,
     }
   );
-
+  console.log(body);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = (challengeId: number) => {
     navigate(`/challenging/${postId}`);
   };
+  const now = new Date();
+  const createdAt = new Date(
+    `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
+  );
   return (
     <StModalContainer>
       <StModalBody>
@@ -76,7 +80,14 @@ function ModalBody({
               </li>
             </StSummeryInfoContainer>
             <StButtonGroup className="footer_button_group">
-              <button onClick={() => handleEnterRoom(postId)}>입장하기</button>
+              {now < createdAt ? (
+                <button>챌린지 시작 전입니다.</button>
+              ) : (
+                <button onClick={() => handleEnterRoom(postId)}>
+                  입장하기
+                </button>
+              )}
+
               <button>취소하기</button>
             </StButtonGroup>
           </StSummeryContainer>

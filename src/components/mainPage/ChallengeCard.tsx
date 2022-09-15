@@ -10,6 +10,11 @@ interface StyleProps {
   status: string;
   thumbnailImg?: string;
   challengeTitle?: string;
+  limitPeople?: number;
+  startDay?: string;
+  startTime?: string;
+  targetTime?: number;
+  endTime?: string;
   ref?: any;
   handleToggleModal?: () => void;
 }
@@ -28,7 +33,7 @@ function ChallengeCard(props: StyleProps) {
             {props.status === "running" && "진행중!"}
             {props.status !== "running" && (
               <>
-                <BsFillPersonFill /> "모집중 19/30"
+                <BsFillPersonFill /> `모집중 19/{props.limitPeople}`
               </>
             )}
           </div>
@@ -36,15 +41,15 @@ function ChallengeCard(props: StyleProps) {
           <div className="footer_info">
             <span className="start_date">
               <BiCalendarCheck />
-              2022 - 10 - 01
+              {props.startDay}
             </span>
             <span className="start_time">
               <IoMdAlarm />
-              오전 09:20
+              {props.startTime}
             </span>
             <span className="running_time">
               <MdOutlineTimer />
-              240분
+              {props.targetTime}
             </span>
           </div>
         </div>
@@ -53,7 +58,7 @@ function ChallengeCard(props: StyleProps) {
           onClick={() => {
             if (typeof props.handleToggleModal !== "undefined")
               props.handleToggleModal();
-            handleReadCahllengeId(2);
+            handleReadCahllengeId(1);
           }}
         >
           {props.status === "doing"

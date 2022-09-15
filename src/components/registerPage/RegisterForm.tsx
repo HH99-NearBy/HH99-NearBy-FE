@@ -18,8 +18,8 @@ function RegisterForm() {
   const Config = {
     bucketName: "ssggwan",
     region: "ap-northeast-2",
-    accessKeyId: "AKIARVHCGCIJVAQPZJ4A",
-    secretAccessKey: "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",
+    accessKeyId: "AKIA5ZVQVLLYCZKG6U5P",
+    secretAccessKey: process.env.REACT_APP_AWS_KEY,
   };
 
   const regin = "ap-northeast-2";
@@ -27,8 +27,8 @@ function RegisterForm() {
 
   AWS.config.update({
     region: regin,
-    accessKeyId: "AKIARVHCGCIJVAQPZJ4A",
-    secretAccessKey: "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",
+    accessKeyId: "AKIA5ZVQVLLYCZKG6U5P",
+    secretAccessKey: process.env.REACT_APP_AWS_KEY,
   });
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +268,9 @@ function RegisterForm() {
   //   [email, nickname, password, upload]
   // );
 
-  const toggleHidePassword = () => {
+  const toggleHidePassword = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     setShowpw(!showPw);
   };
 

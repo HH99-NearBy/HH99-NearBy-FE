@@ -81,7 +81,6 @@ function VideoSection() {
       console.log("streamCreated");
       const sub = session.subscribe(event.stream, "video_container");
       console.log(state.ovSubscribers);
-      console.log(JSON.parse(event.stream.connection.data));
       // setSubscribers([...subscribers, sub]);
       dispatch({
         type: "READ_SUBSCRIBERS",

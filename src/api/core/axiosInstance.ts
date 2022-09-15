@@ -6,7 +6,7 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   (req) => {
-    const accessToken = "";
+    const accessToken = sessionStorage.getItem("accessToken");
     if (typeof accessToken === "string" && typeof req.headers !== "undefined") {
       req.headers.authorization = accessToken;
     }

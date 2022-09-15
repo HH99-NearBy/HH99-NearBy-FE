@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
 
 function PostingBtn() {
+  const navigate = useNavigate();
   return (
-    <StPostingBtn>
+    <StPostingBtn onClick={() => navigate("/posting")}>
       챌린지 만들기 <span>+</span>
     </StPostingBtn>
   );

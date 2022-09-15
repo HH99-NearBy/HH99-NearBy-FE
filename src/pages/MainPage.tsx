@@ -38,7 +38,7 @@ function MainPage() {
 
 const StMainContents = styled.div`
   background-color: #f5f5f5;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   min-height: 100vh;
 `;
