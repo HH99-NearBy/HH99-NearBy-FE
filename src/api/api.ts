@@ -68,7 +68,7 @@ const apis = {
   },
   getMyChallengeList: async () => {
     try {
-      const reqRes = await instance.get("/api/myList");
+      const reqRes = await instance.get("/api/joinposts");
       return reqRes.data;
     } catch (error) {
       throw error;
@@ -175,6 +175,7 @@ const apis = {
   recruitChallenge: async (challengeId: number) => {
     try {
       const reqRes = await instance.post(`/api/challenge/ok/${challengeId}`);
+      console.log(reqRes);
       return reqRes.data;
     } catch (error) {
       throw error;

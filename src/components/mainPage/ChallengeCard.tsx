@@ -16,13 +16,18 @@ interface StyleProps {
   targetTime?: number;
   endTime?: string;
   ref?: any;
+  challengeId?: number;
   handleToggleModal?: () => void;
 }
 
 function ChallengeCard(props: StyleProps) {
   const { state, dispatch } = useContext(AppContext);
   const handleReadCahllengeId = (id: number) => {
-    dispatch({ type: "READ_CHALLENGE_ID", payload: id });
+    dispatch({
+      type: "READ_CHALLENGE_ID",
+      payload: id,
+      challengeStatus: props.status,
+    });
   };
   return (
     <StCardContainer status={props.status}>
@@ -53,20 +58,33 @@ function ChallengeCard(props: StyleProps) {
             </span>
           </div>
         </div>
-        <button
-          className="modal_open_btn"
-          onClick={() => {
-            if (typeof props.handleToggleModal !== "undefined")
-              props.handleToggleModal();
-            handleReadCahllengeId(1);
-          }}
-        >
-          {props.status === "doing"
-            ? "도전하기"
-            : props.status === "done"
-            ? "완료된 챌린지입니다."
-            : "입장하기"}
-        </button>
+        {props.status === "doing" ? (
+          <button
+            className="modal_open_btn"
+            onClick={() => {
+              if (typeof props.handleToggleModal !== "undefined")
+                props.handleToggleModal();
+              if (typeof props.challengeId !== "undefined")
+                handleReadCahllengeId(props.challengeId);
+            }}
+          >
+            도전하기
+          </button>
+        ) : props.status === "done" ? (
+          <button className="modal_open_btn">완료된 챌린지입니다.</button>
+        ) : (
+          <button
+            className="modal_open_btn"
+            onClick={() => {
+              if (typeof props.handleToggleModal !== "undefined")
+                props.handleToggleModal();
+              if (typeof props.challengeId !== "undefined")
+                handleReadCahllengeId(props.challengeId);
+            }}
+          >
+            입장하기
+          </button>
+        )}
       </StCardContents>
     </StCardContainer>
   );

@@ -3,9 +3,10 @@ import React, { Dispatch, useReducer, useContext } from "react";
 
 interface ContextAction {
   type: string;
-  payload: number;
+  payload?: number;
   subscribe?: any;
   userName?: string;
+  challengeStatus?: string;
 }
 
 type ContextDispatch = Dispatch<ContextAction>;
@@ -14,10 +15,12 @@ const ContextState: {
   challengeId: number;
   ovSubscribers: any;
   userName: string | undefined;
+  challengeStatus: string;
 } = {
   challengeId: -1,
   ovSubscribers: [],
   userName: "",
+  challengeStatus: "",
 };
 
 // const StateContext = React.createContext<typeof ContextState | null>(null);
@@ -31,10 +34,27 @@ export const AppContext = React.createContext<{
   dispatch: () => null,
 });
 
-function reducer(state: typeof ContextState, action: ContextAction) {
+function reducer(
+  state: typeof ContextState,
+  action: ContextAction
+): typeof ContextState {
   switch (action.type) {
     case "READ_CHALLENGE_ID": {
-      return { ...state, challengeId: action.payload };
+      const newData = {
+        challengeId: -1,
+        challengeStatus: "",
+      };
+      if (
+        typeof action.payload === "number" &&
+        typeof action.challengeStatus === "string"
+      ) {
+        newData.challengeId = action.payload;
+        newData.challengeStatus = action.challengeStatus;
+      }
+      return {
+        ...state,
+        ...newData,
+      };
     }
     case "READ_SUBSCRIBERS": {
       return {
@@ -56,11 +76,7 @@ function reducer(state: typeof ContextState, action: ContextAction) {
 }
 
 export function ContextProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, {
-    challengeId: -1,
-    ovSubscribers: [],
-    userName: "",
-  });
+  const [state, dispatch] = useReducer(reducer, ContextState);
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}

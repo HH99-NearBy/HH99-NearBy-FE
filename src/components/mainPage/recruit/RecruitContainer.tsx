@@ -13,6 +13,7 @@ interface ChallengeInfo {
   startTime: string;
   targetTime: number;
   title: string;
+  id: number;
 }
 
 function RecruitContainer({
@@ -46,6 +47,7 @@ function RecruitContainer({
                   targetTime={post.targetTime}
                   thumbnailImg={post.challengeImg}
                   endTime={post.endTime}
+                  challengeId={post.id}
                 />
               );
             })

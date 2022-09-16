@@ -9,6 +9,8 @@ import { MdOutlineTimer } from "react-icons/md";
 import { GetModalDetail } from "../../../api/challengeDetail/types";
 import { AppContext } from "../../../api/context/index";
 import { useNavigate } from "react-router";
+import apis from "../../../api/api";
+import Button from "../../../elements/Button";
 
 function ModalBody({
   handleToggleModal,
@@ -31,10 +33,15 @@ function ModalBody({
     }
   );
   console.log(body);
+  console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
-  const handleEnterRoom = (challengeId: number) => {
-    navigate(`/challenging/${postId}`);
+  const handleEnterRoom = () => {
+    navigate(`/challenging/${state.challengeId}`);
+  };
+  const handleRecruitChallenge = () => {
+    apis.recruitChallenge(state.challengeId);
+    handleToggleModal();
   };
   const now = new Date();
   const createdAt = new Date(
@@ -80,15 +87,27 @@ function ModalBody({
               </li>
             </StSummeryInfoContainer>
             <StButtonGroup className="footer_button_group">
-              {now < createdAt ? (
-                <button>챌린지 시작 전입니다.</button>
+              {state.challengeStatus === "doing" ? (
+                <button
+                  className="challenge_recruit_button"
+                  onClick={handleRecruitChallenge}
+                >
+                  참가하기
+                </button>
+              ) : now < createdAt ? (
+                <button className="not_yet_button">시작 전</button>
               ) : (
-                <button onClick={() => handleEnterRoom(postId)}>
+                <button
+                  className="challenge_enter_button"
+                  onClick={handleEnterRoom}
+                >
                   입장하기
                 </button>
               )}
-
-              <button>취소하기</button>
+              {/* //status => doing:모집중, recruit: 신청했으나 시작하지 않음, running: 신청했고 시작한 챌린지 */}
+              {state.challengeStatus === "doing" ? null : (
+                <button>취소하기</button>
+              )}
             </StButtonGroup>
           </StSummeryContainer>
           <StChallengeInfoContainer>
@@ -176,6 +195,7 @@ const StSummeryContainer = styled.div`
   }
 
   .footer_button_group {
+    display: flex;
     button {
       width: 50%;
       border: none;
@@ -185,11 +205,32 @@ const StSummeryContainer = styled.div`
       color: #fff;
       cursor: pointer;
       :nth-of-type(1) {
-        background-color: #ffa115;
+        flex-grow: 1;
       }
+
       :nth-of-type(2) {
-        background-color: var(--purple-color);
+        color: var(--purple-color);
+        :hover {
+          color: white;
+          background-color: var(--purple-color);
+        }
       }
+    }
+    .challenge_enter_button {
+      background-color: #ffa115;
+    }
+    .challenge_recruit_button {
+      background-color: #ffffff;
+      color: #ffa115;
+      border: 0.4rem solid #ffa115;
+      :hover {
+        background-color: #ffa115;
+        color: #ffffff;
+      }
+    }
+    .not_yet_button {
+      background-color: #e3e3e3;
+      color: black;
     }
   }
 `;

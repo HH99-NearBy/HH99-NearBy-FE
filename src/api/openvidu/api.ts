@@ -6,8 +6,8 @@ const ovApis = {
         sessionName: "newSession",
       });
       console.log(reqRes);
-      console.log(reqRes.data[0]);
-      callback(reqRes.data[0]);
+      console.log(reqRes.data.data[0]);
+      callback(reqRes.data.data[0]);
     } catch (error) {
       throw error;
     }

@@ -1,13 +1,31 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import ChallengeCard from "../ChallengeCard";
+import { useQuery } from "react-query";
+import apis from "../../../api/api";
+
+interface ChallengeInfo {
+  challengeImg: string;
+  endTime: string;
+  limitPeople: number;
+  startDay: string;
+  startTime: string;
+  targetTime: number;
+  title: string;
+  id: number;
+}
 
 function MyChallengeContainer({
   handleToggleModal,
 }: {
   handleToggleModal: () => void;
 }) {
-  const [testArr, setTestArr] = useState([0, 1, 2, 3, 4, 5, 6]);
+  const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
+  useQuery("MY_CHALLENGE", async () => {
+    const res = await apis.getMyChallengeList();
+    setChallengeList(res);
+    console.log(res);
+  });
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(true);
   const listRef = useRef<HTMLDivElement>(null);
   const flag = useRef<boolean>(false);
@@ -30,7 +48,10 @@ function MyChallengeContainer({
       if (listRef.current.scrollLeft > 650) {
         if (!flag.current) {
           flag.current = true;
-          setTestArr([...testArr.filter((el, idx) => idx !== 0), testArr[0]]);
+          setChallengeList([
+            ...challengeList.filter((el, idx) => idx !== 0),
+            challengeList[0],
+          ]);
           if (listRef.current !== null) {
             listRef.current.classList.add("static_scroll");
             listRef.current.scrollLeft = 0;
@@ -51,7 +72,7 @@ function MyChallengeContainer({
     return () => {
       clearInterval(interval);
     };
-  }, [isMouseEnter, testArr, flag.current]);
+  }, [isMouseEnter, challengeList, flag.current]);
 
   return (
     <StContentsWrapper>
@@ -62,13 +83,21 @@ function MyChallengeContainer({
         onMouseLeave={handleMouseOut}
         ref={listRef}
       >
-        {testArr.map((el, idx) => {
+        {challengeList.map((post, idx) => {
+          const now = new Date();
+          const startTime = new Date(`${post.startDay}T${post.startTime}`);
           return (
             <ChallengeCard
-              key={`${el} + ${idx}`}
-              status="recruit"
-              challengeTitle={String(el)}
+              status={now < startTime ? "recruit" : "running"}
               handleToggleModal={handleToggleModal}
+              challengeTitle={post.title}
+              limitPeople={post.limitPeople}
+              startDay={post.startDay}
+              startTime={post.startTime}
+              targetTime={post.targetTime}
+              thumbnailImg={post.challengeImg}
+              endTime={post.endTime}
+              challengeId={post.id}
             />
           );
         })}
