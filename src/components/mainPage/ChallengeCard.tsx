@@ -29,6 +29,7 @@ function ChallengeCard(props: StyleProps) {
       challengeStatus: props.status,
     });
   };
+  console.log(props.challengeId);
   return (
     <StCardContainer status={props.status}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
@@ -62,10 +63,12 @@ function ChallengeCard(props: StyleProps) {
           <button
             className="modal_open_btn"
             onClick={() => {
+              if (typeof props.challengeId !== "undefined") {
+                handleReadCahllengeId(props.challengeId);
+              }
+
               if (typeof props.handleToggleModal !== "undefined")
                 props.handleToggleModal();
-              if (typeof props.challengeId !== "undefined")
-                handleReadCahllengeId(props.challengeId);
             }}
           >
             도전하기

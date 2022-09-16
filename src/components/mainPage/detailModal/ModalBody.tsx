@@ -43,6 +43,9 @@ function ModalBody({
     apis.recruitChallenge(state.challengeId);
     handleToggleModal();
   };
+  const handleCancleChallenge = () => {
+    apis.cancelRecruit(state.challengeId);
+  };
   const now = new Date();
   const createdAt = new Date(
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
@@ -106,7 +109,7 @@ function ModalBody({
               )}
               {/* //status => doing:모집중, recruit: 신청했으나 시작하지 않음, running: 신청했고 시작한 챌린지 */}
               {state.challengeStatus === "doing" ? null : (
-                <button>취소하기</button>
+                <button onClick={handleCancleChallenge}>취소하기</button>
               )}
             </StButtonGroup>
           </StSummeryContainer>
