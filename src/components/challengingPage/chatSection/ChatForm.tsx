@@ -13,14 +13,19 @@ function ChatForm({
     setBody(e.currentTarget.value);
   };
 
+  //   {type:'TALK', roomId:this.roomId, sender:this.sender, message:this.message}
+  // {type:'ENTER', roomId:vm.$data.roomId, sender:vm.$data.sender, sessionId :sessionid}
+
   const handleSubmitChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(sessionStorage.getItem("userName"), body);
     stompClient.current.send(
-      `/pub/chat/challenge/${challengeId}`,
+      `/pub/chat/message`,
       JSON.stringify({
-        author: sessionStorage.getItem("userName"),
-        content: body,
+        type: "TALK",
+        roomId: challengeId,
+        sender: sessionStorage.getItem("userName"),
+        message: body,
       }),
       {
         Authorization: sessionStorage.getItem("accessToken"),

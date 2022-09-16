@@ -8,7 +8,9 @@ function UserInfoCard() {
       <UserIcon size="medium" />
       <StInfoSection>
         <StInfoFooter>
-          <span className="user_tier">LV.23</span>
+          <span className="user_tier">
+            LV.{sessionStorage.getItem("userLevel")?.split("L")[0]}
+          </span>
           <div className="toggle_navigate">{">"}</div>
         </StInfoFooter>
         <span className="user_nickname">강태훈강태훈강태훈</span>

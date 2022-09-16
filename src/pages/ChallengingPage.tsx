@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router";
 import { BsFillPersonFill } from "react-icons/bs";
 import VideoSection from "../components/challengingPage/VideoSection";
 import SideContentsSection from "../components/challengingPage/SideContentsSection";
+import { RoomContextProvider } from "../api/context/roomContext";
 
 function ChallengingPage() {
   const { challengeId } = useParams();
@@ -23,7 +24,9 @@ function ChallengingPage() {
   return (
     <StPageLayout>
       <VideoSection />
-      <SideContentsSection />
+      <RoomContextProvider>
+        <SideContentsSection />
+      </RoomContextProvider>
     </StPageLayout>
   );
 }

@@ -35,6 +35,7 @@ const StChatListContainer = styled.div`
   display: flex;
   padding: 1rem 2rem;
   flex-direction: column;
+  overflow-y: auto;
 `;
 
 export default ChatList;
