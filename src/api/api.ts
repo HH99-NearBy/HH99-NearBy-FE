@@ -201,5 +201,13 @@ const apis = {
       throw error;
     }
   },
+  getParticipantList: async (challengeId: number) => {
+    try {
+      const reqRes = await instance.get(`/api/chat/list/${challengeId}`);
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 export default apis;

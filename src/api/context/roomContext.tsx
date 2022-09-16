@@ -4,16 +4,21 @@ interface ChatType {
   nickName: string;
   chat: string;
 }
+interface UserType {
+  level: string;
+  nickname: string;
+}
 interface ContextAction {
   type: string;
-  targetPerson?: string;
+  targetPerson?: UserType;
+  userList?: UserType[];
   newChat?: ChatType;
 }
 
 type ContextDispatch = Dispatch<ContextAction>;
 
 const ContextState: {
-  people: string[];
+  people: UserType[];
   chat: ChatType[];
 } = {
   people: [],
@@ -52,6 +57,13 @@ function reducer(
         ...state,
         chat: newArr,
       };
+    }
+    case "INIT_PEOPLE": {
+      let newArr: UserType[] = [];
+      if (action.userList !== undefined) {
+        newArr = action.userList;
+      }
+      return { ...state, people: newArr };
     }
     default: {
       console.log("머하노");
