@@ -5,7 +5,7 @@ import UserIcon from "../../elements/UserIcon";
 function UserInfoCard() {
   return (
     <StCardContainer>
-      <UserIcon size="medium" />
+      <UserIcon size="medium" imgUrl={sessionStorage.getItem("userProfile")} />
       <StInfoSection>
         <StInfoFooter>
           <span className="user_tier">
@@ -13,7 +13,9 @@ function UserInfoCard() {
           </span>
           <div className="toggle_navigate">{">"}</div>
         </StInfoFooter>
-        <span className="user_nickname">강태훈강태훈강태훈</span>
+        <span className="user_nickname">
+          {sessionStorage.getItem("userName")}
+        </span>
       </StInfoSection>
     </StCardContainer>
   );

@@ -73,7 +73,7 @@ function RegisterForm() {
   const [password, setPassword] = useState<string>("");
   const [checkpw, setCheckpw] = useState<string>("");
   const [profileImg, setProfileImg] = useState<File>();
-  const [upload, setUpload] = useState<string>("");
+  const [upload, setUpload] = useState<string>("https://ifh.cc/g/RCtOo7.png");
 
   //오류메세지 상태저장
   const [emailMessage, setEmailMessage] = useState<string>("");
