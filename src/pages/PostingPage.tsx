@@ -99,7 +99,7 @@ function PostingPage() {
       ],
     });
   };
-  const handleClickOption = (e: React.MouseEvent) => {
+  const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
     const siblings = e.currentTarget.parentElement?.children;
