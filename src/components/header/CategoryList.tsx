@@ -20,10 +20,12 @@ function CategoryList() {
     setActivateIdx(targetIdx);
     if (targetIdx === 0) {
       navigate("/ranking");
+    }else if (targetIdx === 1){
+      navigate("/info")
     }
   };
   useEffect(() => {
-    if (pathname !== "/ranking") {
+    if (pathname !== "/ranking" && pathname !== "/info") {
       setActivateIdx(-1);
     }
   }, [pathname]);

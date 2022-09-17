@@ -1,20 +1,42 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import styled from 'styled-components'
+import axios from 'axios'
+import Pagination from './Pagination'
+import DoneListContainer from './DoneListContainer'
 
-function DoneCard() {
+interface DoneCardProps {
+  id : string;
+  title : string;
+  day : string;
+  date : string;
+  time : string;
+}
+
+function DoneCard({done,loading}:{done:Array<DoneCardProps>;loading:boolean}) {
+
+  if (loading) {
+    return <h2>Loading...</h2>
+  }
+
 
   return (
     <>
-    <DoneBox>
-      <TitleBox>
-      진행중인 잴린지 제목입니다.
-      </TitleBox>
-      <Date>
-      <img src = "https://ifh.cc/g/Ylpc4J.png"/>2022-10-1
-      <img src = "https://ifh.cc/g/6md8RO.png"/>오전 09:20
-      <img src = "https://ifh.cc/g/bFlJmL.png"/>240 분
-      </Date>
-    </DoneBox>
+       {done && done.map((done:any) => {
+      return(
+      <DoneBox key={done.id}>
+          <TitleBox2 >
+          {done.title}
+          </TitleBox2>
+          <Date>
+          <img src = "https://ifh.cc/g/Ylpc4J.png"/>{done.day}
+          <img src = "https://ifh.cc/g/6md8RO.png"/>{done.date}
+          <img src = "https://ifh.cc/g/bFlJmL.png"/>{done.time}
+          </Date>  
+      </DoneBox>
+      )
+    } 
+      
+    )}
     </>
   )
 }
@@ -27,7 +49,7 @@ const DoneBox = styled.div`
   height: 5rem;
   
 `
-const TitleBox = styled.div`
+const TitleBox2 = styled.div`
   border: 1px solid red;
   margin: 1.5rem 0;
   width: 60rem;

@@ -1,0 +1,52 @@
+[
+    {
+        "id" : "1",
+        "title":"아스날응원 챌린지",
+        "day":"2022-09-18",
+        "date":"08:00",
+        "time":"90분",
+        "people":"20",
+        "image":"https://ifh.cc/g/OaZqa2.jpg"
+
+    },
+    {
+        "id" : "2",
+        "title":"아스날 유로파 우승 챌린지",
+        "day":"2022-09-18",
+        "date":"08:00",
+        "time":"90분",
+        "people":"20",
+        "image":"https://ifh.cc/g/OaZqa2.jpg"
+
+    },
+    {
+        "id" : "3",
+        "title":"아스날 챔스진출 챌린지",
+        "day":"2022-09-18",
+        "date":"08:00",
+        "time":"90분",
+        "people":"20",
+        "image":"https://ifh.cc/g/OaZqa2.jpg"
+
+    },
+    {
+        "id" : "4",
+        "title":"아스날 리그우승 챌린지",
+        "day":"2022-09-18",
+        "date":"08:00",
+        "time":"90분",
+        "people":"20",
+        "image":"https://ifh.cc/g/OaZqa2.jpg"
+
+    },
+    {
+        "id" : "5",
+        "title":"아스날 트레블 챌린지",
+        "day":"2022-09-18",
+        "date":"08:00",
+        "time":"90분",
+        "people":"20",
+        "image":"https://ifh.cc/g/OaZqa2.jpg"
+
+    }
+]

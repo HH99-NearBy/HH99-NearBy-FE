@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import AWS from 'aws-sdk'
 import imageCompression from 'browser-image-compression';
+import MAINLOGO from "../../static/main_logo.png";
 
 function RegisterForm() {
 
@@ -240,8 +241,7 @@ function RegisterForm() {
      <>
         <SignupContainer>
         <LogoBox>
-          <p>쓱관</p>
-          쓱 만드는 습관
+          <img src={MAINLOGO}/>
         </LogoBox>
         <FormBox onSubmit={onSubmit}>
         <SignupBox>
@@ -304,7 +304,6 @@ function RegisterForm() {
 export default RegisterForm;
 
 const SignupContainer = styled.div`
-  border: 1px solid black;
   width: 167rem;
     padding-top: 15rem;
     padding-right: 0rem;
@@ -315,7 +314,6 @@ const SignupContainer = styled.div`
 `
 
 const SignupBox =styled.div`
-  border: 1px solid blue;
   width: 150rem;
   height: 49rem;
   margin: auto 2rem;
@@ -323,7 +321,6 @@ const SignupBox =styled.div`
 `
 
 const ImgBox = styled.div`
-     border: 1px solid red;
     float: left;
     width: 44rem;
     padding: 5rem;
@@ -361,7 +358,6 @@ const FileBox = styled.div`
 `
 
 const SignBox2 = styled.div`
-  border: 1px solid green;
   width: 74rem;
   padding: 5rem;
   float: right;
@@ -413,7 +409,6 @@ const InputSt = styled.input`
 `
 
 const LogoBox =styled.div`
-  border: 1px solid black;
    width: 20rem;
     height: 10rem;
     position: relative;
@@ -423,7 +418,6 @@ const LogoBox =styled.div`
 `
 
 const TetxBox = styled.div`
-     border: 1px solid black;
      width: 12rem;
      margin: 1rem 0;
 `
@@ -434,7 +428,6 @@ const TextP =styled.p`
   margin: 8rem auto;
 `
 const TitleBox = styled.div`
-  border: 1px solid black;
   width: 160px;
   font-size: 30px;
   font-weight: bold;
@@ -459,7 +452,6 @@ const SubmitBtn = styled.div`
  
 `
 const FormBox = styled.form`
-  border: 1px solid red;
   position: relative;
     right: 21rem;
    
