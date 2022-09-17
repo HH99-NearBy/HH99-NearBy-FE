@@ -7,6 +7,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import KakaoForm from "../components/loginPage/KakaoForm";
 import MyPage from "../pages/MyPage";
+import InformationPage from "../pages/InformationPage";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/api/kakaologin" element={<KakaoForm/>}/>
       <Route path="/register" element={<RegisterPage/>}/>
       <Route path ="/mypage" element = {<MyPage/>}/>
+      <Route path = "/info" element ={<InformationPage/>}/>
     </Routes>
   );
 }
