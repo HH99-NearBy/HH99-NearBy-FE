@@ -18,12 +18,12 @@ function TierGraphContainer() {
 export default TierGraphContainer;
 
 const TierContainer = styled.div`
-  border: 1px solid green;
   width: 70rem;
   height: 15rem;
+  border: 2px solid whitesmoke;
+  box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
 `
 const TitleBox = styled.div`
-  border: 1px solid black;
   width: 16rem;
   height: 3rem;
   justify-content: center;
@@ -34,7 +34,6 @@ const TitleBox = styled.div`
 `
 
 const GraphBox = styled.div`
-  border: 1px solid black;
   width: 54rem;
   justify-content: center;
   padding-top: 2rem;

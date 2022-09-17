@@ -68,7 +68,6 @@ function DoneListContainer() {
 export default DoneListContainer;
 
 const DoneContainer = styled.div`
-  /* border: 1px solid blue; */
   width: 100rem;
   display: flex;
   margin: 10rem auto;
@@ -77,7 +76,6 @@ const DoneContainer = styled.div`
   box-shadow: grey 1px 1px 10px;
 `
 const TitleBox1 = styled.div`
-  border: 1px solid purple;
   width: 12rem;
   display: flex;
   justify-content: center;
