@@ -50,7 +50,6 @@ const DoneBox = styled.div`
   
 `
 const TitleBox2 = styled.div`
-  border: 1px solid red;
   margin: 1.5rem 0;
   width: 60rem;
   float: left;
@@ -58,7 +57,6 @@ const TitleBox2 = styled.div`
 `
 
 const Date = styled.div`
-  border:  1px solid red;
   width: 21rem;
   float: right;
   margin: 1.5rem 0;

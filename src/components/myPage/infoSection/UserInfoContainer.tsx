@@ -33,22 +33,21 @@ function UserInfoContainer() {
 export default UserInfoContainer;
 
 const UserContainer = styled.div`
-  border: 1px solid red;
   width: 30rem;
   height: 30rem;
   position: relative;
   top: 15rem;
-  justify-content: center
+  justify-content: center;
+  border: 2px solid whitesmoke;
+  box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
 `
 const UserBox = styled.div`
-  border: 1px solid gray;
   width: 28rem;
   height: 30rem;
   flex-direction: column;
 `
 
 const Nickname = styled.div`
-  border: 1px solid blue;
   width: 20rem;
   height: 3rem;
   position: relative;
@@ -59,7 +58,6 @@ const Nickname = styled.div`
 `
 
 const Email =styled.div`
-  border: 1px solid blue;
   width: 20rem;
   height: 2rem;
   font-size: larger;
@@ -69,7 +67,6 @@ const Email =styled.div`
   
 `
 const UserImage = styled.div`
-  border: 1px solid green;
   width: 21rem;
   height: 17rem;
   position: relative;
@@ -84,22 +81,18 @@ const UserImage = styled.div`
   
 `
 const LevelBox = styled.div`
-  border: 1px solid red;
   position: relative;
   top: 2.5rem;
   .level{
-    border: 1px solid black;
     padding-top: 2px;
   }
   .minute{
-    border: 1px solid black;
     position: relative;
     left: 20rem;
   }
 `
 
 const ProgressBox = styled.div`
-  /* border: 1px solid red; */
   position: relative;
   top: 3rem;
   progress {

@@ -27,7 +27,6 @@ function InfoWrapper() {
 export default InfoWrapper
 
 const InfoContainer = styled.div`
-  border: 1px solid black;
   display: flex;
   flex-direction: column;
   width: 100rem;
@@ -43,7 +42,6 @@ const InfoBox = styled.div`
 `
 
 const MyTitle = styled.div`
-  border: 1px solid orange;
   width: 25rem;
   height: 4rem;
   position: relative;
