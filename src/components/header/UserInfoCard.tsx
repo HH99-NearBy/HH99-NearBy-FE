@@ -30,7 +30,7 @@ function UserInfoCard() {
           {sessionStorage.getItem("userName")}
         </span>
       </StInfoSection>
-      <StNavModalBody ref={navModal}>
+      <StNavModalBody ref={navModal} className="hidden">
         <h2>앞으로 나아간 시간</h2>
         <div className="challenge_time_container">1122분</div>
         <button className="move_to_mypage" onClick={() => navigate("/mypage")}>
@@ -84,8 +84,9 @@ const StInfoFooter = styled.div`
 
 const StNavModalBody = styled.div`
   position: absolute;
+  z-index: 100;
   left: 0;
-  top: 9rem;
+  top: 10rem;
   width: 30rem;
   height: 20rem;
   border: 0.2rem solid gray;

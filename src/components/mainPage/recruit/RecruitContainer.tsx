@@ -9,9 +9,10 @@ interface ChallengeInfo {
   challengeImg: string;
   endTime: string;
   limitPeople: number;
+  participatePeople: number;
   startDay: string;
   startTime: string;
-  targetTime: number;
+  tagetTime: number;
   title: string;
   id: number;
 }
@@ -38,13 +39,15 @@ function RecruitContainer({
               const createdAt = new Date(`${post.startDay}T${post.startTime}`);
               return (
                 <ChallengeCard
+                  key={post.id}
                   status={now < createdAt ? "doing" : "done"}
                   handleToggleModal={handleToggleModal}
                   challengeTitle={post.title}
                   limitPeople={post.limitPeople}
+                  participatePeople={post.participatePeople}
                   startDay={post.startDay}
                   startTime={post.startTime}
-                  targetTime={post.targetTime}
+                  targetTime={post.tagetTime}
                   thumbnailImg={post.challengeImg}
                   endTime={post.endTime}
                   challengeId={post.id}

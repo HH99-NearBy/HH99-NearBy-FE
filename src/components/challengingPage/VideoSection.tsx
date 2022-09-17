@@ -89,7 +89,12 @@ function VideoSection() {
       });
     });
     session.on("streamDestroyed", (event: any) => {
+      dispatch({
+        type: "REMOVE_SUBSCRIBERS",
+        targetOvSub: event.stream.streamId,
+      });
       console.log("stream destroyed");
+      console.log(event.stream);
     });
     session.on("exception", (exception) => {
       console.warn(exception);
@@ -146,7 +151,6 @@ function VideoSection() {
     //   });
     // }
   };
-
   const leaveSession = useCallback(() => {
     if (session) {
       session.disconnect();

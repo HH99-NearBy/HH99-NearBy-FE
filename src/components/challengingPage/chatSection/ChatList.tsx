@@ -13,6 +13,7 @@ function ChatList({ chats }: { chats: ChatType[] }) {
       {chats.map((chat) => {
         return (
           <ChatCard
+            key={`${chat.nickName}${chat.chat}`}
             author={
               chat.nickName === sessionStorage.getItem("userName")
                 ? "me"

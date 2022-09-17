@@ -7,6 +7,7 @@ interface ContextAction {
   subscribe?: any;
   userName?: string;
   challengeStatus?: string;
+  targetOvSub?: string;
 }
 
 type ContextDispatch = Dispatch<ContextAction>;
@@ -60,6 +61,15 @@ function reducer(
       return {
         ...state,
         ovSubscribers: [...state.ovSubscribers, action.subscribe],
+      };
+    }
+    case "REMOVE_SUBSCRIBERS": {
+      return {
+        ...state,
+        ovSubscribers: state.ovSubscribers.filter(
+          (sub: { stream: { streamId: string | undefined } }) =>
+            sub.stream.streamId !== action.targetOvSub
+        ),
       };
     }
     case "SYNC_USER_DATA": {

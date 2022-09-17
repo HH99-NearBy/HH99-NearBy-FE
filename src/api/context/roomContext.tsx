@@ -48,6 +48,17 @@ function reducer(
       }
       return { ...state, people: newArr };
     }
+    case "REMOVE_PEOPLE": {
+      let target: string = "";
+      if (action.targetPerson !== undefined) {
+        target = action.targetPerson.nickname;
+      }
+      return {
+        ...state,
+        people: state.people.filter((person) => person.nickname !== target),
+      };
+    }
+
     case "ADD_CHAT": {
       const newArr = state.chat;
       if (action.newChat !== undefined) {

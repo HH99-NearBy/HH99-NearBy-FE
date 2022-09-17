@@ -6,6 +6,7 @@ import { useParams } from "react-router";
 import ChatSection from "./ChatSection";
 import SummeryInfoSection from "./SummeryInfoSection";
 import { RoomContext } from "../../api/context/roomContext";
+import apis from "../../api/api";
 
 interface ChatType {
   nickName: string;
@@ -16,8 +17,13 @@ function SideContentsSection() {
   const WSURI = process.env.REACT_APP_BASE_URI + "/ws";
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
+  const getInitUserList = async () => {
+    const res = await apis.getParticipantList(Number(challengeId));
+    dispatch({ type: "INIT_PEOPLE", userList: res.data });
+  };
   console.log(state);
   useEffect(() => {
+    getInitUserList();
     console.log(WSURI);
     let sock = new SockJs(WSURI);
     let subscription: any;
@@ -37,34 +43,73 @@ function SideContentsSection() {
             Authorization: sessionStorage.getItem("accessToken"),
           }
         );
-
+        //if로 받는 message의 type별로 동작을 나눠야함.
+        //enter할때 유저 level도 받아와야 사람 추가가 가능함.
         subscription = stompClient.current.subscribe(
           `/sub/chat/room/${challengeId}`,
           function name(frame: any) {
             console.log("sub sucessfully");
             console.log(frame);
             const res = JSON.parse(frame.body);
-            dispatch({
-              type: "ADD_CHAT",
-              newChat: { nickName: res.sender, chat: res.message },
-            });
+            console.log(res);
+            switch (res.type) {
+              case "ENTER": {
+                dispatch({
+                  type: "ADD_PEOPLE",
+                  targetPerson: {
+                    nickname: res.sender,
+                    level: "LV0",
+                  },
+                });
+                return;
+              }
+              case "QUIT": {
+                dispatch({
+                  type: "REMOVE_PEOPLE",
+                  targetPerson: {
+                    nickname: res.sender,
+                    level: "",
+                  },
+                });
+                return;
+              }
+              case "TALK": {
+                dispatch({
+                  type: "ADD_CHAT",
+                  newChat: { nickName: res.sender, chat: res.message },
+                });
+                return;
+              }
+            }
           },
           { Authorization: sessionStorage.getItem("accessToken") }
         );
       }
     );
     return () => {
+      const nickname = sessionStorage.getItem("userName");
+      const level = sessionStorage.getItem("userLevel");
       stompClient.current.send(
         `/pub/chat/message`,
         JSON.stringify({
           type: "QUIT",
           roomId: challengeId,
-          sender: sessionStorage.getItem("userName"),
+          sender: nickname,
         }),
         {
           Authorization: sessionStorage.getItem("accessToken"),
         }
       );
+      if (nickname !== null && level !== null) {
+        dispatch({
+          type: "REMOVE_PEOPLE",
+          targetPerson: {
+            nickname,
+            level,
+          },
+        });
+      }
+
       subscription.unsubscribe();
       stompClient.current.disconnect();
     };

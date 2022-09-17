@@ -9,10 +9,8 @@ import apis from "../../api/api";
 function UserListSection() {
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
-  useQuery("CHALLENGING_PEOPLE", async () => {
-    const res = await apis.getParticipantList(Number(challengeId));
-    dispatch({ type: "INIT_PEOPLE", userList: res });
-  });
+
+  useEffect(() => {}, []);
 
   return (
     <StUserListSection>

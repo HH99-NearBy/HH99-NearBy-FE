@@ -11,6 +11,7 @@ interface StyleProps {
   thumbnailImg?: string;
   challengeTitle?: string;
   limitPeople?: number;
+  participatePeople?: number;
   startDay?: string;
   startTime?: string;
   targetTime?: number;
@@ -22,7 +23,7 @@ interface StyleProps {
 
 function ChallengeCard(props: StyleProps) {
   const { state, dispatch } = useContext(AppContext);
-  const handleReadCahllengeId = (id: number) => {
+  const handleReadChallengeId = (id: number) => {
     dispatch({
       type: "READ_CHALLENGE_ID",
       payload: id,
@@ -30,16 +31,22 @@ function ChallengeCard(props: StyleProps) {
     });
   };
   console.log(props.challengeId);
+  console.log(props.targetTime);
   return (
     <StCardContainer status={props.status}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
       <StCardContents>
         <div className="card_body">
           <div className="header_info">
-            {props.status === "running" && "진행중!"}
+            {props.status === "running" && (
+              <>
+                <div className="running_nav_dot"></div> 진행중!
+              </>
+            )}
             {props.status !== "running" && (
               <>
-                <BsFillPersonFill /> `모집중 19/{props.limitPeople}`
+                <BsFillPersonFill /> `모집중 {props.participatePeople}/
+                {props.limitPeople}`
               </>
             )}
           </div>
@@ -55,7 +62,7 @@ function ChallengeCard(props: StyleProps) {
             </span>
             <span className="running_time">
               <MdOutlineTimer />
-              {props.targetTime}
+              {props.targetTime}분
             </span>
           </div>
         </div>
@@ -64,7 +71,7 @@ function ChallengeCard(props: StyleProps) {
             className="modal_open_btn"
             onClick={() => {
               if (typeof props.challengeId !== "undefined") {
-                handleReadCahllengeId(props.challengeId);
+                handleReadChallengeId(props.challengeId);
               }
 
               if (typeof props.handleToggleModal !== "undefined")
@@ -79,10 +86,10 @@ function ChallengeCard(props: StyleProps) {
           <button
             className="modal_open_btn"
             onClick={() => {
+              if (typeof props.challengeId !== "undefined")
+                handleReadChallengeId(props.challengeId);
               if (typeof props.handleToggleModal !== "undefined")
                 props.handleToggleModal();
-              if (typeof props.challengeId !== "undefined")
-                handleReadCahllengeId(props.challengeId);
             }}
           >
             입장하기
@@ -170,6 +177,29 @@ const StCardContents = styled.div`
       height: 3.5rem;
       color: #323232;
       svg {
+        margin-right: 0.5rem;
+      }
+      @keyframes runner {
+        0% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+      .running_nav_dot {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: red;
+        animation-name: runner;
+        animation-duration: 1.6s;
+        animation-iteration-count: infinite;
         margin-right: 0.5rem;
       }
     }

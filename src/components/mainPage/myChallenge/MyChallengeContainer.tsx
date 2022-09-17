@@ -10,7 +10,7 @@ interface ChallengeInfo {
   limitPeople: number;
   startDay: string;
   startTime: string;
-  targetTime: number;
+  tagetTime: number;
   title: string;
   id: number;
 }
@@ -29,10 +29,24 @@ function MyChallengeContainer({
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(true);
   const listRef = useRef<HTMLDivElement>(null);
   const flag = useRef<boolean>(false);
+
   const handleScrolling = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
+    const target = e.currentTarget;
+    console.log(e.currentTarget.clientWidth);
+    console.log(e.currentTarget.scrollWidth);
     console.log(e.currentTarget.scrollLeft);
-    e.currentTarget.scrollLeft += e.deltaY * 2;
+    document.body.classList.add("block_scroll");
+    if (target.scrollLeft === 0 && e.deltaY < 0) {
+      document.body.classList.remove("block_scroll");
+    }
+    if (
+      target.clientWidth + target.scrollLeft === target.scrollWidth &&
+      e.deltaY > 0
+    ) {
+      document.body.classList.remove("block_scroll");
+    }
+    target.scrollLeft += e.deltaY * 2;
   };
   const handleMouseEntering = () => {
     setIsMouseEnter(false);
@@ -88,13 +102,14 @@ function MyChallengeContainer({
           const startTime = new Date(`${post.startDay}T${post.startTime}`);
           return (
             <ChallengeCard
+              key={post.id}
               status={now < startTime ? "recruit" : "running"}
               handleToggleModal={handleToggleModal}
               challengeTitle={post.title}
               limitPeople={post.limitPeople}
               startDay={post.startDay}
               startTime={post.startTime}
-              targetTime={post.targetTime}
+              targetTime={post.tagetTime}
               thumbnailImg={post.challengeImg}
               endTime={post.endTime}
               challengeId={post.id}
