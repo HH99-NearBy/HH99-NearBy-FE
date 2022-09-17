@@ -142,7 +142,6 @@ const AllContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  border: 1px solid red;
   width: 100rem;
   height: 94rem;
   float: left;
@@ -154,14 +153,12 @@ const InfoContainer = styled.div`
 `;
 
 const LoginContainer = styled.div`
-  border: 1px solid black;
   width: 90rem;
   height: 94rem;
   float: right;
   left: 5rem;
 `;
 const TitleBox = styled.div`
-  border: 1px solid black;
   position: relative;
   top: 5rem;
   margin: 0 37rem;
@@ -200,7 +197,6 @@ const UnderBox = styled.div`
 `;
 
 const LoginBox = styled.div`
-  border: 1px solid green;
   position: relative;
   top: 7rem;
   display: flex;
@@ -208,7 +204,6 @@ const LoginBox = styled.div`
 `;
 
 const SocialBox = styled.div`
-  border: 1px solid blue;
   position: relative;
   top: 12rem;
   left: 0rem;
@@ -250,7 +245,6 @@ const LoginBtn = styled.button`
   cursor: pointer;
 `;
 const AutoLogin = styled.div`
-  border: 1px solid black;
   width: 10rem;
   height: 2rem;
   position: relative;
@@ -263,7 +257,6 @@ const AutoLogin = styled.div`
 `;
 
 const SignUpBox = styled.div`
-  border: 1px solid black;
   width: 48rem;
   position: relative;
   text-align: center;

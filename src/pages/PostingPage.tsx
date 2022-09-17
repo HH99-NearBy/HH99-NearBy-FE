@@ -41,17 +41,13 @@ function PostingPage() {
   const navigate = useNavigate();
 
   const postingMutation = useMutation(apis.postChallenge, {
-    onMutate: (payload) => {
-      console.log("onmutate", payload);
-    },
+    onMutate: (payload) => {},
     onError(error, variables, context) {
       throw error;
     },
     onSuccess: (res, variables, context) => {
-      console.log("success", res, variables, context);
       const { data, headers } = res;
-      console.log(data);
-      console.log(headers);
+
       navigate("/");
     },
     onSettled: () => {
@@ -59,8 +55,6 @@ function PostingPage() {
     },
   });
   const handleOnChange = (e: React.ChangeEvent) => {
-    console.log(e);
-    console.log(e.currentTarget);
     const input = e.currentTarget as HTMLInputElement | HTMLTextAreaElement;
     const { name, value } = input;
     if (input !== undefined) {
@@ -137,7 +131,6 @@ function PostingPage() {
       };
       const reImg = await imageCompression(fileList[0], options);
       setProfileImg(reImg);
-      console.log(reImg);
 
       const upload = new AWS.S3.ManagedUpload({
         params: {
@@ -162,7 +155,6 @@ function PostingPage() {
       );
     }
   };
-  console.log(title, month, time, targetTime, desc, info, options);
   return (
     <StContentsWrapper onSubmit={handleSubmit}>
       <StTopContentsWrapper>

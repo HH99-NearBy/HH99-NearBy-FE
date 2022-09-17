@@ -67,6 +67,12 @@ const ChartBody = styled.canvas`
           height: 4rem !important;
         `;
       }
+      case "myPage": {
+        return css`
+          width: 40rem;
+          height: 10rem !important;
+        `;
+      }
       default: {
         return css`
           width: 40rem;

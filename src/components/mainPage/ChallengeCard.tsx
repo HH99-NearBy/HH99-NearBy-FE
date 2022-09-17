@@ -22,6 +22,7 @@ interface StyleProps {
 }
 
 function ChallengeCard(props: StyleProps) {
+  
   const { state, dispatch } = useContext(AppContext);
   const handleReadChallengeId = (id: number) => {
     dispatch({

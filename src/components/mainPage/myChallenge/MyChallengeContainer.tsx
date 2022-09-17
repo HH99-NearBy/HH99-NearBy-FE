@@ -33,9 +33,9 @@ function MyChallengeContainer({
   const handleScrolling = (e: React.WheelEvent<HTMLDivElement>) => {
     e.preventDefault();
     const target = e.currentTarget;
-    console.log(e.currentTarget.clientWidth);
-    console.log(e.currentTarget.scrollWidth);
-    console.log(Math.ceil(target.scrollLeft));
+    // console.log(e.currentTarget.clientWidth);
+    // console.log(e.currentTarget.scrollWidth);
+    // console.log(Math.ceil(target.scrollLeft));
 
     document.body.classList.add("block_scroll");
     // if (
@@ -59,7 +59,6 @@ function MyChallengeContainer({
   };
   const handleAutoScrolling = (bool: boolean) => {
     if (!bool && listRef.current !== null) {
-      console.log(listRef.current.scrollLeft);
       listRef.current.scrollLeft += 10;
       if (listRef.current.scrollLeft > 650) {
         if (!flag.current) {

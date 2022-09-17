@@ -1,14 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import MyChart from "../../Chart";
 
 function TierGraphContainer() {
   return (
     <TierContainer>
-      <TitleBox>
-      습관을 위한 시간
-      </TitleBox>
+      <TitleBox>습관을 위한 시간</TitleBox>
       <GraphBox>
-        여기에 그래프가 들어갑니다
+        <MyChart locate={"myPage"} scores={[10, 20, 30, 40, 50, 60, 70]} />
       </GraphBox>
     </TierContainer>
   );
@@ -17,12 +16,12 @@ function TierGraphContainer() {
 export default TierGraphContainer;
 
 const TierContainer = styled.div`
-  border: 1px solid green;
   width: 70rem;
   height: 15rem;
-`
+  border: 2px solid whitesmoke;
+  box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+`;
 const TitleBox = styled.div`
-  border: 1px solid black;
   width: 16rem;
   height: 3rem;
   justify-content: center;
@@ -30,11 +29,10 @@ const TitleBox = styled.div`
   font-weight: bold;
   position: relative;
   top: 6rem;
-`
+`;
 
 const GraphBox = styled.div`
-  border: 1px solid black;
   width: 54rem;
-`
-
-
+  justify-content: center;
+  padding-top: 2rem;
+`;
