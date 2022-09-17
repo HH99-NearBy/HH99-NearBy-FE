@@ -8,6 +8,7 @@ import apis from "../../api/api";
 import ovApis from "../../api/openvidu/api";
 import { Publisher } from "openvidu-browser/lib/OpenVidu/Publisher";
 import { AppContext } from "../../api/context/index";
+import { useParams } from "react-router-dom";
 
 interface InitState {
   mySessionId: string;
@@ -19,7 +20,8 @@ interface InitState {
 
 function VideoSection() {
   const { state, dispatch } = useContext(AppContext);
-
+  const { challengeId } = useParams();
+  console.log(challengeId);
   const [initialState, setInitialState] = useState<InitState>({
     mySessionId: "",
     myUserName: "",
@@ -69,7 +71,7 @@ function VideoSection() {
           .catch((error) => {
             throw error;
           });
-      });
+      }, Number(challengeId));
     }
   }, [session]);
 

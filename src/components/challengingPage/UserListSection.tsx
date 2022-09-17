@@ -10,8 +10,6 @@ function UserListSection() {
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
 
-  useEffect(() => {}, []);
-
   return (
     <StUserListSection>
       {state.people.map((person) => {

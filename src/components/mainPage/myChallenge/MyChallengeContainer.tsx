@@ -26,7 +26,7 @@ function MyChallengeContainer({
     setChallengeList(res);
     console.log(res);
   });
-  const [isMouseEnter, setIsMouseEnter] = useState<boolean>(true);
+  const [isMouseEnter, setIsMouseEnter] = useState<boolean>(false);
   const listRef = useRef<HTMLDivElement>(null);
   const flag = useRef<boolean>(false);
 
@@ -35,29 +35,31 @@ function MyChallengeContainer({
     const target = e.currentTarget;
     console.log(e.currentTarget.clientWidth);
     console.log(e.currentTarget.scrollWidth);
-    console.log(e.currentTarget.scrollLeft);
+    console.log(Math.ceil(target.scrollLeft));
+
     document.body.classList.add("block_scroll");
-    if (target.scrollLeft === 0 && e.deltaY < 0) {
-      document.body.classList.remove("block_scroll");
-    }
-    if (
-      target.clientWidth + target.scrollLeft === target.scrollWidth &&
-      e.deltaY > 0
-    ) {
-      document.body.classList.remove("block_scroll");
-    }
+    // if (
+    //   (target.scrollLeft === 0 && e.deltaY < 0) ||
+    //   (target.clientWidth + Math.ceil(target.scrollLeft) ===
+    //     target.scrollWidth &&
+    //     e.deltaY > 0)
+    // ) {
+    //   document.body.classList.remove("block_scroll");
+    // }
+
     target.scrollLeft += e.deltaY * 2;
   };
   const handleMouseEntering = () => {
-    setIsMouseEnter(false);
+    setIsMouseEnter(true);
     document.body.classList.add("block_scroll");
   };
   const handleMouseOut = () => {
-    setIsMouseEnter(true);
+    setIsMouseEnter(false);
     document.body.classList.remove("block_scroll");
   };
   const handleAutoScrolling = (bool: boolean) => {
-    if (bool && listRef.current !== null) {
+    if (!bool && listRef.current !== null) {
+      console.log(listRef.current.scrollLeft);
       listRef.current.scrollLeft += 10;
       if (listRef.current.scrollLeft > 650) {
         if (!flag.current) {
@@ -87,7 +89,6 @@ function MyChallengeContainer({
       clearInterval(interval);
     };
   }, [isMouseEnter, challengeList, flag.current]);
-
   return (
     <StContentsWrapper>
       <h2>참여한 챌린지</h2>

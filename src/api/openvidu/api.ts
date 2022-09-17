@@ -1,9 +1,9 @@
 import ovInstance from "./core/ovInstance";
 const ovApis = {
-  getOVToken: async (callback: (token: string) => {}) => {
+  getOVToken: async (callback: (token: string) => {}, challengeId: number) => {
     try {
       const reqRes = await ovInstance.post("/api-sessions/get-token", {
-        sessionName: "newSession",
+        sessionName: challengeId,
       });
       console.log(reqRes);
       console.log(reqRes.data.data[0]);
