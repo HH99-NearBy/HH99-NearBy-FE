@@ -1,3 +1,4 @@
+import { useQuery } from "react-query";
 import instance from "./core/axiosInstance";
 const apis = {
   reissue: async (refreshToken: string) => {
@@ -9,29 +10,75 @@ const apis = {
 
     return requestRes.headers;
   },
-  getOVToken: async (callback: (token: string) => {}) => {
+  userRegister: async ({
+    email,
+    nickname,
+    password,
+    profileImg,
+  }: {
+    email: string;
+    nickname: string;
+    password: string;
+    profileImg: string;
+  }) => {
     try {
-      const reqRes = await instance.post("/api-sessions/get-token", {
-        sessionName: "newSession",
+      const reqRes = await instance.post("/api/signup", {
+        email,
+        nickname,
+        password,
+        profileImg,
       });
-      console.log(reqRes);
-      console.log(reqRes.data[0]);
-      callback(reqRes.data[0]);
+      return reqRes;
+    } catch (error) {
+      throw error;
+    }
+  },
+  userNicknameValidationCheck: async (nickname: string) => {
+    try {
+      const reqRes = await instance.post("api/nicknamecheck", {
+        nickname,
+      });
+      return reqRes;
+    } catch (error) {}
+  },
+  userEmailValidationCheck: async (nickname: string) => {
+    try {
+      const reqRes = await instance.post("api/emailcheck", {
+        nickname,
+      });
+      return reqRes;
+    } catch (error) {}
+  },
+  userLogin: async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
+    try {
+      const reqRes = await instance.post("/api/login", {
+        email,
+        password,
+      });
+      return reqRes;
     } catch (error) {
       throw error;
     }
   },
   getMyChallengeList: async () => {
     try {
-      const reqRes = await instance.get("/api/myList");
+      const reqRes = await instance.get("/api/joinposts");
       return reqRes.data;
     } catch (error) {
       throw error;
     }
   },
-  getFUllChallengeList: async (pageNum: number) => {
+  getFUllChallengeList: async (pageNum: number, sizeNum: number) => {
     try {
-      const reqRes = await instance.get(`/api/posts?pagenum=${pageNum}`);
+      const reqRes = await instance.get(
+        `/api/posts?pageNum=${pageNum}&size=${sizeNum}`
+      );
       return reqRes.data;
     } catch (error) {
       throw error;
@@ -54,27 +101,34 @@ const apis = {
   },
   postChallenge: async ({
     title,
-    postImg,
-    password,
+    challengeImg,
+    startDay,
     startTime,
     targetTime,
-    description,
+    content,
+    notice,
+    challengeTag,
   }: {
     title: string;
-    postImg: string;
-    password: string;
+    challengeImg: string;
+    startDay: string;
     startTime: string;
-    targetTime: string;
-    description: string;
+    targetTime: number;
+    content: string;
+    notice: string;
+    challengeTag: string[];
   }) => {
     try {
       const reqRes = await instance.post("/api/challenge", {
         title,
-        postImg,
-        password,
+        challengeImg,
+        startDay,
         startTime,
         targetTime,
-        description,
+        content,
+        notice,
+        challengeTag,
+        limit: 16,
       });
       return reqRes.data;
     } catch (error) {
@@ -121,6 +175,7 @@ const apis = {
   recruitChallenge: async (challengeId: number) => {
     try {
       const reqRes = await instance.post(`/api/challenge/ok/${challengeId}`);
+      console.log(reqRes);
       return reqRes.data;
     } catch (error) {
       throw error;
@@ -141,6 +196,14 @@ const apis = {
       const reqRes = await instance.get(
         `/api/ranking?pagenum=${pageNum}&pagelimit=20`
       );
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getParticipantList: async (challengeId: number) => {
+    try {
+      const reqRes = await instance.get(`/api/chat/list/${challengeId}`);
       return reqRes.data;
     } catch (error) {
       throw error;

@@ -1,21 +1,60 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import ChallengeCard from "../ChallengeCard";
+import { AppContext } from "../../../api/context";
+import { useQuery } from "react-query";
+import apis from "../../../api/api";
+
+interface ChallengeInfo {
+  challengeImg: string;
+  endTime: string;
+  limitPeople: number;
+  participatePeople: number;
+  startDay: string;
+  startTime: string;
+  tagetTime: number;
+  title: string;
+  id: number;
+}
 
 function RecruitContainer({
   handleToggleModal,
 }: {
   handleToggleModal: () => void;
 }) {
+  const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
+  const req = useQuery("ALL_CHALLENGE", async () => {
+    const res = await apis.getFUllChallengeList(1, 11);
+    setChallengeList(res);
+  });
+  console.log(challengeList);
+
   return (
     <StContentsWrapper>
       <h2>쓱-하는 챌린지</h2>
       <StCardList>
-        <ChallengeCard status="doing" handleToggleModal={handleToggleModal} />
-        <ChallengeCard status="done" handleToggleModal={handleToggleModal} />
-        <ChallengeCard status="doing" handleToggleModal={handleToggleModal} />
-        <ChallengeCard status="done" handleToggleModal={handleToggleModal} />
-        <ChallengeCard status="done" handleToggleModal={handleToggleModal} />
+        {challengeList.length !== 0
+          ? challengeList.map((post) => {
+              const now = new Date();
+              const createdAt = new Date(`${post.startDay}T${post.startTime}`);
+              return (
+                <ChallengeCard
+                  key={post.id}
+                  status={now < createdAt ? "doing" : "done"}
+                  handleToggleModal={handleToggleModal}
+                  challengeTitle={post.title}
+                  limitPeople={post.limitPeople}
+                  participatePeople={post.participatePeople}
+                  startDay={post.startDay}
+                  startTime={post.startTime}
+                  targetTime={post.tagetTime}
+                  thumbnailImg={post.challengeImg}
+                  endTime={post.endTime}
+                  challengeId={post.id}
+                />
+              );
+            })
+          : null}
       </StCardList>
     </StContentsWrapper>
   );

@@ -1,15 +1,18 @@
 import axios from "axios";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { KAKAO_AUTH_URL } from "./KakaoForm";
+import apis from "../../api/api";
+import { useMutation, useQuery } from "react-query";
+import { AppContext } from "../../api/context";
 
 function LoginForm() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [autoLogin, setAutoLogin] = useState<boolean>(false);
+  const { state, dispatch } = useContext(AppContext);
 
   const onChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -20,27 +23,59 @@ function LoginForm() {
     setPassword(e.target.value);
     console.log(password);
   };
+  const loginMutation = useMutation(apis.userLogin, {
+    onMutate: (payload) => {
+      console.log("onmutate", payload);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {
+      console.log("success", res, variables, context);
+      const { data, headers } = res;
+      sessionStorage.setItem("accessToken", headers.authorization);
+      sessionStorage.setItem("userName", data.data.nickname);
+      sessionStorage.setItem("userLevel", data.data.level);
+      sessionStorage.setItem("userProfile", data.data.profileImg);
+
+      navigate("/");
+    },
+    onSettled: () => {
+      console.log("end");
+    },
+  });
 
   const onSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
+    (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      try {
-        const response = await axios.post("http://ssggwan.site/api/login", {
-          email: email,
-          password: password,
-        });
-        alert("로그인 완료");
-        console.log(response);
-      } catch (err) {
-        alert("로그인 실패");
-        console.error(err);
-      }
+      loginMutation.mutate({ email, password });
     },
     [email, password]
   );
   const handleToRegister = () => {
     navigate("/register");
   };
+
+  // const onSubmit = useCallback(
+  //   async (e: React.FormEvent<HTMLFormElement>) => {
+  //     e.preventDefault();
+  //     try {
+  //       const response = await axios.post("http://ssggwan.site/api/login", {
+  //         email: email,
+  //         password: password,
+  //       });
+  //       alert("로그인 완료");
+  //       console.log(response);
+  //     } catch (err) {
+  //       alert("로그인 실패");
+  //       console.error(err);
+  //     }
+  //   },
+  //   [email, password]
+  // );
+  // const handleToRegister = () => {
+  //   navigate("/register");
+  // };
   // const KakaoLogin = useCallback(e: React.MouseEvent<HTMLButtonElement>) => {
   //   location:Location.href = KAKAO_AUTH_URL
   // }
@@ -62,7 +97,7 @@ function LoginForm() {
                 onChange={onChange1}
               />
               <LoginInput
-                type="text"
+                type="password"
                 placeholder="비밀번호"
                 value={password}
                 onChange={onChange2}

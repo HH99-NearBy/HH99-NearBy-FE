@@ -5,8 +5,10 @@ import React, { useState, useCallback, useEffect, useContext } from "react";
 import styled from "styled-components";
 import UserVideoCard from "./videoSection/UserVideoCard";
 import apis from "../../api/api";
+import ovApis from "../../api/openvidu/api";
 import { Publisher } from "openvidu-browser/lib/OpenVidu/Publisher";
 import { AppContext } from "../../api/context/index";
+import { useParams } from "react-router-dom";
 
 interface InitState {
   mySessionId: string;
@@ -18,7 +20,8 @@ interface InitState {
 
 function VideoSection() {
   const { state, dispatch } = useContext(AppContext);
-
+  const { challengeId } = useParams();
+  console.log(challengeId);
   const [initialState, setInitialState] = useState<InitState>({
     mySessionId: "",
     myUserName: "",
@@ -37,7 +40,7 @@ function VideoSection() {
   // dispatch({ type: "READ_SUBSCRIBERS", payload: -1, subscribe: subscribers });
   const connection = useCallback(() => {
     if (session !== undefined && ov !== undefined) {
-      apis.getOVToken(async (token: string) => {
+      ovApis.getOVToken(async (token: string) => {
         session
           .connect(token, { clientData: Math.random() })
           .then(async () => {
@@ -68,7 +71,7 @@ function VideoSection() {
           .catch((error) => {
             throw error;
           });
-      });
+      }, Number(challengeId));
     }
   }, [session]);
 
@@ -80,7 +83,6 @@ function VideoSection() {
       console.log("streamCreated");
       const sub = session.subscribe(event.stream, "video_container");
       console.log(state.ovSubscribers);
-      console.log(JSON.parse(event.stream.connection.data));
       // setSubscribers([...subscribers, sub]);
       dispatch({
         type: "READ_SUBSCRIBERS",
@@ -89,7 +91,12 @@ function VideoSection() {
       });
     });
     session.on("streamDestroyed", (event: any) => {
+      dispatch({
+        type: "REMOVE_SUBSCRIBERS",
+        targetOvSub: event.stream.streamId,
+      });
       console.log("stream destroyed");
+      console.log(event.stream);
     });
     session.on("exception", (exception) => {
       console.warn(exception);
@@ -146,7 +153,6 @@ function VideoSection() {
     //   });
     // }
   };
-
   const leaveSession = useCallback(() => {
     if (session) {
       session.disconnect();
