@@ -8,6 +8,7 @@ import RegisterPage from "../pages/RegisterPage";
 import KakaoForm from "../components/loginPage/KakaoForm";
 import MyPage from "../pages/MyPage";
 import InformationPage from "../pages/InformationPage";
+import EditContainer from "../components/editPage/EditContainer";
 
 function Router() {
   return (
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/register" element={<RegisterPage/>}/>
       <Route path ="/mypage" element = {<MyPage/>}/>
       <Route path = "/info" element ={<InformationPage/>}/>
+      <Route path = '/edit' element = {<EditContainer/>}/>
     </Routes>
   );
 }
