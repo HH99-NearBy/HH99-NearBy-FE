@@ -7,7 +7,6 @@ const apis = {
         "Refresh-Token": refreshToken,
       },
     });
-
     return requestRes.headers;
   },
   userRegister: async ({
@@ -137,27 +136,36 @@ const apis = {
   },
   modifyChallenge: async ({
     title,
-    postImg,
-    password,
+    challengeImg,
+    startDay,
     startTime,
     targetTime,
-    description,
+    content,
+    notice,
+    challengeTag,
+    challengeId,
   }: {
     title: string;
-    postImg: string;
-    password: string;
+    challengeImg: string;
+    startDay: string;
     startTime: string;
-    targetTime: string;
-    description: string;
+    targetTime: number;
+    content: string;
+    notice: string;
+    challengeTag: string[];
+    challengeId: number;
   }) => {
     try {
-      const reqRes = await instance.post("/api/challenge", {
+      const reqRes = await instance.put(`/api/challenge/${challengeId}`, {
         title,
-        postImg,
-        password,
+        challengeImg,
+        startDay,
         startTime,
         targetTime,
-        description,
+        content,
+        notice,
+        challengeTag,
+        limit: 16,
       });
       return reqRes.data;
     } catch (error) {

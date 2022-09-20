@@ -17,6 +17,7 @@ function Router() {
       <Route path="/challenging/:challengeId" element={<ChallengingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/posting" element={<PostingPage />} />
+      <Route path="/modify/:challengeId" element={<PostingPage />} />
       <Route path="/api/kakaologin" element={<KakaoForm />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/mypage" element={<MyPage />} />

@@ -46,6 +46,11 @@ function ModalBody({
   const handleCancleChallenge = () => {
     apis.cancelRecruit(state.challengeId);
   };
+  const handleModifyChallenge = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/modify/${state.challengeId}`);
+  };
   const now = new Date();
   const createdAt = new Date(
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
@@ -69,6 +74,10 @@ function ModalBody({
               className="challenge_detail_thumbnail"
             />
             <StSummeryInfoContainer>
+              <li className="challenge_modify_btn_container">
+                <button onClick={handleModifyChallenge}>수정</button>
+              </li>
+
               <li>
                 {<BiCalendarCheck />}
                 {body?.detailModal.startDay}
@@ -239,9 +248,11 @@ const StSummeryContainer = styled.div`
 `;
 
 const StSummeryInfoContainer = styled.ul`
+  position: relative;
   width: 100%;
   height: 22rem;
   background-color: #f5f5f5;
+
   li {
     width: 100%;
     height: 25%;
@@ -252,6 +263,23 @@ const StSummeryInfoContainer = styled.ul`
     svg {
       font-size: 2.5rem;
       margin-right: 1.5rem;
+    }
+  }
+  .challenge_modify_btn_container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    button {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      width: 5rem;
+      height: 3rem;
+      border: none;
+      background-color: var(--purple-color);
+      cursor: pointer;
+      color: white;
+      font-size: 1.5rem;
     }
   }
 `;
