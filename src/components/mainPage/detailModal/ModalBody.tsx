@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getChallengeDetail } from "../../../api/challengeDetail/api";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
@@ -26,12 +26,27 @@ function ModalBody({
     "CHALLENGE_DETAIL",
     async () => {
       const res = await getChallengeDetail(state.challengeId);
+      console.log(res);
       setBody(res);
     },
     {
       retry: 2,
     }
   );
+  const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
+    onMutate: (payload) => {
+      console.log("onmutate", payload);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {
+      navigate("/");
+    },
+    onSettled: () => {
+      console.log("end");
+    },
+  });
   console.log(body);
   console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
@@ -51,6 +66,12 @@ function ModalBody({
     e.stopPropagation();
     navigate(`/modify/${state.challengeId}`);
   };
+  const handleDeleteChallenge = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteChallengeMutation.mutate(state.challengeId);
+    handleToggleModal();
+  };
   const now = new Date();
   const createdAt = new Date(
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
@@ -60,10 +81,17 @@ function ModalBody({
       <StModalBody>
         <StModalHeader>
           <button onClick={handleToggleModal}>X</button>
-          <span>
-            {body?.detailModal.level}
-            {body?.detailModal.writer}
-          </span>
+          <div>
+            <span>{body?.detailModal.level}</span>
+            <span>{body?.detailModal.writer}</span>
+            {body?.detailModal.writer ===
+              sessionStorage.getItem("userName") && (
+              <div className="challenge_btn_container">
+                <button onClick={handleModifyChallenge}>수정</button>
+                <button onClick={handleDeleteChallenge}>삭제</button>
+              </div>
+            )}
+          </div>
           <h1>{body?.detailModal.title}</h1>
         </StModalHeader>
         <StModalContentsContainer>
@@ -74,10 +102,6 @@ function ModalBody({
               className="challenge_detail_thumbnail"
             />
             <StSummeryInfoContainer>
-              <li className="challenge_modify_btn_container">
-                <button onClick={handleModifyChallenge}>수정</button>
-              </li>
-
               <li>
                 {<BiCalendarCheck />}
                 {body?.detailModal.startDay}
@@ -162,6 +186,7 @@ const StModalBody = styled.div`
 `;
 
 const StModalHeader = styled.div`
+  position: relative;
   width: 100%;
   height: 12rem;
   display: flex;
@@ -179,8 +204,35 @@ const StModalHeader = styled.div`
     font-size: 2rem;
     cursor: pointer;
   }
-  span {
+  div {
+    display: flex;
+    align-items: center;
     font-size: 2rem;
+    height: 3rem;
+    span {
+      height: 3rem;
+      display: flex;
+      align-items: center;
+    }
+    .challenge_btn_container {
+      button {
+        width: 4rem;
+        height: 3rem;
+        border: none;
+        letter-spacing: 0.1rem;
+        :nth-of-type(1) {
+          background-color: var(--purple-color);
+          margin-left: 1.5rem;
+        }
+        :nth-of-type(2) {
+          background-color: red;
+          margin-left: 0.5rem;
+        }
+        cursor: pointer;
+        color: white;
+        font-size: 1.5rem;
+      }
+    }
   }
   h1 {
     font-size: 4rem;
@@ -248,7 +300,6 @@ const StSummeryContainer = styled.div`
 `;
 
 const StSummeryInfoContainer = styled.ul`
-  position: relative;
   width: 100%;
   height: 22rem;
   background-color: #f5f5f5;
@@ -263,23 +314,6 @@ const StSummeryInfoContainer = styled.ul`
     svg {
       font-size: 2.5rem;
       margin-right: 1.5rem;
-    }
-  }
-  .challenge_modify_btn_container {
-    position: absolute;
-    top: 0;
-    right: 0;
-    button {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      width: 5rem;
-      height: 3rem;
-      border: none;
-      background-color: var(--purple-color);
-      cursor: pointer;
-      color: white;
-      font-size: 1.5rem;
     }
   }
 `;

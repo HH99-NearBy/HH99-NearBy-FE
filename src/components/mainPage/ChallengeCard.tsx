@@ -22,7 +22,6 @@ interface StyleProps {
 }
 
 function ChallengeCard(props: StyleProps) {
-  
   const { state, dispatch } = useContext(AppContext);
   const handleReadChallengeId = (id: number) => {
     dispatch({
@@ -31,8 +30,6 @@ function ChallengeCard(props: StyleProps) {
       challengeStatus: props.status,
     });
   };
-  console.log(props.challengeId);
-  console.log(props.targetTime);
   return (
     <StCardContainer status={props.status}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />

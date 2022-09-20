@@ -129,7 +129,11 @@ const apis = {
         challengeTag,
         limit: 16,
       });
-      return reqRes.data;
+      console.log(reqRes);
+      const reReq = await instance.post(
+        `/api/challenge/ok/${reqRes.data.data}`
+      );
+      return reqRes.data.msg;
     } catch (error) {
       throw error;
     }

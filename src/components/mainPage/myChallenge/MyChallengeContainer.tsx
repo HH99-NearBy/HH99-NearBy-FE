@@ -8,6 +8,7 @@ interface ChallengeInfo {
   challengeImg: string;
   endTime: string;
   limitPeople: number;
+  participatePeople: number;
   startDay: string;
   startTime: string;
   tagetTime: number;
@@ -107,6 +108,7 @@ function MyChallengeContainer({
               handleToggleModal={handleToggleModal}
               challengeTitle={post.title}
               limitPeople={post.limitPeople}
+              participatePeople={post.participatePeople}
               startDay={post.startDay}
               startTime={post.startTime}
               targetTime={post.tagetTime}

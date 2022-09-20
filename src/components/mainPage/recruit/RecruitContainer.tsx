@@ -37,6 +37,7 @@ function RecruitContainer({
           ? challengeList.map((post) => {
               const now = new Date();
               const createdAt = new Date(`${post.startDay}T${post.startTime}`);
+              console.log(post.participatePeople);
               return (
                 <ChallengeCard
                   key={post.id}
