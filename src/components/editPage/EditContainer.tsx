@@ -4,7 +4,7 @@ import axios from 'axios'
 import AWS from 'aws-sdk'
 import imageCompression from 'browser-image-compression'
 import MAINLOGO from "../../static/main_logo.png";
-
+import apis from '../../api/api'
 
 function EditContainer() {
 
@@ -69,9 +69,9 @@ function EditContainer() {
 
 
     //닉네임,비밀번호,비밀번호 확인,이미지 url
-    const [nickname, setNickname] = useState<string>('');
+    const [nickname, setNickname] = useState<any>(sessionStorage.getItem("nickname"));
     const [profileImg,setProfileImg] = useState<File>()
-    const [upload,setUpload] = useState<string>('')
+    const [upload,setUpload] = useState<any>(sessionStorage.getItem("profileImg"))
 
 
     //오류메세지 상태저장
@@ -89,10 +89,10 @@ function EditContainer() {
     const onChangeNick = useCallback ((e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setNickname(e.target.value)
-    
-        if(e.target.value.length < 2 || e.target.value.length > 5) {
-          setNicknameMessage('2글자 이상 5글자 미만으로 입력해주세요.')
-          setIsNick(false)
+        if (nickname !== null) {
+            setNickname(e.target.value.length < 2 || e.target.value.length > 5) 
+            setNicknameMessage('2글자 이상 5글자 미만으로 입력해주세요.')
+            setIsNick(false)
         }else {
           setNicknameMessage('올바른 닉네임 형식입니다.')
           setIsNick(true)
@@ -103,9 +103,7 @@ function EditContainer() {
         async (e : React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault()
           try {
-           const response = await axios.put('http://ssggwan.site/api/nicknamecheck',{
-              nickname: nickname
-            })
+        const response =await apis.userNicknameValidationCheck
               setNickCheck(!nickCheck)
               alert('가입 가능한 닉네임입니다.')
               console.log(response)
@@ -115,18 +113,30 @@ function EditContainer() {
           }
         },[nickname])
 
+        const onSubmit = useCallback(
+            async (e:React.FormEvent<HTMLFormElement>) => {
+              e.preventDefault()
+              try {
+                const response = await apis.modifyMyInfo
+                  alert('프로필 수정 완료')
+                  console.log(response)
+              }catch (err) {
+                console.error(err)
+              }
+            },[,nickname,upload])
+
 
   return (
     <SignupContainer>
           <LogoBox>
             <img src={MAINLOGO}/>
           </LogoBox>
-          <FormBox>
+          <FormBox onSubmit={onSubmit}>
           <SignupBox>
           <ImgBox>
           <TitleBox>프로필 수정</TitleBox>
             <FileBox>
-              {isImg ? <img src = {upload} /> : <img src = "https://ifh.cc/g/RCtOo7.png"/>}
+              <img src = {upload} />
               <label htmlFor = "input-file" >사진 등록하기</label>
              <input type="file" id="input-file" placeholder = "사진추가"  accept='image/*' onChange={handleImageChange}/> 
             </FileBox>
@@ -137,9 +147,9 @@ function EditContainer() {
           <SignBox2> 
           <CheckBox>
               <div>
-              <InputSt type="text" placeholder = "닉네임을 입력해 주세요." value={nickname} onChange={onChangeNick}/>
+              <InputSt type="text" placeholder = '닉네임을 입력하세요' value={nickname} onChange={onChangeNick}/>
               <CheckBtn onClick={NicknameCheck}>중복확인</CheckBtn>
-              {nickname.length > 0 && <p className={`message ${isNickname ? 'success' : 'error'}`}>{NicknameMessage}</p>}
+              {nickname?.length > 0 && <p className={`message ${isNickname ? 'success' : 'error'}`}>{NicknameMessage}</p>}
               </div>
           </CheckBox>
           </SignBox2>

@@ -1,11 +1,12 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-function UserIcon({ size }: { size: string }) {
-  return <StIcon size={size} />;
+function UserIcon({ size, imgUrl }: { size: string; imgUrl: string | null }) {
+  console.log(imgUrl);
+  return <StIcon size={size} imgUrl={imgUrl} />;
 }
 
-const StIcon = styled.div<{ size: string }>`
+const StIcon = styled.div<{ size: string; imgUrl: string | null }>`
   width: ${(props) =>
     props.size === "medium"
       ? "6.5rem"
@@ -19,10 +20,9 @@ const StIcon = styled.div<{ size: string }>`
       ? "10rem"
       : "5rem"};
   border-radius: 50%;
-  background: url("https://publy.imgix.net/images/2018/02/28/1519811155_f99450b74bbc61046cf55389501cd124.jpeg?fm=pjpg");
+  background: url(${(props) => props.imgUrl});
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
 `;
 export default UserIcon;
-

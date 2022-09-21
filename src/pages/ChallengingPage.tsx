@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router";
 import { BsFillPersonFill } from "react-icons/bs";
 import VideoSection from "../components/challengingPage/VideoSection";
-import ChatSection from "../components/challengingPage/ChatSection";
-import SummeryInfoSection from "../components/challengingPage/SummeryInfoSection";
+import SideContentsSection from "../components/challengingPage/SideContentsSection";
+import { RoomContextProvider } from "../api/context/roomContext";
 
 function ChallengingPage() {
   const { challengeId } = useParams();
@@ -18,13 +18,15 @@ function ChallengingPage() {
       document.querySelector("header")?.classList.remove("hidden");
     };
   });
+  //웹소켓 연결 여기서
+  //채팅은 ChatSection에서 subscribe하고
+  //인원수는 어떡해야하나?
   return (
     <StPageLayout>
       <VideoSection />
-      <StSideSection>
-        <SummeryInfoSection />
-        <ChatSection />
-      </StSideSection>
+      <RoomContextProvider>
+        <SideContentsSection />
+      </RoomContextProvider>
     </StPageLayout>
   );
 }

@@ -2,12 +2,23 @@ import React from "react";
 import styled from "styled-components";
 import ChatList from "./chatSection/ChatList";
 import ChatForm from "./chatSection/ChatForm";
-
-function ChatSection() {
+interface ChatType {
+  nickName: string;
+  chat: string;
+}
+function ChatSection({
+  chats,
+  stompClient,
+  challengeId,
+}: {
+  chats: ChatType[];
+  stompClient: React.MutableRefObject<any>;
+  challengeId: number;
+}) {
   return (
     <StChatSection>
-      <ChatList />
-      <ChatForm />
+      <ChatList chats={chats} />
+      <ChatForm stompClient={stompClient} challengeId={challengeId} />
     </StChatSection>
   );
 }

@@ -1,23 +1,32 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-function MyChart() {
+interface ChartProps {
+  locate: string;
+  scores: number[];
+}
+
+function MyChart(props: ChartProps) {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
+    let myChart: Chart<"line", number[], string>;
     if (chartRef.current !== null) {
       const ctx = chartRef.current;
       ctx.style.backgroundColor = "white";
-      const myChart = new Chart(ctx, {
+      myChart = new Chart(ctx, {
         type: "line",
         data: {
           labels: ["1", "2", "3", "4", "5", "6", "7"],
           datasets: [
             {
-              data: [12, 30, 3, 5, 2, 3, 7],
+              data: props.scores,
               borderColor: ["#6627f5"],
-              borderWidth: 2,
-              pointBorderWidth: 0,
+              borderWidth: 3,
+              pointBorderWidth: 2,
+              pointStyle: "circle",
+              pointBackgroundColor: ["#6627f5"],
+              tension: 0.4,
             },
           ],
         },
@@ -41,13 +50,37 @@ function MyChart() {
         },
       });
     }
+    return () => {
+      myChart.destroy();
+    };
   }, [chartRef.current]);
-  return <ChartBody ref={chartRef}></ChartBody>;
+
+  return <ChartBody ref={chartRef} {...props}></ChartBody>;
 }
 
 const ChartBody = styled.canvas`
-  width: 400px;
-  height: 100px !important;
+  ${(props: ChartProps) => {
+    switch (props.locate) {
+      case "rankingPage": {
+        return css`
+          width: 30rem;
+          height: 4rem !important;
+        `;
+      }
+      case "myPage": {
+        return css`
+          width: 40rem;
+          height: 10rem !important;
+        `;
+      }
+      default: {
+        return css`
+          width: 40rem;
+          height: 10rem;
+        `;
+      }
+    }
+  }}
 `;
 
 export default MyChart;

@@ -10,6 +10,7 @@ import MyPage from "../pages/MyPage";
 import InformationPage from "../pages/InformationPage";
 import EditContainer from "../components/editPage/EditContainer";
 
+import PostingPage from "../pages/PostingPage";
 function Router() {
   return (
     <Routes>
@@ -22,6 +23,7 @@ function Router() {
       <Route path ="/mypage" element = {<MyPage/>}/>
       <Route path = "/info" element ={<InformationPage/>}/>
       <Route path = '/edit' element = {<EditContainer/>}/>
+      <Route path="/posting" element={<PostingPage />} />
     </Routes>
   );
 }

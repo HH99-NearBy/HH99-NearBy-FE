@@ -61,6 +61,10 @@ const GlobalStyle = createGlobalStyle`
   .selected_icon {
     color: #6627f5 !important;
   }
+  .selected_option {
+    background-color: #6627f5;
+    color: white;
+  }
   .block_scroll {
     overflow-y: hidden;
   }

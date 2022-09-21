@@ -10,26 +10,44 @@ interface StyleProps {
   status: string;
   thumbnailImg?: string;
   challengeTitle?: string;
+  limitPeople?: number;
+  participatePeople?: number;
+  startDay?: string;
+  startTime?: string;
+  targetTime?: number;
+  endTime?: string;
   ref?: any;
+  challengeId?: number;
   handleToggleModal?: () => void;
 }
 
 function ChallengeCard(props: StyleProps) {
   
   const { state, dispatch } = useContext(AppContext);
-  const handleReadCahllengeId = (id: number) => {
-    dispatch({ type: "READ_CHALLENGE_ID", payload: id });
+  const handleReadChallengeId = (id: number) => {
+    dispatch({
+      type: "READ_CHALLENGE_ID",
+      payload: id,
+      challengeStatus: props.status,
+    });
   };
+  console.log(props.challengeId);
+  console.log(props.targetTime);
   return (
     <StCardContainer status={props.status}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
       <StCardContents>
         <div className="card_body">
           <div className="header_info">
-            {props.status === "running" && "진행중!"}
+            {props.status === "running" && (
+              <>
+                <div className="running_nav_dot"></div> 진행중!
+              </>
+            )}
             {props.status !== "running" && (
               <>
-                <BsFillPersonFill /> "모집중 19/30"
+                <BsFillPersonFill /> `모집중 {props.participatePeople}/
+                {props.limitPeople}`
               </>
             )}
           </div>
@@ -37,32 +55,47 @@ function ChallengeCard(props: StyleProps) {
           <div className="footer_info">
             <span className="start_date">
               <BiCalendarCheck />
-              2022 - 10 - 01
+              {props.startDay}
             </span>
             <span className="start_time">
               <IoMdAlarm />
-              오전 09:20
+              {props.startTime}
             </span>
             <span className="running_time">
               <MdOutlineTimer />
-              240분
+              {props.targetTime}분
             </span>
           </div>
         </div>
-        <button
-          className="modal_open_btn"
-          onClick={() => {
-            if (typeof props.handleToggleModal !== "undefined")
-              props.handleToggleModal();
-            handleReadCahllengeId(2);
-          }}
-        >
-          {props.status === "doing"
-            ? "도전하기"
-            : props.status === "done"
-            ? "완료된 챌린지입니다."
-            : "입장하기"}
-        </button>
+        {props.status === "doing" ? (
+          <button
+            className="modal_open_btn"
+            onClick={() => {
+              if (typeof props.challengeId !== "undefined") {
+                handleReadChallengeId(props.challengeId);
+              }
+
+              if (typeof props.handleToggleModal !== "undefined")
+                props.handleToggleModal();
+            }}
+          >
+            도전하기
+          </button>
+        ) : props.status === "done" ? (
+          <button className="modal_open_btn">완료된 챌린지입니다.</button>
+        ) : (
+          <button
+            className="modal_open_btn"
+            onClick={() => {
+              if (typeof props.challengeId !== "undefined")
+                handleReadChallengeId(props.challengeId);
+              if (typeof props.handleToggleModal !== "undefined")
+                props.handleToggleModal();
+            }}
+          >
+            입장하기
+          </button>
+        )}
       </StCardContents>
     </StCardContainer>
   );
@@ -145,6 +178,29 @@ const StCardContents = styled.div`
       height: 3.5rem;
       color: #323232;
       svg {
+        margin-right: 0.5rem;
+      }
+      @keyframes runner {
+        0% {
+          opacity: 1;
+        }
+
+        50% {
+          opacity: 0;
+        }
+
+        100% {
+          opacity: 1;
+        }
+      }
+      .running_nav_dot {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background-color: red;
+        animation-name: runner;
+        animation-duration: 1.6s;
+        animation-iteration-count: infinite;
         margin-right: 0.5rem;
       }
     }

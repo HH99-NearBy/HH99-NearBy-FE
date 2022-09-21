@@ -3,15 +3,25 @@ import React, { Dispatch, useReducer, useContext } from "react";
 
 interface ContextAction {
   type: string;
-  payload: number;
+  payload?: number;
   subscribe?: any;
+  userName?: string;
+  challengeStatus?: string;
+  targetOvSub?: string;
 }
 
 type ContextDispatch = Dispatch<ContextAction>;
 
-const ContextState: { challengeId: number; ovSubscribers: any } = {
+const ContextState: {
+  challengeId: number;
+  ovSubscribers: any;
+  userName: string | undefined;
+  challengeStatus: string;
+} = {
   challengeId: -1,
   ovSubscribers: [],
+  userName: "",
+  challengeStatus: "",
 };
 
 // const StateContext = React.createContext<typeof ContextState | null>(null);
@@ -25,15 +35,47 @@ export const AppContext = React.createContext<{
   dispatch: () => null,
 });
 
-function reducer(state: typeof ContextState, action: ContextAction) {
+function reducer(
+  state: typeof ContextState,
+  action: ContextAction
+): typeof ContextState {
   switch (action.type) {
     case "READ_CHALLENGE_ID": {
-      return { ...state, challengeId: action.payload };
+      const newData = {
+        challengeId: -1,
+        challengeStatus: "",
+      };
+      if (
+        typeof action.payload === "number" &&
+        typeof action.challengeStatus === "string"
+      ) {
+        newData.challengeId = action.payload;
+        newData.challengeStatus = action.challengeStatus;
+      }
+      return {
+        ...state,
+        ...newData,
+      };
     }
     case "READ_SUBSCRIBERS": {
       return {
         ...state,
         ovSubscribers: [...state.ovSubscribers, action.subscribe],
+      };
+    }
+    case "REMOVE_SUBSCRIBERS": {
+      return {
+        ...state,
+        ovSubscribers: state.ovSubscribers.filter(
+          (sub: { stream: { streamId: string | undefined } }) =>
+            sub.stream.streamId !== action.targetOvSub
+        ),
+      };
+    }
+    case "SYNC_USER_DATA": {
+      return {
+        ...state,
+        userName: action.userName,
       };
     }
     default: {
@@ -44,10 +86,7 @@ function reducer(state: typeof ContextState, action: ContextAction) {
 }
 
 export function ContextProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, {
-    challengeId: -1,
-    ovSubscribers: [],
-  });
+  const [state, dispatch] = useReducer(reducer, ContextState);
   return (
     <AppContext.Provider value={{ state, dispatch }}>
       {children}

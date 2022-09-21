@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const instance = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URI,
+const ovInstance = axios.create({
+  baseURL: process.env.REACT_APP_OV_URI,
 });
 
-instance.interceptors.request.use(
+ovInstance.interceptors.request.use(
   (req) => {
     const accessToken = sessionStorage.getItem("accessToken");
     if (typeof accessToken === "string" && typeof req.headers !== "undefined") {
@@ -43,4 +43,4 @@ instance.interceptors.request.use(
 //   }
 // );
 
-export default instance;
+export default ovInstance;
