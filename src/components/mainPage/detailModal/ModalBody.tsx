@@ -76,6 +76,11 @@ function ModalBody({
   const createdAt = new Date(
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
+  const endTime = Date.parse(`${body?.detailModal.endTime}`);
+  console.log(body?.detailModal.endTime);
+  console.log(endTime);
+  console.log(Date.now());
+
   return (
     <StModalContainer>
       <StModalBody>
@@ -84,11 +89,14 @@ function ModalBody({
           <div>
             <span>{body?.detailModal.level}</span>
             <span>{body?.detailModal.writer}</span>
+            <span>
+              {body?.detailModal.writer ===
+                sessionStorage.getItem("userName") && `⭐`}
+            </span>
             {body?.detailModal.writer ===
               sessionStorage.getItem("userName") && (
               <div className="challenge_btn_container">
                 <button onClick={handleModifyChallenge}>수정</button>
-                <button onClick={handleDeleteChallenge}>삭제</button>
               </div>
             )}
           </div>
@@ -141,7 +149,13 @@ function ModalBody({
                 </button>
               )}
               {/* //status => doing:모집중, recruit: 신청했으나 시작하지 않음, running: 신청했고 시작한 챌린지 */}
-              {state.challengeStatus === "doing" ? null : (
+              {/* {state.challengeStatus === "doing" ? null : (
+                <button onClick={handleCancleChallenge}>취소하기</button>
+              )} */}
+              {state.challengeStatus === "doing" ? null : body?.detailModal
+                  .writer === sessionStorage.getItem("userName") ? (
+                <button onClick={handleDeleteChallenge}>챌린지 삭제</button>
+              ) : (
                 <button onClick={handleCancleChallenge}>취소하기</button>
               )}
             </StButtonGroup>

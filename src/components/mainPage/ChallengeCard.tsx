@@ -111,7 +111,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
-            background-color: purple;
+            background-color: #e1e1e1;
           }
         `;
       case "done":
@@ -119,7 +119,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
-            background-color: purple;
+            background-color: #e1e1e1;
           }
           .modal_open_btn {
             background-color: #e1e1e1;
@@ -134,7 +134,7 @@ const StCardContainer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
-            background-color: red;
+            background-color: #e1e1e1;
           }
           .modal_open_btn {
             background-color: #ffa115;
@@ -148,7 +148,7 @@ const StCardContainer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
-            background-color: red;
+            background-color: #e1e1e1;
           }
           .modal_open_btn {
             background-color: #ffa115;

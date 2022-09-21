@@ -99,24 +99,29 @@ function MyChallengeContainer({
         ref={listRef}
       >
         {challengeList.map((post, idx) => {
-          const now = new Date();
-          const startTime = new Date(`${post.startDay}T${post.startTime}`);
-          return (
-            <ChallengeCard
-              key={post.id}
-              status={now < startTime ? "recruit" : "running"}
-              handleToggleModal={handleToggleModal}
-              challengeTitle={post.title}
-              limitPeople={post.limitPeople}
-              participatePeople={post.participatePeople}
-              startDay={post.startDay}
-              startTime={post.startTime}
-              targetTime={post.tagetTime}
-              thumbnailImg={post.challengeImg}
-              endTime={post.endTime}
-              challengeId={post.id}
-            />
-          );
+          const now = Date.now();
+          const startTime = Date.parse(`${post.startDay}T${post.startTime}`);
+          const endTime = Date.parse(`${post.endTime}`);
+          console.log("now :", now);
+          console.log("endTime :", endTime);
+          if (now < endTime) {
+            return (
+              <ChallengeCard
+                key={post.id}
+                status={now < startTime ? "recruit" : "running"}
+                handleToggleModal={handleToggleModal}
+                challengeTitle={post.title}
+                limitPeople={post.limitPeople}
+                participatePeople={post.participatePeople}
+                startDay={post.startDay}
+                startTime={post.startTime}
+                targetTime={post.tagetTime}
+                thumbnailImg={post.challengeImg}
+                endTime={post.endTime}
+                challengeId={post.id}
+              />
+            );
+          }
         })}
         {/* <ChallengeCard status="running" />
         <ChallengeCard status="recruit" />

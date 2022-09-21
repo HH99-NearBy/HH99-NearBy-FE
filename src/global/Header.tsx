@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import CategoryList from "../components/header/CategoryList";
 import UserInfoCard from "../components/header/UserInfoCard";
 import PostingBtn from "../components/header/PostingBtn";
-import MAINLOGO from "../static/main_logo.png";
+import MAINLOGO from "../static/main_logo.svg";
 
 function Header() {
   const navigate = useNavigate();
