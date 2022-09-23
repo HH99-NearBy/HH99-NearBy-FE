@@ -6,7 +6,7 @@ interface UserCardProps {
   userName: string;
   userRanking: string;
   userLevel: string;
-  userScore: string;
+  userScore: number;
   userImg: string;
   rankingChart: number[];
 }
@@ -88,4 +88,4 @@ const StCardContainer = styled.div`
   }
 `;
 
-export default UserRankingCard;
+export default React.memo(UserRankingCard);

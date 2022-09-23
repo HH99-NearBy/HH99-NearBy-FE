@@ -23,18 +23,21 @@ instance.interceptors.response.use(
     return res;
   },
   async function (error) {
+    console.log(error);
+    const originalRequest = error.config;
     try {
-      const originalRequest = error.config;
+      switch (error.response.data.msg) {
+        case "만료된 JWT token 입니다.": {
+          const requestRes = await apis.reissue();
+          sessionStorage.setItem("accessToken", requestRes.authorization);
 
-      const requestRes = await apis.reissue();
-      sessionStorage.setItem("accessToken", requestRes.authorization);
-
-      originalRequest.headers["Authorization"] = requestRes.authorization;
-
-      return await instance.request(originalRequest);
-    } catch (error) {
+          originalRequest.headers["Authorization"] = requestRes.authorization;
+          return await instance.request(originalRequest);
+        }
+      }
+    } catch (deepError) {
       sessionStorage.removeItem("accessToken");
-      return console.log(error);
+      return console.log(deepError);
     }
   }
 );

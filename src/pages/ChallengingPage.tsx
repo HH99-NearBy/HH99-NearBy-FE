@@ -1,26 +1,55 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router";
+import { useQuery } from "react-query";
+import { GetModalDetail } from "../api/challengeDetail/types";
 import { BsFillPersonFill } from "react-icons/bs";
 import VideoSection from "../components/challengingPage/VideoSection";
 import SideContentsSection from "../components/challengingPage/SideContentsSection";
 import { RoomContextProvider } from "../api/context/roomContext";
+import { getChallengeDetail } from "../api/challengeDetail/api";
 
 function ChallengingPage() {
   const { challengeId } = useParams();
   const navigate = useNavigate();
-  const handleLeaveRoom = () => {
-    navigate("/");
-  };
+  const [info, setInfo] = useState<GetModalDetail | null>(null);
   useEffect(() => {
     document.querySelector("header")?.classList.add("hidden");
     return () => {
       document.querySelector("header")?.classList.remove("hidden");
     };
   });
+  useQuery(
+    ["CHALLENGE_DETAIL"],
+    async () => {
+      const res = await getChallengeDetail(Number(challengeId));
+      console.log(res);
+      setInfo(res);
+    },
+    {
+      retry: 2,
+    }
+  );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+
+      if (info?.detailModal.endTime !== undefined) {
+        const end = Date.parse(info.detailModal.endTime);
+        if (now > end) {
+          navigate("/");
+        }
+      }
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
   //웹소켓 연결 여기서
   //채팅은 ChatSection에서 subscribe하고
   //인원수는 어떡해야하나?
+  console.log(info);
   return (
     <StPageLayout>
       <VideoSection />

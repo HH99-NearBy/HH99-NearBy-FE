@@ -207,9 +207,7 @@ const apis = {
   },
   getUserRanking: async (pageNum: number) => {
     try {
-      const reqRes = await instance.get(
-        `/api/ranking?pagenum=${pageNum}&pagelimit=20`
-      );
+      const reqRes = await instance.get(`/api/rank?pageNum=${pageNum}&size=10`);
       return reqRes.data;
     } catch (error) {
       throw error;
