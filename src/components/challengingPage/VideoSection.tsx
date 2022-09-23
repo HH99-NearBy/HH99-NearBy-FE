@@ -174,6 +174,10 @@ function VideoSection() {
   console.log(subscribers);
   console.log(publisher);
   console.log(state);
+
+  window.onbeforeunload = function () {
+    leaveSession();
+  };
   return (
     <StVideoSection>
       {publisher !== null ? (

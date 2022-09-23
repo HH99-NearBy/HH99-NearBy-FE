@@ -23,7 +23,7 @@ function RecruitContainer({
   handleToggleModal: () => void;
 }) {
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
-  const req = useQuery("ALL_CHALLENGE", async () => {
+  const req = useQuery(["ALL_CHALLENGE"], async () => {
     const res = await apis.getFUllChallengeList(1, 11);
     setChallengeList(res);
   });

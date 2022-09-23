@@ -19,6 +19,7 @@ function ModalBody({
   handleToggleModal: () => void;
   postId: number;
 }) {
+  const queryClient = useQueryClient();
   const [body, setBody] = useState<GetModalDetail | null>(null);
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
@@ -34,17 +35,16 @@ function ModalBody({
     }
   );
   const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
-    onMutate: (payload) => {
+    onMutate: async (payload) => {
       console.log("onmutate", payload);
+      await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
     onError(error, variables, context) {
       throw error;
     },
-    onSuccess: (res, variables, context) => {
-      navigate("/");
-    },
+    onSuccess: (res, variables, context) => {},
     onSettled: () => {
-      console.log("end");
+      queryClient.invalidateQueries(["MY_CHALLENGE"]);
     },
   });
   console.log(body);
@@ -169,7 +169,11 @@ function ModalBody({
               <h2>공지사항</h2>
               <span> {body?.detailModal.notice}</span>
             </div>
-            <ul className="detail_tag"></ul>
+            <ul className="detail_tag">
+              {body?.detailModal.challengeTag.map((tag, idx) => {
+                return <li key={`${idx}.${tag}`}>{tag}</li>;
+              })}
+            </ul>
           </StChallengeInfoContainer>
         </StModalContentsContainer>
       </StModalBody>
@@ -368,8 +372,22 @@ const StChallengeInfoContainer = styled.div`
     }
   }
   .detail_tag {
+    display: flex;
     width: 100%;
     height: 4rem;
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 13rem;
+      height: 4rem;
+      border: none;
+      border-radius: 10rem;
+      background-color: var(--purple-color);
+      color: white;
+      font-size: 1.5rem;
+      margin-right: 2rem;
+    }
   }
 `;
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import apis from "../api/api";
 import { useNavigate, useParams } from "react-router";
 import AWS from "aws-sdk";
@@ -27,6 +27,7 @@ function PostingPage() {
     sexual: "",
   });
   const optionsRef = useRef<HTMLDivElement | null>(null);
+  const queryClient = useQueryClient();
   const Config = {
     bucketName: "ssggwan",
     region: "ap-northeast-2",
@@ -45,7 +46,9 @@ function PostingPage() {
   const navigate = useNavigate();
 
   const modifyingMutation = useMutation(apis.modifyChallenge, {
-    onMutate: () => {},
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
+    },
     onSuccess: (res) => {
       console.log(res);
       navigate("/");
@@ -53,10 +56,15 @@ function PostingPage() {
     onError: (error) => {
       throw error;
     },
+    onSettled: () => {
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
+    },
   });
 
   const postingMutation = useMutation(apis.postChallenge, {
-    onMutate: (payload) => {},
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
+    },
     onError(error, variables, context) {
       throw error;
     },
@@ -66,7 +74,7 @@ function PostingPage() {
       navigate("/");
     },
     onSettled: () => {
-      console.log("end");
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
     },
   });
   const handleOnChange = (e: React.ChangeEvent) => {

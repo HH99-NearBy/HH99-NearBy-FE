@@ -1,12 +1,14 @@
 import { useQuery } from "react-query";
 import instance from "./core/axiosInstance";
 const apis = {
-  reissue: async (refreshToken: string) => {
-    const requestRes = await instance.get("/api/reissue", {
-      headers: {
-        "Refresh-Token": refreshToken,
+  reissue: async () => {
+    const requestRes = await instance.post(
+      "/api/token",
+      {
+        nickname: sessionStorage.getItem("userName"),
       },
-    });
+      {}
+    );
     return requestRes.headers;
   },
   userRegister: async ({

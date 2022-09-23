@@ -22,7 +22,7 @@ function MyChallengeContainer({
   handleToggleModal: () => void;
 }) {
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
-  useQuery("MY_CHALLENGE", async () => {
+  useQuery(["MY_CHALLENGE"], async () => {
     const res = await apis.getMyChallengeList();
     setChallengeList(res);
     console.log(res);
@@ -80,7 +80,6 @@ function MyChallengeContainer({
       }
     }
   };
-
   useEffect(() => {
     let interval = setInterval(() => {
       handleAutoScrolling(isMouseEnter);
@@ -88,7 +87,8 @@ function MyChallengeContainer({
     return () => {
       clearInterval(interval);
     };
-  }, [isMouseEnter, challengeList, flag.current]);
+  }, [isMouseEnter, flag.current]);
+  console.log(challengeList);
   return (
     <StContentsWrapper>
       <h2>참여한 챌린지</h2>
@@ -102,8 +102,6 @@ function MyChallengeContainer({
           const now = Date.now();
           const startTime = Date.parse(`${post.startDay}T${post.startTime}`);
           const endTime = Date.parse(`${post.endTime}`);
-          console.log("now :", now);
-          console.log("endTime :", endTime);
           if (now < endTime) {
             return (
               <ChallengeCard
@@ -155,4 +153,4 @@ const StCardList = styled.div`
   scroll-behavior: smooth;
 `;
 
-export default MyChallengeContainer;
+export default React.memo(MyChallengeContainer);

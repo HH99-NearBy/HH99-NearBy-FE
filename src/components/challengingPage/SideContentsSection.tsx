@@ -87,8 +87,8 @@ function SideContentsSection() {
       }
     );
     return () => {
+      console.log(stompClient.current);
       const nickname = sessionStorage.getItem("userName");
-      const level = sessionStorage.getItem("userLevel");
       stompClient.current.send(
         `/pub/chat/message`,
         JSON.stringify({
@@ -100,20 +100,25 @@ function SideContentsSection() {
           Authorization: sessionStorage.getItem("accessToken"),
         }
       );
-      if (nickname !== null && level !== null) {
-        dispatch({
-          type: "REMOVE_PEOPLE",
-          targetPerson: {
-            nickname,
-            level,
-          },
-        });
-      }
-
       subscription.unsubscribe();
       stompClient.current.disconnect();
     };
   }, []);
+  window.onbeforeunload = function () {
+    const nickname = sessionStorage.getItem("userName");
+    stompClient.current.send(
+      `/pub/chat/message`,
+      JSON.stringify({
+        type: "QUIT",
+        roomId: challengeId,
+        sender: nickname,
+      }),
+      {
+        Authorization: sessionStorage.getItem("accessToken"),
+      }
+    );
+    stompClient.current.disconnect();
+  };
   return (
     <StContentsWrapper>
       <SummeryInfoSection />
