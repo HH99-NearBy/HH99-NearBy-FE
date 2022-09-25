@@ -80,7 +80,7 @@ const apis = {
       const reqRes = await instance.get(
         `/api/posts?pageNum=${pageNum}&size=${sizeNum}`
       );
-      return reqRes.data;
+      return reqRes;
     } catch (error) {
       throw error;
     }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallengeContainer";
 import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
@@ -9,6 +9,7 @@ import apis from "../api/api";
 
 function MainPage() {
   const [modalShow, setModalShow] = useState<boolean>(false);
+  const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useContext(AppContext);
   const handleToggleModal = () => {
     setModalShow(!modalShow);
@@ -20,11 +21,17 @@ function MainPage() {
       dispatch({ type: "SYNC_USER_DATA", payload: -1, userName });
     }
   }, []);
+  const handleVerticalScrolling = (e: React.MouseEvent<HTMLDivElement>) => {
+    // console.log(e.currentTarget);
+  };
   return (
-    <StMainContents>
+    <StMainContents onScroll={handleVerticalScrolling} ref={mainContainerRef}>
       <StContentsWrapper>
         {state.userName ? (
-          <MyChallengeContainer handleToggleModal={handleToggleModal} />
+          <MyChallengeContainer
+            handleToggleModal={handleToggleModal}
+            Ref={mainContainerRef.current}
+          />
         ) : null}
 
         <RecruitContainer handleToggleModal={handleToggleModal} />
@@ -37,10 +44,12 @@ function MainPage() {
 }
 
 const StMainContents = styled.div`
+  position: relative;
   background-color: #f5f5f5;
+  padding-bottom: 6rem;
   overflow-y: auto;
   overflow-x: hidden;
-  min-height: 100vh;
+  height: calc(100vh - 10rem);
 `;
 
 const StContentsWrapper = styled.div`

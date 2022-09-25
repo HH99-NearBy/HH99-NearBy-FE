@@ -66,7 +66,7 @@ const GlobalStyle = createGlobalStyle`
     color: white;
   }
   .block_scroll {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
   }
   .static_scroll {
     scroll-behavior: auto !important;
@@ -75,6 +75,11 @@ const GlobalStyle = createGlobalStyle`
   .video_container {
     width: 100%;
     height: 100%;
+  }
+
+  #is_not_long {
+    width: 128rem !important;
+    position: relative !important;
   }
 `;
 

@@ -18,8 +18,10 @@ interface ChallengeInfo {
 
 function MyChallengeContainer({
   handleToggleModal,
+  Ref,
 }: {
   handleToggleModal: () => void;
+  Ref: HTMLDivElement | null;
 }) {
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
   useQuery(["MY_CHALLENGE"], async () => {
@@ -52,34 +54,38 @@ function MyChallengeContainer({
   };
   const handleMouseEntering = () => {
     setIsMouseEnter(true);
-    document.body.classList.add("block_scroll");
+    Ref?.classList.add("block_scroll");
   };
   const handleMouseOut = () => {
     setIsMouseEnter(false);
-    document.body.classList.remove("block_scroll");
+    Ref?.classList.remove("block_scroll");
   };
-  const handleAutoScrolling = (bool: boolean) => {
-    if (!bool && listRef.current !== null) {
-      listRef.current.scrollLeft += 10;
-      if (listRef.current.scrollLeft > 650) {
-        if (!flag.current) {
-          flag.current = true;
-          setChallengeList([
-            ...challengeList.filter((el, idx) => idx !== 0),
-            challengeList[0],
-          ]);
-          if (listRef.current !== null) {
-            listRef.current.classList.add("static_scroll");
-            listRef.current.scrollLeft = 0;
-            listRef.current.classList.remove("static_scroll");
+  const handleAutoScrolling = useCallback(
+    (bool: boolean) => {
+      if (!bool && listRef.current !== null) {
+        listRef.current.scrollLeft += 10;
+        if (listRef.current.scrollLeft > 608) {
+          if (!flag.current) {
+            flag.current = true;
+            console.log(challengeList);
+            setChallengeList([
+              ...challengeList.filter((el, idx) => idx !== 0),
+              challengeList[0],
+            ]);
+            if (listRef.current !== null) {
+              listRef.current.classList.add("static_scroll");
+              listRef.current.scrollLeft = 0;
+              listRef.current.classList.remove("static_scroll");
+            }
+            setTimeout(function () {
+              flag.current = false;
+            }, 300);
           }
-          setTimeout(function () {
-            flag.current = false;
-          }, 300);
         }
       }
-    }
-  };
+    },
+    [challengeList]
+  );
   useEffect(() => {
     let interval = setInterval(() => {
       handleAutoScrolling(isMouseEnter);
@@ -87,8 +93,23 @@ function MyChallengeContainer({
     return () => {
       clearInterval(interval);
     };
-  }, [isMouseEnter, flag.current]);
-  console.log(challengeList);
+  }, [isMouseEnter, flag.current, challengeList]);
+  useEffect(() => {
+    if (listRef.current !== null) {
+      if (listRef.current?.childElementCount < 3) {
+        listRef.current.id = "is_not_long";
+      } else if (listRef.current?.childElementCount >= 3) {
+        listRef.current.id = "";
+      }
+    }
+
+    return () => {
+      if (listRef.current !== null) {
+        listRef.current.id = "";
+      }
+    };
+  }, [challengeList]);
+  console.log(listRef.current);
   return (
     <StContentsWrapper>
       <h2>참여한 챌린지</h2>
@@ -100,8 +121,8 @@ function MyChallengeContainer({
       >
         {challengeList.map((post, idx) => {
           const now = Date.now();
-          const startTime = Date.parse(`${post.startDay}T${post.startTime}`);
-          const endTime = Date.parse(`${post.endTime}`);
+          const startTime = Date.parse(`${post?.startDay}T${post?.startTime}`);
+          const endTime = Date.parse(`${post?.endTime}`);
           if (now < endTime) {
             return (
               <ChallengeCard
@@ -132,7 +153,7 @@ function MyChallengeContainer({
 
 const StContentsWrapper = styled.div`
   width: 100vw;
-  height: 40.7rem;
+  height: 50rem;
   padding-top: 10rem;
   h2 {
     padding-bottom: 5rem;

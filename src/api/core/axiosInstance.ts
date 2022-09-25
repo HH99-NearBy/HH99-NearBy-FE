@@ -36,7 +36,6 @@ instance.interceptors.response.use(
         }
       }
     } catch (deepError) {
-      sessionStorage.removeItem("accessToken");
       return console.log(deepError);
     }
   }

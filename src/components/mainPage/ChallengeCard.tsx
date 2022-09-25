@@ -16,7 +16,7 @@ interface StyleProps {
   startTime?: string;
   targetTime?: number;
   endTime?: string;
-  ref?: any;
+  Ref?: React.MutableRefObject<HTMLDivElement | null>;
   challengeId?: number;
   handleToggleModal?: () => void;
 }
@@ -31,7 +31,7 @@ function ChallengeCard(props: StyleProps) {
     });
   };
   return (
-    <StCardContainer status={props.status}>
+    <StCardContainer status={props.status} ref={props.Ref}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
       <StCardContents>
         <div className="card_body">
@@ -128,7 +128,7 @@ const StCardContainer = styled.div`
         `;
       case "recruit":
         return css`
-          width: 61.1rem;
+          width: 57.1rem;
           height: 21.1rem;
           flex-direction: row;
           img {
@@ -142,7 +142,7 @@ const StCardContainer = styled.div`
         `;
       case "running":
         return css`
-          width: 61.1rem;
+          width: 57.1rem;
           height: 21.1rem;
           flex-direction: row;
           img {
@@ -159,13 +159,13 @@ const StCardContainer = styled.div`
 `;
 
 const StCardContents = styled.div`
-  width: 40rem;
+  width: 100%;
   height: 21.1rem;
   background-color: #fff;
   .card_body {
     display: flex;
     flex-direction: column;
-    width: 40rem;
+    width: 100%;
     height: 16.1rem;
     padding: 0 1rem;
     .header_info {
@@ -223,7 +223,7 @@ const StCardContents = styled.div`
     }
   }
   button {
-    width: 40rem;
+    width: 100%;
     height: 5rem;
     background-color: var(--purple-color);
     color: #fff;

@@ -1,4 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
+import { useInfiniteQuery, QueryFunctionContext } from "react-query";
 import styled from "styled-components";
 import ChallengeCard from "../ChallengeCard";
 import { AppContext } from "../../../api/context";
@@ -17,27 +24,108 @@ interface ChallengeInfo {
   id: number;
 }
 
+interface IntersectionObserver {
+  root?: Element | Document | null;
+  rootMargin?: string;
+  threshold?: number | number[];
+}
+
+type IntersectHandler = (
+  entry: IntersectionObserverEntry,
+  observer: IntersectionObserver
+) => void;
+
+const useIntersect = (
+  onIntersect: IntersectHandler,
+  options?: IntersectionObserverInit
+) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const callbackFunc = useCallback(
+    (entries: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) onIntersect(entry, observer);
+      });
+    },
+    [onIntersect]
+  );
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const observer = new IntersectionObserver(callbackFunc, options);
+    observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, [ref, options, callbackFunc]);
+
+  return ref;
+};
+
+//
+
 function RecruitContainer({
   handleToggleModal,
 }: {
   handleToggleModal: () => void;
 }) {
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
+  const [pageNum, setPageNum] = useState<number>(2);
+  const getChallengeList = useCallback(async () => {
+    const reqRes = await apis.getFUllChallengeList(pageNum, 10);
+    setChallengeList([...challengeList, ...reqRes.data]);
+    setPageNum(pageNum + 1);
+  }, [pageNum, challengeList]);
+  // const { canFetchMore, isLoading, error, data, fetchMore } = useInfiniteQuery<
+  //   { items: any; page: number },
+  //   [string, { page: number }],
+  //   number | boolean,
+  //   Error
+  // >(
+  //   ["ALL_CHALLENGE", { pageNum: 1 }],
+  //   async () => {
+  //     return await apis.getFUllChallengeList(pageNum, pageNum === 1 ? 11 : 10);
+  //   },
+  //   {
+  //     getFetchMore: (lastPage, allPages) => {
+  //       let morePagesExist = true;
+  //       if (lastPage && lastPage.items.result) {
+  //         morePagesExist = lastPage.items.result !== null;
+  //       }
+  //     },
+  //   }
+  // );
+  // const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
+  const observeTarget = useRef<HTMLDivElement | null>(null);
   const req = useQuery(["ALL_CHALLENGE"], async () => {
-    const res = await apis.getFUllChallengeList(1, 11);
-    setChallengeList(res);
+    const res = await apis.getFUllChallengeList(1, 10);
+    setChallengeList(res.data);
   });
-  console.log(challengeList);
-
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      console.log(entries[0]);
+      if (
+        entries[0].isIntersecting &&
+        challengeList.length >= 10 + (pageNum - 2) * 10
+      ) {
+        getChallengeList();
+      }
+    });
+    if (observeTarget.current !== null) {
+      observer.observe(observeTarget.current);
+    }
+    return () => {
+      if (observeTarget.current !== null) {
+        observer.unobserve(observeTarget.current);
+      }
+    };
+  }, [observeTarget, challengeList.length]);
+  console.log(pageNum);
   return (
     <StContentsWrapper>
       <h2>쓱-하는 챌린지</h2>
       <StCardList>
         {challengeList.length !== 0
-          ? challengeList.map((post) => {
+          ? challengeList.map((post, idx) => {
               const now = new Date();
               const createdAt = new Date(`${post.startDay}T${post.startTime}`);
-              console.log(post.participatePeople);
               return (
                 <ChallengeCard
                   key={post.id}
@@ -57,6 +145,7 @@ function RecruitContainer({
             })
           : null}
       </StCardList>
+      <StObserveTarget ref={observeTarget} />
     </StContentsWrapper>
   );
 }
@@ -77,6 +166,10 @@ const StCardList = styled.div`
   flex-wrap: wrap;
   column-gap: 4rem;
   row-gap: 4rem;
+`;
+
+const StObserveTarget = styled.div`
+  height: 1px;
 `;
 
 export default RecruitContainer;
