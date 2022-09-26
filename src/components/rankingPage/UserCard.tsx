@@ -71,7 +71,7 @@ const StCardContainer = styled.div`
       height: 5rem;
       border-radius: 50%;
       font-size: 1.5rem;
-      background-color: red;
+      background-color: #f5f5f5;
     }
     span {
       margin-left: 1rem;

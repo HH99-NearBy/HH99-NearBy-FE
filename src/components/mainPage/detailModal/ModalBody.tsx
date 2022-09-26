@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { getChallengeDetail } from "../../../api/challengeDetail/api";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
@@ -19,6 +20,7 @@ function ModalBody({
   handleToggleModal: () => void;
   postId: number;
 }) {
+  const fullScreenHandler = useFullScreenHandle();
   const queryClient = useQueryClient();
   const [body, setBody] = useState<GetModalDetail | null>(null);
   const { state, dispatch } = useContext(AppContext);
@@ -53,6 +55,7 @@ function ModalBody({
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = () => {
     navigate(`/challenging/${state.challengeId}`);
+    fullScreenHandler.enter();
   };
   const handleRecruitChallenge = () => {
     apis.recruitChallenge(state.challengeId);

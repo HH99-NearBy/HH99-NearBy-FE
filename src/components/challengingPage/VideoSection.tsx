@@ -38,6 +38,13 @@ function VideoSection() {
   const [publisher, setPublisher] = useState<Publisher | null>(null);
   const [subscribers, setSubscribers] = useState<Array<StreamManager>>([]);
   // dispatch({ type: "READ_SUBSCRIBERS", payload: -1, subscribe: subscribers });
+  const handleVideoStatus = () => {
+    publisher?.publishVideo(!publisher.stream.videoActive);
+    console.log(publisher);
+  };
+  const handleAudioStatus = () => {
+    publisher?.publishAudio(!publisher.stream.audioActive);
+  };
   const connection = useCallback(() => {
     if (session !== undefined && ov !== undefined) {
       ovApis.getOVToken(async (token: string) => {
@@ -52,8 +59,9 @@ function VideoSection() {
                 resolution: "640x480",
                 frameRate: 60,
               })
-              .then((mediaSteam) => {
-                const videoTrack = mediaSteam.getVideoTracks()[0];
+              .then((mediaStream) => {
+                const videoTrack = mediaStream.getVideoTracks()[0];
+                console.log(mediaStream.getVideoTracks());
                 const publisher = ov.initPublisher("video_container", {
                   audioSource: undefined,
                   videoSource: videoTrack,
@@ -156,6 +164,7 @@ function VideoSection() {
   const leaveSession = useCallback(() => {
     if (session) {
       session.disconnect();
+      dispatch({ type: "LEAVE_SESSION" });
       setSession(undefined);
       setOv(undefined);
     }
@@ -169,40 +178,57 @@ function VideoSection() {
       leaveSession();
     };
   }, [session]);
-  console.log(ov);
-  console.log(session);
-  console.log(subscribers);
-  console.log(publisher);
-  console.log(state);
+  // console.log(ov);
+  // console.log(session);
+  // console.log(subscribers);
+  // console.log(publisher);
+  // console.log(state);
 
   window.onbeforeunload = function () {
     leaveSession();
   };
   return (
     <StVideoSection>
-      {publisher !== null ? (
-        <UserVideoCard key={`i`} streamManager={publisher} />
-      ) : null}
-      {state.ovSubscribers.map((sub: any, i: any) => {
-        return <UserVideoCard key={`${i}`} streamManager={sub} />;
-      })}
+      <div className="video_wrapper">
+        {publisher !== null ? (
+          <UserVideoCard
+            key={`pub`}
+            streamManager={publisher}
+            videoHandler={handleVideoStatus}
+            audioHandler={handleAudioStatus}
+          />
+        ) : null}
+
+        {state.ovSubscribers.map((sub: any, i: any) => {
+          return <UserVideoCard key={`${i}`} streamManager={sub} />;
+        })}
+      </div>
     </StVideoSection>
   );
 }
 
 const StVideoSection = styled.div`
-  width: calc(100% - 64rem);
+  min-width: 128rem;
+  flex-grow: 1;
   height: 100%;
   min-height: 101.35rem;
   background-color: black;
-  display: grid;
+  /* display: grid;
   grid-template-columns: calc(100% / 4) calc(100% / 4) calc(100% / 4) calc(
       100% / 4
     );
   grid-template-rows: calc(100% / 4) calc(100% / 4) calc(100% / 4) calc(
       100% / 4
     );
-  grid-gap: 0.1rem;
+  grid-gap: 0.1rem; */
+
+  .video_wrapper {
+    width: 128rem;
+    height: 108rem;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+  }
 `;
 
 export default VideoSection;

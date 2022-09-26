@@ -78,7 +78,7 @@ const apis = {
   getFUllChallengeList: async (pageNum: number, sizeNum: number) => {
     try {
       const reqRes = await instance.get(
-        `/api/posts?pageNum=${pageNum}&size=${sizeNum}`
+        `/api/posts?challengeId=${pageNum}&size=${sizeNum}`
       );
       return reqRes;
     } catch (error) {

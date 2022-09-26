@@ -15,17 +15,18 @@ function MainPage() {
     setModalShow(!modalShow);
   };
   console.log(modalShow);
+
+  const handleToScrollTop = () => {
+    mainContainerRef.current?.scrollTo(0, 0);
+  };
   useEffect(() => {
     const userName = sessionStorage.getItem("userName");
     if (userName !== null) {
       dispatch({ type: "SYNC_USER_DATA", payload: -1, userName });
     }
   }, []);
-  const handleVerticalScrolling = (e: React.MouseEvent<HTMLDivElement>) => {
-    // console.log(e.currentTarget);
-  };
   return (
-    <StMainContents onScroll={handleVerticalScrolling} ref={mainContainerRef}>
+    <StMainContents ref={mainContainerRef}>
       <StContentsWrapper>
         {state.userName ? (
           <MyChallengeContainer
@@ -39,6 +40,7 @@ function MainPage() {
       {modalShow && (
         <ModalPortal handleToggleModal={handleToggleModal} postId={1} />
       )}
+      <StTopBtn onClick={handleToScrollTop}>↑</StTopBtn>
     </StMainContents>
   );
 }
@@ -55,6 +57,27 @@ const StMainContents = styled.div`
 const StContentsWrapper = styled.div`
   width: 128rem;
   margin: 0 auto;
+`;
+
+const StTopBtn = styled.button`
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 5rem;
+  bottom: 5rem;
+  width: 5rem;
+  height: 5rem;
+  border: 0.2rem solid var(--purple-color);
+  color: var(--purple-color);
+  background-color: white;
+  border-radius: 50%;
+  font-size: 3.5rem;
+  padding-top: 1rem;
+  :hover {
+    background-color: var(--purple-color);
+    color: white;
+  }
 `;
 
 export default MainPage;

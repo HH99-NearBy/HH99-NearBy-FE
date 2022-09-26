@@ -20,6 +20,7 @@ function RankingList({ ranking }: { ranking: UserRaking[] }) {
       {ranking.map((rank, idx) => {
         return (
           <UserRankingCard
+            key={`${idx}${rank.nickname}}`}
             userName={rank.nickname}
             userRanking={`${idx + 1}등`}
             userLevel={rank.level}

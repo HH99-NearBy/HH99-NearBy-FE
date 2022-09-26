@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router";
 import { useQuery } from "react-query";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { GetModalDetail } from "../api/challengeDetail/types";
 import { BsFillPersonFill } from "react-icons/bs";
 import VideoSection from "../components/challengingPage/VideoSection";
@@ -10,15 +11,11 @@ import { RoomContextProvider } from "../api/context/roomContext";
 import { getChallengeDetail } from "../api/challengeDetail/api";
 
 function ChallengingPage() {
+  const fullScreenHandler = useFullScreenHandle();
   const { challengeId } = useParams();
   const navigate = useNavigate();
   const [info, setInfo] = useState<GetModalDetail | null>(null);
-  useEffect(() => {
-    document.querySelector("header")?.classList.add("hidden");
-    return () => {
-      document.querySelector("header")?.classList.remove("hidden");
-    };
-  });
+
   useQuery(
     ["CHALLENGE_DETAIL"],
     async () => {
@@ -45,18 +42,25 @@ function ChallengingPage() {
       clearInterval(interval);
     };
   });
-
+  useEffect(() => {
+    fullScreenHandler.enter();
+    return () => {
+      fullScreenHandler.exit();
+    };
+  }, []);
   //웹소켓 연결 여기서
   //채팅은 ChatSection에서 subscribe하고
   //인원수는 어떡해야하나?
   console.log(info);
   return (
-    <StPageLayout>
-      <VideoSection />
-      <RoomContextProvider>
-        <SideContentsSection />
-      </RoomContextProvider>
-    </StPageLayout>
+    <FullScreen handle={fullScreenHandler}>
+      <StPageLayout>
+        <VideoSection />
+        <RoomContextProvider>
+          <SideContentsSection />
+        </RoomContextProvider>
+      </StPageLayout>
+    </FullScreen>
   );
 }
 
@@ -68,11 +72,4 @@ const StPageLayout = styled.div`
   align-items: flex-start;
 `;
 
-const StSideSection = styled.div`
-  width: 64rem;
-  height: 100%;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-`;
 export default ChallengingPage;

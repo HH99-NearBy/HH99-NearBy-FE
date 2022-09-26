@@ -58,7 +58,8 @@ function SideContentsSection() {
                   type: "ADD_PEOPLE",
                   targetPerson: {
                     nickname: res.sender,
-                    level: "LV0",
+                    level: res.level,
+                    joinTime: Date.now(),
                   },
                 });
                 return;
@@ -69,6 +70,7 @@ function SideContentsSection() {
                   targetPerson: {
                     nickname: res.sender,
                     level: "",
+                    joinTime: 0,
                   },
                 });
                 return;
@@ -132,8 +134,9 @@ function SideContentsSection() {
 }
 
 const StContentsWrapper = styled.div`
-  width: 64rem;
+  flex-shrink: 1;
   height: 100%;
+  min-height: 101.35rem;
   background-color: #fff;
   display: flex;
   flex-direction: column;

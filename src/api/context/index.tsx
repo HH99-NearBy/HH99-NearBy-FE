@@ -78,6 +78,12 @@ function reducer(
         userName: action.userName,
       };
     }
+    case "LEAVE_SESSION": {
+      return {
+        ...state,
+        ovSubscribers: [],
+      };
+    }
     default: {
       console.log("머하노");
       return state;

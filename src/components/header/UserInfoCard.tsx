@@ -20,7 +20,7 @@ function UserInfoCard() {
       <StInfoSection>
         <StInfoFooter>
           <span className="user_tier">
-            LV.{sessionStorage.getItem("userLevel")?.split("L")[0]}
+            {sessionStorage.getItem("userLevel")}
           </span>
           <div className="toggle_navigate">
             <IoCaretDownOutline className="selected_icon" />

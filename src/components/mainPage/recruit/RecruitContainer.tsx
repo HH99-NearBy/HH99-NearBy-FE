@@ -67,11 +67,12 @@ function RecruitContainer({
   handleToggleModal: () => void;
 }) {
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
-  const [pageNum, setPageNum] = useState<number>(2);
+  const [pageNum, setPageNum] = useState<number>(0);
   const getChallengeList = useCallback(async () => {
     const reqRes = await apis.getFUllChallengeList(pageNum, 10);
+    console.log(reqRes);
     setChallengeList([...challengeList, ...reqRes.data]);
-    setPageNum(pageNum + 1);
+    setPageNum(reqRes.data.at(-1).id);
   }, [pageNum, challengeList]);
   // const { canFetchMore, isLoading, error, data, fetchMore } = useInfiniteQuery<
   //   { items: any; page: number },
@@ -95,16 +96,15 @@ function RecruitContainer({
   // const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
   const observeTarget = useRef<HTMLDivElement | null>(null);
   const req = useQuery(["ALL_CHALLENGE"], async () => {
-    const res = await apis.getFUllChallengeList(1, 10);
+    const res = await apis.getFUllChallengeList(0, 11);
+    console.log(res);
     setChallengeList(res.data);
+    setPageNum(res.data.at(-1).id);
   });
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       console.log(entries[0]);
-      if (
-        entries[0].isIntersecting &&
-        challengeList.length >= 10 + (pageNum - 2) * 10
-      ) {
+      if (entries[0].isIntersecting && pageNum !== 0) {
         getChallengeList();
       }
     });
