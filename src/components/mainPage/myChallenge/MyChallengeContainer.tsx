@@ -26,7 +26,11 @@ function MyChallengeContainer({
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
   useQuery(["MY_CHALLENGE"], async () => {
     const res = await apis.getMyChallengeList();
-    setChallengeList(res);
+    setChallengeList(
+      res.filter(
+        (post: ChallengeInfo) => Date.now() < Date.parse(`${post.endTime}`)
+      )
+    );
     console.log(res);
   });
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(false);
@@ -64,7 +68,7 @@ function MyChallengeContainer({
     (bool: boolean) => {
       if (!bool && listRef.current !== null) {
         listRef.current.scrollLeft += 10;
-        if (listRef.current.scrollLeft > 608) {
+        if (listRef.current.scrollLeft > 618) {
           if (!flag.current) {
             flag.current = true;
             console.log(challengeList);
@@ -122,25 +126,23 @@ function MyChallengeContainer({
         {challengeList.map((post, idx) => {
           const now = Date.now();
           const startTime = Date.parse(`${post?.startDay}T${post?.startTime}`);
-          const endTime = Date.parse(`${post?.endTime}`);
-          if (now < endTime) {
-            return (
-              <ChallengeCard
-                key={post.id}
-                status={now < startTime ? "recruit" : "running"}
-                handleToggleModal={handleToggleModal}
-                challengeTitle={post.title}
-                limitPeople={post.limitPeople}
-                participatePeople={post.participatePeople}
-                startDay={post.startDay}
-                startTime={post.startTime}
-                targetTime={post.tagetTime}
-                thumbnailImg={post.challengeImg}
-                endTime={post.endTime}
-                challengeId={post.id}
-              />
-            );
-          }
+
+          return (
+            <ChallengeCard
+              key={post.id}
+              status={now < startTime ? "recruit" : "running"}
+              handleToggleModal={handleToggleModal}
+              challengeTitle={post.title}
+              limitPeople={post.limitPeople}
+              participatePeople={post.participatePeople}
+              startDay={post.startDay}
+              startTime={post.startTime}
+              targetTime={post.tagetTime}
+              thumbnailImg={post.challengeImg}
+              endTime={post.endTime}
+              challengeId={post.id}
+            />
+          );
         })}
         {/* <ChallengeCard status="running" />
         <ChallengeCard status="recruit" />

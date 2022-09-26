@@ -72,10 +72,10 @@ const GlobalStyle = createGlobalStyle`
     scroll-behavior: auto !important;
   }
 
-  .video_container {
+  /* .video_container {
     width: 100%;
     height: 100%;
-  }
+  } */
 
   #is_not_long {
     width: 128rem !important;

@@ -103,6 +103,7 @@ const StCardContainer = styled.div`
   height: 42.2rem;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   ${(props: StyleProps) => {
     switch (props.status) {
@@ -128,7 +129,7 @@ const StCardContainer = styled.div`
         `;
       case "recruit":
         return css`
-          width: 57.1rem;
+          width: 58.1rem;
           height: 21.1rem;
           flex-direction: row;
           img {
@@ -142,7 +143,7 @@ const StCardContainer = styled.div`
         `;
       case "running":
         return css`
-          width: 57.1rem;
+          width: 58.1rem;
           height: 21.1rem;
           flex-direction: row;
           img {
@@ -159,7 +160,7 @@ const StCardContainer = styled.div`
 `;
 
 const StCardContents = styled.div`
-  width: 100%;
+  flex-grow: 1;
   height: 21.1rem;
   background-color: #fff;
   .card_body {
