@@ -71,7 +71,6 @@ function MyChallengeContainer({
         if (listRef.current.scrollLeft > 618) {
           if (!flag.current) {
             flag.current = true;
-            console.log(challengeList);
             setChallengeList([
               ...challengeList.filter((el, idx) => idx !== 0),
               challengeList[0],
@@ -113,7 +112,6 @@ function MyChallengeContainer({
       }
     };
   }, [challengeList]);
-  console.log(listRef.current);
   return (
     <StContentsWrapper>
       <h2>참여한 챌린지</h2>

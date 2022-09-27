@@ -70,7 +70,6 @@ function RecruitContainer({
   const [pageNum, setPageNum] = useState<number>(0);
   const getChallengeList = useCallback(async () => {
     const reqRes = await apis.getFUllChallengeList(pageNum, 10);
-    console.log(reqRes);
     setChallengeList([...challengeList, ...reqRes.data]);
     setPageNum(reqRes.data.at(-1).id);
   }, [pageNum, challengeList]);
@@ -97,13 +96,11 @@ function RecruitContainer({
   const observeTarget = useRef<HTMLDivElement | null>(null);
   const req = useQuery(["ALL_CHALLENGE"], async () => {
     const res = await apis.getFUllChallengeList(0, 11);
-    console.log(res);
     setChallengeList(res.data);
     setPageNum(res.data.at(-1).id);
   });
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
-      console.log(entries[0]);
       if (entries[0].isIntersecting && pageNum !== 0) {
         getChallengeList();
       }
@@ -117,7 +114,6 @@ function RecruitContainer({
       }
     };
   }, [observeTarget, challengeList.length]);
-  console.log(pageNum);
   return (
     <StContentsWrapper>
       <h2>쓱-하는 챌린지</h2>

@@ -17,19 +17,20 @@ function UserInfoCard() {
   return (
     <StCardContainer onClick={handleNaveModalShow}>
       <UserIcon size="medium" imgUrl={sessionStorage.getItem("userProfile")} />
-      <StInfoSection>
+      <div className="toggle_navigate">
+        <IoCaretDownOutline className="selected_icon" />
+      </div>
+      {/* <StInfoSection>
         <StInfoFooter>
           <span className="user_tier">
             {sessionStorage.getItem("userLevel")}
           </span>
-          <div className="toggle_navigate">
-            <IoCaretDownOutline className="selected_icon" />
-          </div>
+          
         </StInfoFooter>
         <span className="user_nickname">
           {sessionStorage.getItem("userName")}
         </span>
-      </StInfoSection>
+      </StInfoSection> */}
       <StNavModalBody ref={navModal} className="hidden">
         <h2>앞으로 나아간 시간</h2>
         <div className="challenge_time_container">1122분</div>
@@ -46,47 +47,36 @@ function UserInfoCard() {
 
 const StCardContainer = styled.div`
   position: relative;
-  width: 30rem;
+  width: 9rem;
   height: 9rem;
-  border: 0.2rem solid #99999988;
-  margin-left: 3rem;
+  margin-left: 2.5rem;
   border-radius: 0.8rem;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   padding: 0 0.5rem;
   cursor: pointer;
-`;
-
-const StInfoSection = styled.div`
-  width: 20rem;
-  margin-left: 1.5rem;
-  font-size: 1.9rem;
-  .user_nickname {
-    letter-spacing: 0.15rem;
-  }
   .toggle_navigate {
-    width: 2rem;
-    height: 2rem;
+    position: absolute;
+    right: 0.5rem;
+    bottom: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: baseline;
-    font-size: 1.7rem;
-    border: 0.2rem solid var(--purple-color);
+    font-size: 2rem;
+    border: 0.33rem solid var(--purple-color);
+    border-radius: 50%;
+    background-color: white;
   }
-`;
-
-const StInfoFooter = styled.div`
-  display: flex;
-  padding-right: 0.5rem;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const StNavModalBody = styled.div`
   position: absolute;
   z-index: 100;
-  left: 0;
-  top: 10rem;
+  right: 0;
+  top: 9.2rem;
   width: 30rem;
   height: 20rem;
   border: 0.2rem solid gray;
