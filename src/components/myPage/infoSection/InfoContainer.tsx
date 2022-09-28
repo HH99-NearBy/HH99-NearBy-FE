@@ -94,6 +94,7 @@ const TitleBox = styled.div`
     flex-direction: row;
     display: flex;
     div {
+        background-color: black;
         color: white;
         width: 4rem;
         justify-content: center;
