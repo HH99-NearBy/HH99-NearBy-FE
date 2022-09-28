@@ -7,7 +7,7 @@ interface ChatType {
 interface UserType {
   level: string;
   nickname: string;
-  joinTime: number;
+  entryTime: number;
 }
 interface ContextAction {
   type: string;

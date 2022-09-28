@@ -59,7 +59,7 @@ function SideContentsSection() {
                   targetPerson: {
                     nickname: res.sender,
                     level: res.level,
-                    joinTime: Date.now(),
+                    entryTime: Date.now(),
                   },
                 });
                 return;
@@ -70,7 +70,7 @@ function SideContentsSection() {
                   targetPerson: {
                     nickname: res.sender,
                     level: "",
-                    joinTime: 0,
+                    entryTime: 0,
                   },
                 });
                 return;

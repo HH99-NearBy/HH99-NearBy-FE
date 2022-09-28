@@ -9,6 +9,7 @@ import apis from "../../api/api";
 function UserListSection() {
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
+  console.log(state.people);
   return (
     <StUserListSection>
       {state.people.map((person) => {
@@ -16,7 +17,7 @@ function UserListSection() {
           <UserCard
             userName={person.nickname}
             userLevel={person.level}
-            joinAt={person.joinTime}
+            joinAt={person.entryTime}
           />
         );
       })}

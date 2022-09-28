@@ -21,11 +21,21 @@ function UserVideoCard({
     video: true,
     audio: true,
   });
+  console.log(streamManager.stream.connection.data.split("%")[0] + '"');
   return (
     <StVideoCardContainer>
       <OvVideo streamManager={streamManager} />
       <div className="user_info_section">
-        <span>username</span>
+        <span>
+          {
+            JSON.parse(streamManager.stream.connection.data.split("%")[0])
+              .clientData.level
+          }
+          {
+            JSON.parse(streamManager.stream.connection.data.split("%")[0])
+              .clientData.nickname
+          }
+        </span>
         <div className="tool_box">
           {resourceActivation.video ? (
             <IoVideocamSharp

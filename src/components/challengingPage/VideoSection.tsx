@@ -49,7 +49,12 @@ function VideoSection() {
     if (session !== undefined && ov !== undefined) {
       ovApis.getOVToken(async (token: string) => {
         session
-          .connect(token, { clientData: Math.random() })
+          .connect(token, {
+            clientData: {
+              nickname: sessionStorage.getItem("userName"),
+              level: sessionStorage.getItem("userLevel"),
+            },
+          })
           .then(async () => {
             console.log("session connect");
             await ov
@@ -90,7 +95,9 @@ function VideoSection() {
     session.on("streamCreated", (event: any) => {
       console.log("streamCreated");
       const sub = session.subscribe(event.stream, "video_container");
+      console.log(event);
       console.log(state.ovSubscribers);
+      console.log(sub);
       // setSubscribers([...subscribers, sub]);
       dispatch({
         type: "READ_SUBSCRIBERS",
@@ -187,6 +194,8 @@ function VideoSection() {
   window.onbeforeunload = function () {
     leaveSession();
   };
+  console.log(state.ovSubscribers);
+  console.log(publisher);
   return (
     <StVideoSection>
       <div className="video_wrapper">
