@@ -109,7 +109,7 @@ function RegisterForm() {
         setIsEmail(false);
       } else {
         setEmailMessage("올바른 이메일 형식입니다");
-        setIsEmail(true);
+        if (isEmail === false) setIsEmail(true);
       }
     },
     []
@@ -125,7 +125,7 @@ function RegisterForm() {
       setIsNick(false);
     } else {
       setNicknameMessage("올바른 닉네임 형식입니다.");
-      setIsNick(true);
+      if (isNickname === false) setIsNick(true);
     }
   }, []);
 
@@ -170,66 +170,73 @@ function RegisterForm() {
   // const onChangeImg = useCallback((e: React.ChangeEvent<HTMLInput>) => {
   //   const
   // })
-  const emailMutation = useMutation(apis.userEmailValidationCheck, {
-    onMutate: (payload) => {
-      console.log("onmutate", payload);
-    },
-    onError(error, variables, context) {
-      throw error;
-    },
-    onSuccess: (data, variables, context) => {
-      console.log("success", data, variables, context);
-      setEmailCheck(!emailCheck);
-      alert("가입 가능한 닉네임입니다.");
-    },
-    onSettled: () => {
-      console.log("end");
-    },
-  });
-
   const EmailCheck = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      emailMutation.mutate(email);
-    },
-    [email]
-  );
+    async (e : React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      try {
+        const response = await axios.post('http://ssggwan.site/api/emailcheck',{
+          email: email
+        })
+          setEmailCheck(true)
+          alert('가입 가능한 이메일입니다.')
+          console.log(response)
+      }catch (err) {
+        setEmailCheck(false)
+        alert('중복된 이메일입니다.')
+        console.error(err)
+      }
+    },[email])
 
-  const nickNameMutation = useMutation(apis.userNicknameValidationCheck, {
-    onMutate: (payload) => {
-      console.log("onmutate", payload);
-    },
-    onError(error, variables, context) {
-      throw error;
-    },
-    onSuccess: (data, variables, context) => {
-      console.log("success", data, variables, context);
-      setNickCheck(!nickCheck);
-      alert("가입 가능한 닉네임입니다.");
-    },
-    onSettled: () => {
-      console.log("end");
-    },
-  });
+  // const EmailCheck =  (
+  //   async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //     e.preventDefault();
+  //     let result;
+  //     try {
+  //       result = await emailMutation();
+  //     } catch (error) {
+  //       console.log(error)
+  //       // error handler
+  //     }
+  //   });
 
   const NicknameCheck = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      nickNameMutation.mutate(nickname);
-    },
-    [nickname]
-  );
+    async (e : React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      try {
+       const response = await axios.post('http://ssggwan.site/api/nicknamecheck',{
+          nickname: nickname
+        })
+          setNickCheck(true)
+          alert('가입 가능한 닉네임입니다.')
+          console.log(response)
+      }catch (err) {
+        alert('중복된 닉네임 입니다.')
+        setNickCheck(false)
+        console.error(err)
+      }
+    },[nickname])
+
+  // const NicknameCheck = useCallback(
+  //   (e: React.MouseEvent<HTMLButtonElement>) => {
+  //     e.preventDefault();
+  //     nickNameMutation.mutate(nickname);
+  //   },
+  //   [nickname]
+  // );
 
   const registerMutation = useMutation(apis.userRegister, {
     onMutate: (payload) => {
       console.log("onmutate", payload);
     },
     onError(error, variables, context) {
+      console.log(error)
       throw error;
     },
     onSuccess: (data, variables, context) => {
       console.log("success", data, variables, context);
-      alert("회원가입을 축하드립니다.");
+      const rrs = "인증 메일이 발송되었습니다.\n"
+      const aar = "인증을 완료해 주십시오."
+      alert(rrs+aar);
       navigate("/login");
     },
     onSettled: () => {
@@ -302,7 +309,7 @@ function RegisterForm() {
               </FileBox>
             </ImgBox>
             <TetxBox>
-              <TextP>아이디</TextP>
+              <TextP>이메일</TextP>
               <TextP>닉네임</TextP>
               <TextP>비밀번호</TextP>
               <TextP>비밀번호 확인</TextP>
@@ -318,7 +325,7 @@ function RegisterForm() {
                     value={email}
                     onChange={onChangeEmail}
                   />
-                  <CheckBtn onClick={EmailCheck}>중복확인</CheckBtn>
+                  <CheckBtn onClick={EmailCheck} disabled={!(isEmail)}>중복확인</CheckBtn>
                   {email.length > 0 && (
                     <p className={`message ${isEmail ? "success" : "error"}`}>
                       {emailMessage}
@@ -334,7 +341,7 @@ function RegisterForm() {
                     value={nickname}
                     onChange={onChangeNick}
                   />
-                  <CheckBtn onClick={NicknameCheck}>중복확인</CheckBtn>
+                  <CheckBtn onClick={NicknameCheck} disabled={!(isNickname)}>중복확인</CheckBtn>
                   {nickname.length > 0 && (
                     <p
                       className={`message ${isNickname ? "success" : "error"}`}

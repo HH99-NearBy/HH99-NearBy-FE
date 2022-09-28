@@ -1,5 +1,7 @@
 import { useQuery } from "react-query";
-import instance from "./core/axiosInstance";
+import instance,{arr} from "./core/axiosInstance";
+
+
 const apis = {
   reissue: async () => {
     const requestRes = await instance.post(
@@ -36,19 +38,23 @@ const apis = {
   },
   userNicknameValidationCheck: async (nickname: string) => {
     try {
-      const reqRes = await instance.post("api/nicknamecheck", {
+      const reqRes = await arr.post("api/nicknamecheck", {
         nickname,
       });
       return reqRes;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   },
-  userEmailValidationCheck: async (nickname: string) => {
+  userEmailValidationCheck: async (email: string) => {
     try {
-      const reqRes = await instance.post("api/emailcheck", {
-        nickname,
+      const reqRes = await arr.post("api/emailcheck", {
+        email,
       });
       return reqRes;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error)
+    }
   },
   userLogin: async ({
     email,
