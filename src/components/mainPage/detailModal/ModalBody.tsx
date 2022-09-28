@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { FullScreen, useFullScreenHandle } from "react-full-screen";
 import { getChallengeDetail } from "../../../api/challengeDetail/api";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
@@ -19,6 +20,8 @@ function ModalBody({
   handleToggleModal: () => void;
   postId: number;
 }) {
+  const fullScreenHandler = useFullScreenHandle();
+  const queryClient = useQueryClient();
   const [body, setBody] = useState<GetModalDetail | null>(null);
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
@@ -26,18 +29,34 @@ function ModalBody({
     "CHALLENGE_DETAIL",
     async () => {
       const res = await getChallengeDetail(state.challengeId);
+      console.log(res);
       setBody(res);
     },
     {
       retry: 2,
     }
   );
+  const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
+    onMutate: async (payload) => {
+      console.log("onmutate", payload);
+      await queryClient.cancelQueries(["MY_CHALLENGE"]);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {},
+    onSettled: () => {
+      queryClient.invalidateQueries(["MY_CHALLENGE"]);
+    },
+  });
   console.log(body);
   console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = () => {
     navigate(`/challenging/${state.challengeId}`);
+    handleToggleModal();
+    fullScreenHandler.enter();
   };
   const handleRecruitChallenge = () => {
     apis.recruitChallenge(state.challengeId);
@@ -46,19 +65,49 @@ function ModalBody({
   const handleCancleChallenge = () => {
     apis.cancelRecruit(state.challengeId);
   };
+  const handleModifyChallenge = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/modify/${state.challengeId}`);
+  };
+  const handleDeleteChallenge = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteChallengeMutation.mutate(state.challengeId);
+    handleToggleModal();
+  };
   const now = new Date();
   const createdAt = new Date(
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
+  const startTime = Date.parse(
+    `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
+  );
+  const endTime = Date.parse(`${body?.detailModal.endTime}`);
+  console.log(startTime);
+  console.log(body?.detailModal.endTime);
+  console.log(endTime);
+  console.log(Date.now());
+
   return (
     <StModalContainer>
       <StModalBody>
         <StModalHeader>
           <button onClick={handleToggleModal}>X</button>
-          <span>
-            {body?.detailModal.level}
-            {body?.detailModal.writer}
-          </span>
+          <div>
+            <span>{body?.detailModal.level}</span>
+            <span>{body?.detailModal.writer}</span>
+            <span>
+              {body?.detailModal.writer ===
+                sessionStorage.getItem("userName") && `⭐`}
+            </span>
+            {body?.detailModal.writer ===
+              sessionStorage.getItem("userName") && (
+              <div className="challenge_btn_container">
+                <button onClick={handleModifyChallenge}>수정</button>
+              </div>
+            )}
+          </div>
           <h1>{body?.detailModal.title}</h1>
         </StModalHeader>
         <StModalContentsContainer>
@@ -108,7 +157,13 @@ function ModalBody({
                 </button>
               )}
               {/* //status => doing:모집중, recruit: 신청했으나 시작하지 않음, running: 신청했고 시작한 챌린지 */}
-              {state.challengeStatus === "doing" ? null : (
+              {/* {state.challengeStatus === "doing" ? null : (
+                <button onClick={handleCancleChallenge}>취소하기</button>
+              )} */}
+              {state.challengeStatus === "doing" ? null : body?.detailModal
+                  .writer === sessionStorage.getItem("userName") ? (
+                <button onClick={handleDeleteChallenge}>챌린지 삭제</button>
+              ) : (
                 <button onClick={handleCancleChallenge}>취소하기</button>
               )}
             </StButtonGroup>
@@ -122,7 +177,11 @@ function ModalBody({
               <h2>공지사항</h2>
               <span> {body?.detailModal.notice}</span>
             </div>
-            <ul className="detail_tag"></ul>
+            <ul className="detail_tag">
+              {body?.detailModal.challengeTag.map((tag, idx) => {
+                return <li key={`${idx}.${tag}`}>{tag}</li>;
+              })}
+            </ul>
           </StChallengeInfoContainer>
         </StModalContentsContainer>
       </StModalBody>
@@ -153,6 +212,7 @@ const StModalBody = styled.div`
 `;
 
 const StModalHeader = styled.div`
+  position: relative;
   width: 100%;
   height: 12rem;
   display: flex;
@@ -170,8 +230,35 @@ const StModalHeader = styled.div`
     font-size: 2rem;
     cursor: pointer;
   }
-  span {
+  div {
+    display: flex;
+    align-items: center;
     font-size: 2rem;
+    height: 3rem;
+    span {
+      height: 3rem;
+      display: flex;
+      align-items: center;
+    }
+    .challenge_btn_container {
+      button {
+        width: 4rem;
+        height: 3rem;
+        border: none;
+        letter-spacing: 0.1rem;
+        :nth-of-type(1) {
+          background-color: var(--purple-color);
+          margin-left: 1.5rem;
+        }
+        :nth-of-type(2) {
+          background-color: red;
+          margin-left: 0.5rem;
+        }
+        cursor: pointer;
+        color: white;
+        font-size: 1.5rem;
+      }
+    }
   }
   h1 {
     font-size: 4rem;
@@ -242,6 +329,7 @@ const StSummeryInfoContainer = styled.ul`
   width: 100%;
   height: 22rem;
   background-color: #f5f5f5;
+
   li {
     width: 100%;
     height: 25%;
@@ -292,8 +380,22 @@ const StChallengeInfoContainer = styled.div`
     }
   }
   .detail_tag {
+    display: flex;
     width: 100%;
     height: 4rem;
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 13rem;
+      height: 4rem;
+      border: none;
+      border-radius: 10rem;
+      background-color: var(--purple-color);
+      color: white;
+      font-size: 1.5rem;
+      margin-right: 2rem;
+    }
   }
 `;
 

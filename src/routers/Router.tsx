@@ -9,6 +9,7 @@ import KakaoForm from "../components/loginPage/KakaoForm";
 import MyPage from "../pages/MyPage";
 import InformationPage from "../pages/InformationPage";
 import PostingPage from "../pages/PostingPage";
+import SearchPage from "../pages/SearchPage";
 function Router() {
   return (
     <Routes>
@@ -17,10 +18,12 @@ function Router() {
       <Route path="/challenging/:challengeId" element={<ChallengingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/posting" element={<PostingPage />} />
+      <Route path="/modify/:challengeId" element={<PostingPage />} />
       <Route path="/api/kakaologin" element={<KakaoForm />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/info" element={<InformationPage />} />
+      <Route path="/search" element={<SearchPage />} />
     </Routes>
   );
 }

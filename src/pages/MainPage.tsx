@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import styled from "styled-components";
 import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallengeContainer";
 import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
@@ -9,11 +9,16 @@ import apis from "../api/api";
 
 function MainPage() {
   const [modalShow, setModalShow] = useState<boolean>(false);
+  const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useContext(AppContext);
   const handleToggleModal = () => {
-    setModalShow(!modalShow);
+    dispatch({ type: "TOGGLE_MODAL" });
   };
   console.log(modalShow);
+
+  const handleToScrollTop = () => {
+    mainContainerRef.current?.scrollTo(0, 0);
+  };
   useEffect(() => {
     const userName = sessionStorage.getItem("userName");
     if (userName !== null) {
@@ -21,31 +26,58 @@ function MainPage() {
     }
   }, []);
   return (
-    <StMainContents>
+    <StMainContents ref={mainContainerRef}>
       <StContentsWrapper>
         {state.userName ? (
-          <MyChallengeContainer handleToggleModal={handleToggleModal} />
+          <MyChallengeContainer
+            handleToggleModal={handleToggleModal}
+            Ref={mainContainerRef.current}
+          />
         ) : null}
 
         <RecruitContainer handleToggleModal={handleToggleModal} />
       </StContentsWrapper>
-      {modalShow && (
+      {state.modalOpen && (
         <ModalPortal handleToggleModal={handleToggleModal} postId={1} />
       )}
+      <StTopBtn onClick={handleToScrollTop}>↑</StTopBtn>
     </StMainContents>
   );
 }
 
 const StMainContents = styled.div`
+  position: relative;
   background-color: #f5f5f5;
+  padding-bottom: 6rem;
   overflow-y: auto;
   overflow-x: hidden;
-  min-height: 100vh;
+  height: calc(100vh - 10rem);
 `;
 
 const StContentsWrapper = styled.div`
   width: 128rem;
   margin: 0 auto;
+`;
+
+const StTopBtn = styled.button`
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 5rem;
+  bottom: 5rem;
+  width: 5rem;
+  height: 5rem;
+  border: 0.2rem solid var(--purple-color);
+  color: var(--purple-color);
+  background-color: white;
+  border-radius: 50%;
+  font-size: 3.5rem;
+  padding-top: 1rem;
+  :hover {
+    background-color: var(--purple-color);
+    color: white;
+  }
 `;
 
 export default MainPage;

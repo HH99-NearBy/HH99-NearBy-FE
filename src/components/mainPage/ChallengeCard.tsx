@@ -16,13 +16,12 @@ interface StyleProps {
   startTime?: string;
   targetTime?: number;
   endTime?: string;
-  ref?: any;
+  Ref?: React.MutableRefObject<HTMLDivElement | null>;
   challengeId?: number;
   handleToggleModal?: () => void;
 }
 
 function ChallengeCard(props: StyleProps) {
-  
   const { state, dispatch } = useContext(AppContext);
   const handleReadChallengeId = (id: number) => {
     dispatch({
@@ -31,10 +30,8 @@ function ChallengeCard(props: StyleProps) {
       challengeStatus: props.status,
     });
   };
-  console.log(props.challengeId);
-  console.log(props.targetTime);
   return (
-    <StCardContainer status={props.status}>
+    <StCardContainer status={props.status} ref={props.Ref}>
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
       <StCardContents>
         <div className="card_body">
@@ -106,6 +103,7 @@ const StCardContainer = styled.div`
   height: 42.2rem;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   ${(props: StyleProps) => {
     switch (props.status) {
@@ -114,7 +112,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
-            background-color: purple;
+            background-color: #e1e1e1;
           }
         `;
       case "done":
@@ -122,7 +120,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
-            background-color: purple;
+            background-color: #e1e1e1;
           }
           .modal_open_btn {
             background-color: #e1e1e1;
@@ -131,13 +129,13 @@ const StCardContainer = styled.div`
         `;
       case "recruit":
         return css`
-          width: 61.1rem;
+          width: 58.1rem;
           height: 21.1rem;
           flex-direction: row;
           img {
             width: 21.1rem;
             height: 21.1rem;
-            background-color: red;
+            background-color: #e1e1e1;
           }
           .modal_open_btn {
             background-color: #ffa115;
@@ -145,13 +143,13 @@ const StCardContainer = styled.div`
         `;
       case "running":
         return css`
-          width: 61.1rem;
+          width: 58.1rem;
           height: 21.1rem;
           flex-direction: row;
           img {
             width: 21.1rem;
             height: 21.1rem;
-            background-color: red;
+            background-color: #e1e1e1;
           }
           .modal_open_btn {
             background-color: #ffa115;
@@ -162,13 +160,13 @@ const StCardContainer = styled.div`
 `;
 
 const StCardContents = styled.div`
-  width: 40rem;
+  flex-grow: 1;
   height: 21.1rem;
   background-color: #fff;
   .card_body {
     display: flex;
     flex-direction: column;
-    width: 40rem;
+    width: 100%;
     height: 16.1rem;
     padding: 0 1rem;
     .header_info {
@@ -226,7 +224,7 @@ const StCardContents = styled.div`
     }
   }
   button {
-    width: 40rem;
+    width: 100%;
     height: 5rem;
     background-color: var(--purple-color);
     color: #fff;

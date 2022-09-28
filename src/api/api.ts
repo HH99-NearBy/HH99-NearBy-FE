@@ -1,13 +1,14 @@
 import { useQuery } from "react-query";
 import instance from "./core/axiosInstance";
 const apis = {
-  reissue: async (refreshToken: string) => {
-    const requestRes = await instance.get("/api/reissue", {
-      headers: {
-        "Refresh-Token": refreshToken,
+  reissue: async () => {
+    const requestRes = await instance.post(
+      "/api/token",
+      {
+        nickname: sessionStorage.getItem("userName"),
       },
-    });
-
+      {}
+    );
     return requestRes.headers;
   },
   userRegister: async ({
@@ -77,9 +78,9 @@ const apis = {
   getFUllChallengeList: async (pageNum: number, sizeNum: number) => {
     try {
       const reqRes = await instance.get(
-        `/api/posts?pageNum=${pageNum}&size=${sizeNum}`
+        `/api/posts?challengeId=${pageNum}&size=${sizeNum}`
       );
-      return reqRes.data;
+      return reqRes;
     } catch (error) {
       throw error;
     }
@@ -130,34 +131,47 @@ const apis = {
         challengeTag,
         limit: 16,
       });
-      return reqRes.data;
+      console.log(reqRes);
+      const reReq = await instance.post(
+        `/api/challenge/ok/${reqRes.data.data}`
+      );
+      return reqRes.data.msg;
     } catch (error) {
       throw error;
     }
   },
   modifyChallenge: async ({
     title,
-    postImg,
-    password,
+    challengeImg,
+    startDay,
     startTime,
     targetTime,
-    description,
+    content,
+    notice,
+    challengeTag,
+    challengeId,
   }: {
     title: string;
-    postImg: string;
-    password: string;
+    challengeImg: string;
+    startDay: string;
     startTime: string;
-    targetTime: string;
-    description: string;
+    targetTime: number;
+    content: string;
+    notice: string;
+    challengeTag: string[];
+    challengeId: number;
   }) => {
     try {
-      const reqRes = await instance.post("/api/challenge", {
+      const reqRes = await instance.put(`/api/challenge/${challengeId}`, {
         title,
-        postImg,
-        password,
+        challengeImg,
+        startDay,
         startTime,
         targetTime,
-        description,
+        content,
+        notice,
+        challengeTag,
+        limit: 16,
       });
       return reqRes.data;
     } catch (error) {
@@ -193,9 +207,7 @@ const apis = {
   },
   getUserRanking: async (pageNum: number) => {
     try {
-      const reqRes = await instance.get(
-        `/api/ranking?pagenum=${pageNum}&pagelimit=20`
-      );
+      const reqRes = await instance.get(`/api/rank?pageNum=${pageNum}&size=10`);
       return reqRes.data;
     } catch (error) {
       throw error;
@@ -208,6 +220,23 @@ const apis = {
     } catch (error) {
       throw error;
     }
+  },
+  searchChallengeList: async (
+    searchParam: string | undefined,
+    pageNum: number
+  ) => {
+    try {
+      const reqRes = await instance.get(
+        `/api/search?keyword=${searchParam}&pageNum=${pageNum}`
+      );
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  searchTitle: async (searchParam: string) => {
+    const reqRes = await instance.get(`/api/relation?word=${searchParam}`);
+    return reqRes.data;
   },
 };
 export default apis;

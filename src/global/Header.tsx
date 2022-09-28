@@ -2,9 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import CategoryList from "../components/header/CategoryList";
+import SearchBar from "../components/header/SearchBar";
 import UserInfoCard from "../components/header/UserInfoCard";
 import PostingBtn from "../components/header/PostingBtn";
-import MAINLOGO from "../static/main_logo.png";
+import MAINLOGO from "../static/main_logo.svg";
 
 function Header() {
   const navigate = useNavigate();
@@ -18,9 +19,10 @@ function Header() {
           <Link to="/">
             <img src={MAINLOGO} alt="로고" />
           </Link>
-
+          <SearchBar />
           <CategoryList />
         </div>
+
         {sessionStorage.getItem("userName") ? (
           <div className="interface_section">
             <PostingBtn />
@@ -50,6 +52,8 @@ const StcontentsWrapper = styled.div`
   .navigate_section {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    flex-grow: 1;
   }
   .interface_section {
     display: flex;

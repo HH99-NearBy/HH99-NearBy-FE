@@ -4,24 +4,19 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyle = createGlobalStyle`
  // ::: Font Setting
   // :: Basic(400, 500) & English Font(400, 500, 700) import
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500&family=Ubuntu:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
   // :: Korean Font import
+  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+  // :: English Font import
  
-    @font-face {
-    font-family: 'GmarketSansMedium';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    }
-  // :: Basic Font import
   :root {
     --bg-color: #F5ECE9;
     --purple-color: #6627f5;
     --focus-color: #343740;
     --text-color: #000000;
     --border-style: 2px solid #000000;
-    /* --english-font:'Ubuntu', sans-serif; */
-    --basic-font: 'GmarketSansMedium', sans-serif;
+    --english-font: 'Roboto', sans-serif;
+    --basic-font: 'Noto Sans KR', sans-serif;
   }
   
   * {
@@ -66,15 +61,20 @@ const GlobalStyle = createGlobalStyle`
     color: white;
   }
   .block_scroll {
-    overflow-y: hidden;
+    overflow-y: hidden !important;
   }
   .static_scroll {
     scroll-behavior: auto !important;
   }
 
-  .video_container {
+  /* .video_container {
     width: 100%;
     height: 100%;
+  } */
+
+  #is_not_long {
+    width: 128rem !important;
+    position: relative !important;
   }
 `;
 
