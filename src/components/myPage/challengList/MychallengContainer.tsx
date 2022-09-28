@@ -3,15 +3,17 @@ import styled from 'styled-components'
 import axios from 'axios';
 import MychallengCard from './MychallengCard'
 import CardPagination from './CardPagination'
+import apis from '../../../api/api'
 
 interface CardProps {
-  id : string;
-  title : string;
-  day : string;
-  date : string;
-  time : string;
-  people: string;
-  image : string;
+  title:string;
+  challengeImg:string;
+  endTime:string;
+  limitPeople:string;
+  startDay:string;
+  startTime:string;
+  tagetTime:number;
+
 }
 
 
@@ -25,10 +27,10 @@ function MychallengContainer() {
   useEffect(() => {
     const CardList = async () => {
       setLoading(true)
-      const res = await axios.get('/data/Card.json')
-      setChalleng(res.data)
+      const res = await apis.getMyInfo()
+      setChalleng(res.challengeLists)
       setLoading(false)
-      console.log(res)
+      console.log(res.challengeLists)
     }
     CardList();
   },[])
@@ -37,7 +39,8 @@ function MychallengContainer() {
 
   const indexOfLastCard = page * Limit;
   const indexOfFirstCard = indexOfLastCard - Limit;
-  const currentCard = challeng.slice(indexOfFirstCard,indexOfLastCard)
+  console.log(challeng)
+  const currentCard = challeng?.slice(indexOfFirstCard,indexOfLastCard)
 
 
   return (
@@ -49,7 +52,7 @@ function MychallengContainer() {
       <CardContents>
       <MychallengCard challeng={currentCard} loading={loading}/>
       </CardContents>
-      <CardPagination Limit ={Limit} totalCard={challeng.length} paginate={paginate}/>
+      <CardPagination Limit={Limit} totalCard={challeng.length} paginate={paginate}/>
     </CardContainer>
     </>
   )

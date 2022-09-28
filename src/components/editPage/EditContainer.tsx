@@ -1,17 +1,18 @@
-import React,{useState, useCallback} from 'react'
+import React,{useState, useCallback,useEffect} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import AWS from 'aws-sdk'
 import imageCompression from 'browser-image-compression'
 import MAINLOGO from "../../static/main_logo.png";
 import apis from '../../api/api'
-
+import {useNavigate} from 'react-router-dom'
 function EditContainer() {
 
+    const navigate = useNavigate()
     const  Config = {
         bucketName : "ssggwan",
         region : "ap-northeast-2",
-        accessKeyId : "AKIARVHCGCIJVAQPZJ4A",
+        accessKeyId : "AKIA5ZVQVLLYCZKG6U5P",
         secretAccessKey : "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"
       }
     
@@ -21,8 +22,8 @@ function EditContainer() {
     
       AWS.config.update({
         region:regin,
-        accessKeyId : "AKIARVHCGCIJVAQPZJ4A",
-        secretAccessKey : "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"
+        accessKeyId : "AKIA5ZVQVLLYCZKG6U5P",
+        secretAccessKey : process.env.REACT_APP_AWS_KEY
       })
 
      
@@ -36,7 +37,7 @@ function EditContainer() {
         useWebWorker: true,
       }
       const reImg = await imageCompression(fileList[0],options)
-      setProfileImg(reImg)
+      setUpload(reImg)
       console.log(reImg)
 
 
@@ -54,7 +55,7 @@ function EditContainer() {
     promise.then(
       function(data) {
         alert("이미지 업로드에 성공했습니다.")
-        setUpload(data.Location)
+        setProfileImg(data.Location)
         setIsimg(true)
         console.log(data.Location)
       },
@@ -66,13 +67,16 @@ function EditContainer() {
     
     
     }
-
+   
 
     //닉네임,비밀번호,비밀번호 확인,이미지 url
-    const [nickname, setNickname] = useState<any>(sessionStorage.getItem("nickname"));
-    const [profileImg,setProfileImg] = useState<File>()
-    const [upload,setUpload] = useState<any>(sessionStorage.getItem("profileImg"))
-
+    
+    
+    
+    const [nickname, setNickname] = useState<string>('');
+    const [profileImg,setProfileImg] = useState<string>('')
+    const [upload,setUpload] = useState<File>()
+    console.log(profileImg)
 
     //오류메세지 상태저장
     const [NicknameMessage, setNicknameMessage] = useState<string>('');
@@ -89,13 +93,12 @@ function EditContainer() {
     const onChangeNick = useCallback ((e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setNickname(e.target.value)
-        if (nickname !== null) {
-            setNickname(e.target.value.length < 2 || e.target.value.length > 5) 
+          if(e.target.value.length < 2 || e.target.value.length > 5){
             setNicknameMessage('2글자 이상 5글자 미만으로 입력해주세요.')
             setIsNick(false)
-        }else {
-          setNicknameMessage('올바른 닉네임 형식입니다.')
-          setIsNick(true)
+          }else{
+            setNicknameMessage('올바른 닉네임 형식입니다.')
+          setIsNick(true) 
         }
       },[])
 
@@ -103,10 +106,15 @@ function EditContainer() {
         async (e : React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault()
           try {
-        const response =await apis.userNicknameValidationCheck
+            if(nickname === sessionStorage.getItem("userName")){
               setNickCheck(!nickCheck)
-              alert('가입 가능한 닉네임입니다.')
-              console.log(response)
+              setIsNick(!isNickname)
+                alert('가입 가능한 닉네임입니다.') 
+                return
+        }
+          const response =await apis.userNicknameValidationCheck(nickname)
+          alert('가능한 닉네임 입니다.')
+          setNickCheck(!nickCheck)
           }catch (err) {
             alert('중복된 닉네임 입니다.')
             console.error(err)
@@ -117,14 +125,24 @@ function EditContainer() {
             async (e:React.FormEvent<HTMLFormElement>) => {
               e.preventDefault()
               try {
-                const response = await apis.modifyMyInfo
+                const response = await apis.modifyMyInfo({nickname,profileImg})
                   alert('프로필 수정 완료')
+                  navigate('/mypage')
                   console.log(response)
               }catch (err) {
                 console.error(err)
               }
-            },[,nickname,upload])
+              console.log(profileImg)
+            },[,nickname,profileImg])
 
+            useEffect(() => {
+              const userName = sessionStorage.getItem("userName")
+              const userProfile = sessionStorage.getItem("userProfile")
+              if(userName !== null)
+              setNickname(userName)
+              if(userProfile !== null)
+              setProfileImg(userProfile)
+            },[])
 
   return (
     <SignupContainer>
@@ -136,7 +154,7 @@ function EditContainer() {
           <ImgBox>
           <TitleBox>프로필 수정</TitleBox>
             <FileBox>
-              <img src = {upload} />
+              <img src = {profileImg} />
               <label htmlFor = "input-file" >사진 등록하기</label>
              <input type="file" id="input-file" placeholder = "사진추가"  accept='image/*' onChange={handleImageChange}/> 
             </FileBox>
@@ -146,6 +164,9 @@ function EditContainer() {
           </TetxBox>
           <SignBox2> 
           <CheckBox>
+              <div className='check_pr'>
+                중복확인을 꼭 눌러주세요~
+              </div>
               <div>
               <InputSt type="text" placeholder = '닉네임을 입력하세요' value={nickname} onChange={onChangeNick}/>
               <CheckBtn onClick={NicknameCheck}>중복확인</CheckBtn>
@@ -157,7 +178,7 @@ function EditContainer() {
           <SubmitBtn>
           <input type ="submit"  value= "확인" disabled={!(isNickname  && nickCheck)}/>
           </SubmitBtn>
-        </FormBox>  
+        </FormBox>
     </SignupContainer>
   )
 }
@@ -165,7 +186,6 @@ function EditContainer() {
 export default EditContainer
 
 const SignupContainer = styled.div`
-    border: 1px solid black;
   width: 167rem;
     padding-top: 15rem;
     padding-right: 0rem;
@@ -182,7 +202,6 @@ const TitleBox = styled.div`
 
 `
 const ImgBox = styled.div`
-border: 1px solid red;
     float: left;
     width: 44rem;
     padding: 5rem;
@@ -220,12 +239,13 @@ const FileBox = styled.div`
 `
 
 const CheckBox = styled.div`
-    border: 1px solid blue;
     position: relative;
     right: 10rem;
   p{
     font-size: small;
     margin: -10px auto;
+    position: relative;
+    bottom: 14rem;
     &.success {
       color: green;
     }
@@ -233,12 +253,17 @@ const CheckBox = styled.div`
       color : red;
     }
   }
+  .check_pr {
+    font-size: large;
+    position: relative;
+    top: 14rem;
+  }
 `
 
 const InputSt = styled.input`
     width: 50rem;
     height: 6rem;
-    margin: 18.5rem -10rem;
+    margin: 15.5rem -10rem;
     background-color: #F5F5F5;
     border: solid white;
     font-size: medium;
@@ -249,7 +274,7 @@ const CheckBtn = styled.button`
   position: absolute;
   width: 12rem;
     height: 6rem;
-    margin: 18.5rem 0;
+    margin: 15.5rem 0;
   background-color: #777777;
   border: solid white;
   color: white;
@@ -266,7 +291,6 @@ const CheckBtn = styled.button`
 `
 
 const TetxBox = styled.div`
-    border: 1px solid green;
      width: 12rem;
      margin: 0rem 8rem;
 `
@@ -279,7 +303,6 @@ const TextP =styled.p`
 
 
 const LogoBox =styled.div`
-    border: 1px solid black;
    width: 20rem;
     height: 10rem;
     position: relative;
@@ -288,8 +311,9 @@ const LogoBox =styled.div`
     text-align: center;
 `
 const SubmitBtn = styled.div`
-    border: 1px solid red;
     margin: 1rem 37rem;
+    position: relative;
+      left: 4rem;
   input[type="submit"] {
      width: 45rem;
       height: 4rem;
@@ -298,6 +322,7 @@ const SubmitBtn = styled.div`
       color: white;
       font-size: xx-large;
       font-weight: bold;
+      
       &:disabled {
         background-color: gray;
       }
@@ -305,7 +330,6 @@ const SubmitBtn = styled.div`
     }
 `
 const FormBox = styled.form`
-    border: 1px solid black;
     position: relative;
     right: 21rem;
    

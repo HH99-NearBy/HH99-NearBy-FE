@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {useNavigate} from "react-router-dom"
 
 const REST_API_KEY = "06bbace6fde025ff72772cc94cc52876";
-const REDIRECT_URI = "http://localhost:3000/api/kakaologin";
+const REDIRECT_URI = "https://ssggwan.shop/api/kakaologin";
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 function KakaoForm() {
@@ -41,7 +41,7 @@ function KakaoForm() {
     async (e : React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
       try {
-       const response = await axios.post('http://ssggwan.site/api/nicknamecheck',{
+       const response = await axios.post('https://ssggwan.site/api/nicknamecheck',{
           nickname: nickname
         })
           setNickCheck(!nickCheck)
@@ -60,7 +60,7 @@ function KakaoForm() {
     async(e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       try{
-        const response = await axios.post("http://ssggwan.site/api/kakaologin",{
+        const response = await axios.post("https://ssggwan.site/api/kakaologin",{
           code:code,
           nickname:nickname
         })
@@ -72,7 +72,7 @@ function KakaoForm() {
         alert("로그인 실패")
         console.error(err)
       }
-  },[nickname]) 
+  },[]) 
 
   return (
     <>

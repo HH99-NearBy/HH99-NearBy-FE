@@ -3,7 +3,17 @@ import styled from 'styled-components';
 import {FaUserEdit} from "react-icons/fa"
 import {useNavigate} from 'react-router-dom'
 
-function UserInfoContainer() {
+
+interface infoData {
+  nickname : undefined;
+  email : undefined;
+  profileImg:undefined;
+  level:undefined;
+  remainingTime:undefined;
+}
+
+
+function UserInfoContainer({nickname,email,profileImg,level,remainingTime}:{nickname:undefined;email:undefined,profileImg:undefined;level:undefined;remainingTime:undefined}) {
   const navigate = useNavigate();
 
   const EditBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -14,24 +24,24 @@ function UserInfoContainer() {
     <UserContainer>
       <UserBox>
       <Nickname>
-      닉네임 들어갈곳
+      {nickname}
       </Nickname>
       <Email>
-          dydwns9310@gmail.com
+          {email}
       </Email>
       <UserImage>
-        <img src = "https://ifh.cc/g/RCtOo7.png"/>
+        <img src = {profileImg}/>
       </UserImage>
       <LevelBox>
         <div className="level">
-          Lv20
+          {level}
         </div>
         <div className='minute'>
-          70/100 분
+          {remainingTime}/70 분
         </div>
       </LevelBox>
       <ProgressBox>
-        <progress value="70"  max = "100"></progress>
+        <progress value={remainingTime}  max = "70"></progress>
       </ProgressBox>
       </UserBox>
         <Editbutton onClick={EditBtn}>

@@ -5,12 +5,12 @@ import Pagination from './Pagination'
 import DoneListContainer from './DoneListContainer'
 
 interface DoneCardProps {
-  id : string;
   title : string;
-  day : string;
-  date : string;
-  time : string;
+  endtime : string;
+  startTime : string;
+  tagetTime : string;
 }
+
 
 function DoneCard({done,loading}:{done:Array<DoneCardProps>;loading:boolean}) {
 
@@ -28,9 +28,9 @@ function DoneCard({done,loading}:{done:Array<DoneCardProps>;loading:boolean}) {
           {done.title}
           </TitleBox2>
           <Date>
-          <img src = "https://ifh.cc/g/Ylpc4J.png"/>{done.day}
-          <img src = "https://ifh.cc/g/6md8RO.png"/>{done.date}
-          <img src = "https://ifh.cc/g/bFlJmL.png"/>{done.time}
+          <img src = "https://ifh.cc/g/Ylpc4J.png"/>{done.endtime}
+          <img src = "https://ifh.cc/g/6md8RO.png"/>{done.startTime}
+          <img src = "https://ifh.cc/g/bFlJmL.png"/>{done.tagetTime}
           </Date>  
       </DoneBox>
       )

@@ -84,7 +84,7 @@ const apis = {
       throw error;
     }
   },
-  getMyInfo: async (userName: string) => {
+  getMyInfo: async () => {
     try {
       const reqRes = await instance.get("/api/member");
       return reqRes.data;
@@ -94,7 +94,7 @@ const apis = {
   },
   modifyMyInfo: async (payload: { nickname: string; profileImg: string }) => {
     const reqRes = await instance.put("/api/member", {
-      nickname: payload.nickname,
+      nickName: payload.nickname,
       profileImg: payload.profileImg,
     });
     return reqRes.data;

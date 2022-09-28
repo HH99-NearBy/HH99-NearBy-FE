@@ -3,13 +3,13 @@ import styled from "styled-components";
 import axios from "axios";
 import DoneCard from "./DoneCard";
 import Pagination from "./Pagination";
+import apis from '../../../api/api'
 
 interface DoneCardProps {
-  id : string;
   title : string;
-  day : string;
-  date : string;
-  time : string;
+  endtime : string;
+  startTime : string;
+  tagetTime : string;
 }
 
 
@@ -26,8 +26,8 @@ function DoneListContainer() {
 
     const doneList = async () => {
       setLoading(true)
-      const res = await axios.get('/data/done.json')
-      setDone(res.data)
+      const res = await apis.getMyInfo()
+      setDone(res.finishLists)
       setLoading(false)
       console.log(res)
     }
