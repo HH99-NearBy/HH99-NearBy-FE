@@ -79,7 +79,11 @@ function ModalBody({
   const createdAt = new Date(
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
+  const startTime = Date.parse(
+    `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
+  );
   const endTime = Date.parse(`${body?.detailModal.endTime}`);
+  console.log(startTime);
   console.log(body?.detailModal.endTime);
   console.log(endTime);
   console.log(Date.now());

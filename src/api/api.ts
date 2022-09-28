@@ -221,5 +221,22 @@ const apis = {
       throw error;
     }
   },
+  searchChallengeList: async (
+    searchParam: string | undefined,
+    pageNum: number
+  ) => {
+    try {
+      const reqRes = await instance.get(
+        `/api/search?keyword=${searchParam}&pageNum=${pageNum}`
+      );
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  searchTitle: async (searchParam: string) => {
+    const reqRes = await instance.get(`/api/relation?word=${searchParam}`);
+    return reqRes.data;
+  },
 };
 export default apis;

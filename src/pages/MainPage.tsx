@@ -12,7 +12,7 @@ function MainPage() {
   const mainContainerRef = useRef<HTMLDivElement | null>(null);
   const { state, dispatch } = useContext(AppContext);
   const handleToggleModal = () => {
-    setModalShow(!modalShow);
+    dispatch({ type: "TOGGLE_MODAL" });
   };
   console.log(modalShow);
 
@@ -37,7 +37,7 @@ function MainPage() {
 
         <RecruitContainer handleToggleModal={handleToggleModal} />
       </StContentsWrapper>
-      {modalShow && (
+      {state.modalOpen && (
         <ModalPortal handleToggleModal={handleToggleModal} postId={1} />
       )}
       <StTopBtn onClick={handleToScrollTop}>↑</StTopBtn>

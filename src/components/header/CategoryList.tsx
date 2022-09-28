@@ -20,8 +20,8 @@ function CategoryList() {
     setActivateIdx(targetIdx);
     if (targetIdx === 0) {
       navigate("/ranking");
-    }else if (targetIdx === 1){
-      navigate("/info")
+    } else if (targetIdx === 1) {
+      navigate("/info");
     }
   };
   useEffect(() => {
@@ -68,7 +68,7 @@ const StListContainer = styled.ul`
   justify-content: space-around;
   align-items: center;
   padding-bottom: 0.2rem;
-  margin-left: 5rem;
+  /* margin-left: 3rem; */
   li {
     height: 100%;
     flex-grow: 1;
@@ -78,6 +78,9 @@ const StListContainer = styled.ul`
     justify-content: space-around;
     align-items: center;
     border-bottom: 0.5rem solid #fff;
+    :nth-of-type(1) {
+      margin-left: 1rem;
+    }
     span {
       height: 3rem;
       display: flex;

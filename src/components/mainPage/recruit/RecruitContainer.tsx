@@ -69,7 +69,7 @@ function RecruitContainer({
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
   const [pageNum, setPageNum] = useState<number>(0);
   const getChallengeList = useCallback(async () => {
-    const reqRes = await apis.getFUllChallengeList(pageNum, 10);
+    const reqRes = await apis.getFUllChallengeList(pageNum, 9);
     setChallengeList([...challengeList, ...reqRes.data]);
     setPageNum(reqRes.data.at(-1).id);
   }, [pageNum, challengeList]);
