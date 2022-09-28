@@ -9,8 +9,9 @@ import KakaoForm from "../components/loginPage/KakaoForm";
 import MyPage from "../pages/MyPage";
 import InformationPage from "../pages/InformationPage";
 import EditContainer from "../components/editPage/EditContainer";
-
 import PostingPage from "../pages/PostingPage";
+import SearchPage from "../pages/SearchPage";
+
 function Router() {
   return (
     <Routes>
@@ -24,6 +25,7 @@ function Router() {
       <Route path = "/info" element ={<InformationPage/>}/>
       <Route path = '/edit' element = {<EditContainer/>}/>
       <Route path="/posting" element={<PostingPage />} />
+      <Route path="/search" element={<SearchPage />} />
     </Routes>
   );
 }

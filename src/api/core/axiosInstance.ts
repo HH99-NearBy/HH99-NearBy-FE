@@ -1,4 +1,7 @@
 import axios from "axios";
+import apis from "../api";
+
+export const arr = axios.create({baseURL: process.env.REACT_APP_BASE_URI})
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URI,
@@ -13,34 +16,33 @@ instance.interceptors.request.use(
     return req;
   },
   (err) => {
+    console.log("err",err)
     return Promise.reject(err);
   }
 );
 
-// instance.interceptors.response.use(
-//   function (res) {
-//     return res;
-//   },
-//   async function (error) {
-//     try {
-//       const originalRequest = error.config;
-//       let requestRes;
-//       let refreshToken;
-//       if (typeof localStorage.getItem("refreshtoken") === "string") {
-//         refreshToken = localStorage.getItem("refreshtoken");
-//       }
-//       if (typeof refreshToken === "string") {
-//         requestRes = await apis.reissue(refreshToken);
-//         localStorage.setItem("accessToken", requestRes.authorization);
-//         localStorage.setItem("refreshtoken", requestRes["refresh-token"]);
-//         originalRequest.headers["Authorization"] = requestRes.authorization;
-//       }
-//       return await instance.request(originalRequest);
-//     } catch (error) {
-//       localStorage.removeItem("accessToken");
-//       return console.log(error);
-//     }
-//   }
-// );
+instance.interceptors.response.use(
+  function (res) {
+    return res;
+  },
+  async function (error) {
+    console.log(error.response);
+    const originalRequest = error.config;
+    try {
+      switch (error.response.data.msg) {
+        case "만료된 JWT token 입니다.": {
+          const requestRes = await apis.reissue();
+          sessionStorage.setItem("accessToken", requestRes.authorization);
+
+          originalRequest.headers["Authorization"] = requestRes.authorization;
+          return await instance.request(originalRequest);
+        }
+      }
+    } catch (deepError) { 
+      return console.log(deepError);
+    }
+    return Promise.reject(error)
+  }
+);
 
 export default instance;

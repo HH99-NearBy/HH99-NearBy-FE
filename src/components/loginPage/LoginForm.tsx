@@ -27,7 +27,8 @@ function LoginForm() {
     onMutate: (payload) => {
       console.log("onmutate", payload);
     },
-    onError(error, variables, context) {
+    onError(error:any, variables, context) {
+      alert(error.response.data.msg)
       throw error;
     },
     onSuccess: (res, variables, context) => {

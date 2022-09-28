@@ -8,6 +8,7 @@ interface ContextAction {
   userName?: string;
   challengeStatus?: string;
   targetOvSub?: string;
+  searchParam?: string;
 }
 
 type ContextDispatch = Dispatch<ContextAction>;
@@ -17,11 +18,15 @@ const ContextState: {
   ovSubscribers: any;
   userName: string | undefined;
   challengeStatus: string;
+  modalOpen: boolean;
+  searchParam: string | undefined;
 } = {
   challengeId: -1,
   ovSubscribers: [],
   userName: "",
   challengeStatus: "",
+  modalOpen: false,
+  searchParam: "",
 };
 
 // const StateContext = React.createContext<typeof ContextState | null>(null);
@@ -76,6 +81,30 @@ function reducer(
       return {
         ...state,
         userName: action.userName,
+      };
+    }
+    case "LEAVE_SESSION": {
+      return {
+        ...state,
+        ovSubscribers: [],
+      };
+    }
+    case "TOGGLE_MODAL": {
+      return {
+        ...state,
+        modalOpen: !state.modalOpen,
+      };
+    }
+    case "CLOSE_MODAL": {
+      return {
+        ...state,
+        modalOpen: false,
+      };
+    }
+    case "SET_SEARCH": {
+      return {
+        ...state,
+        searchParam: action.searchParam,
       };
     }
     default: {

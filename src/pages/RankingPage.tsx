@@ -1,13 +1,56 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import { useQuery } from "react-query";
+import apis from "../api/api";
 import MyChart from "../components/Chart";
 import { IoTrophy } from "react-icons/io5";
 import UserRankingCard from "../components/rankingPage/UserCard";
 import RankingList from "../components/rankingPage/RankingList";
 
+interface UserRaking {
+  id: number;
+  level: string;
+  profileImg: string;
+  nickname: string;
+  rank: string;
+  score: number;
+  graph: number[];
+}
+
 function RankingPage() {
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [myRanking, setMyRanking] = useState<UserRaking>({
+    id: -1,
+    profileImg: "",
+    nickname: "",
+    level: "",
+    rank: "",
+    score: -1,
+    graph: [],
+  });
+  const [ranking, setRanking] = useState<UserRaking[]>([]);
+  useQuery(
+    ["GET_FULL_RANKING"],
+    async () => {
+      const res = await apis.getUserRanking(pageNum);
+      console.log(res);
+      setRanking([...ranking, ...res.data]);
+      setMyRanking({ ...myRanking, ...res.myRank });
+    },
+    {
+      retry: 2,
+    }
+  );
+
+  const handleAddRanking = () => {
+    setPageNum(pageNum + 1);
+  };
+  console.log(pageNum);
+  console.log(ranking);
   return (
-    <StContentsContainer>
+    <StContentsContainer
+      isLogin={sessionStorage.getItem("accessToken") !== null ? true : false}
+    >
       <h1>
         <span>쓱-관왕</span>
         <IoTrophy />
@@ -19,26 +62,30 @@ function RankingPage() {
           <span>스코어</span>
           <span>주간 챌린지 그래프</span>
         </StContentsHeader>
-        <UserRankingCard
-          userName="강무시깽이"
-          userRanking="42"
-          userLevel="Lv.42"
-          userScore="42"
-          userImg="https://publy.imgix.net/images/2018/02/28/1519811155_f99450b74bbc61046cf55389501cd124.jpeg?fm=pjpg"
-          rankingChart={[10, 30, 45, 38, 44, 50, 60]}
-        />
+        {sessionStorage.getItem("accessToken") && (
+          <UserRankingCard
+            userName={myRanking.nickname}
+            userRanking={myRanking.rank}
+            userLevel={myRanking.level}
+            userScore={myRanking.score}
+            userImg={myRanking.profileImg}
+            rankingChart={myRanking.graph}
+          />
+        )}
       </div>
-      <RankingList />
+      <RankingList ranking={ranking} />
+      <StPluBtn onClick={handleAddRanking}>+</StPluBtn>
     </StContentsContainer>
   );
 }
 
-const StContentsContainer = styled.div`
+const StContentsContainer = styled.div<{ isLogin: boolean }>`
   width: 128rem;
   margin: 0 auto;
   margin-top: 7rem;
   min-height: 100%;
-
+  display: flex;
+  flex-direction: column;
   h1 {
     display: flex;
     align-items: center;
@@ -60,10 +107,11 @@ const StContentsContainer = styled.div`
 
   .top_ranking_content {
     margin-top: 2rem;
-    margin-bottom: 4rem;
+    margin-bottom: ${(props) => (props.isLogin === true ? "4rem" : "0")};
     box-shadow: rgba(0, 0, 0, 0.15) 0px 0.6rem 1rem;
   }
 `;
+
 const StContentsHeader = styled.div`
   width: 100%;
   height: 5rem;
@@ -84,6 +132,22 @@ const StContentsHeader = styled.div`
     :nth-of-type(3) {
       width: 23rem;
     }
+  }
+`;
+const StPluBtn = styled.button`
+  width: 5rem;
+  height: 5rem;
+  border: 0.4rem solid var(--purple-color);
+  border-radius: 50%;
+  font-size: 4rem;
+  background-color: white;
+  color: var(--purple-color);
+  align-self: center;
+  margin-top: 3rem;
+  margin-bottom: 6rem;
+  cursor: pointer;
+  :hover {
+    background-color: #f5f5f5;
   }
 `;
 

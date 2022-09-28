@@ -1,19 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useMutation } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import apis from "../api/api";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import AWS from "aws-sdk";
 import imageCompression from "browser-image-compression";
+import { getChallengeDetail } from "../api/challengeDetail/api";
+import Button from "../elements/Button";
 
 function PostingPage() {
+  const { challengeId } = useParams();
   const [title, setTitle] = useState("");
   const [month, setMonth] = useState("");
   const [time, setTime] = useState("");
   const [targetTime, setTargetTime] = useState(0);
   const [desc, setDesc] = useState("");
   const [info, setInfo] = useState("");
-  const [upload, setUpload] = useState<string>("");
+  const [upload, setUpload] = useState<string>("https://ifh.cc/g/RCtOo7.png");
   const [isImg, setIsimg] = useState<boolean>(false);
   const [profileImg, setProfileImg] = useState<File>();
   const [options, setOptions] = useState({
@@ -23,6 +26,8 @@ function PostingPage() {
     Character: "",
     sexual: "",
   });
+  const optionsRef = useRef<HTMLDivElement | null>(null);
+  const queryClient = useQueryClient();
   const Config = {
     bucketName: "ssggwan",
     region: "ap-northeast-2",
@@ -40,8 +45,26 @@ function PostingPage() {
   });
   const navigate = useNavigate();
 
+  const modifyingMutation = useMutation(apis.modifyChallenge, {
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
+    },
+    onSuccess: (res) => {
+      console.log(res);
+      navigate("/");
+    },
+    onError: (error) => {
+      throw error;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
+    },
+  });
+
   const postingMutation = useMutation(apis.postChallenge, {
-    onMutate: (payload) => {},
+    onMutate: async (payload) => {
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
+    },
     onError(error, variables, context) {
       throw error;
     },
@@ -51,7 +74,7 @@ function PostingPage() {
       navigate("/");
     },
     onSettled: () => {
-      console.log("end");
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
     },
   });
   const handleOnChange = (e: React.ChangeEvent) => {
@@ -76,22 +99,44 @@ function PostingPage() {
   };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    postingMutation.mutate({
-      title,
-      challengeImg: upload,
-      startDay: month,
-      startTime: time,
-      targetTime: targetTime,
-      content: desc,
-      notice: info,
-      challengeTag: [
-        options.mic,
-        options.cam,
-        options.atmosphere,
-        options.Character,
-        options.sexual,
-      ],
-    });
+    if (challengeId) {
+      console.log("modify!");
+      modifyingMutation.mutate({
+        title,
+        challengeImg: upload,
+        startDay: month,
+        startTime: time,
+        targetTime: targetTime,
+        content: desc,
+        notice: info,
+        challengeTag: [
+          options.mic,
+          options.cam,
+          options.atmosphere,
+          options.Character,
+          options.sexual,
+        ],
+        challengeId: Number(challengeId),
+      });
+    } else {
+      console.log("post!");
+      postingMutation.mutate({
+        title,
+        challengeImg: upload,
+        startDay: month,
+        startTime: time,
+        targetTime: targetTime,
+        content: desc,
+        notice: info,
+        challengeTag: [
+          options.mic,
+          options.cam,
+          options.atmosphere,
+          options.Character,
+          options.sexual,
+        ],
+      });
+    }
   };
   const handleClickOption = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -155,6 +200,71 @@ function PostingPage() {
       );
     }
   };
+  useQuery(
+    "MP_DETAIL",
+    async () => {
+      if (challengeId) {
+        const res = await getChallengeDetail(Number(challengeId));
+        const target = res.detailModal;
+        const tags = target.challengeTag;
+        setTitle(target.title);
+        setDesc(target.content);
+        setMonth(target.startDay);
+        setTime(target.startTime);
+        setTargetTime(target.targetTime);
+        setInfo(target.notice);
+        setUpload(target.challengeImg);
+        setOptions({
+          ...options,
+          mic: tags[0],
+          cam: tags[1],
+          atmosphere: tags[2],
+          Character: tags[3],
+          sexual: tags[4],
+        });
+      }
+    },
+    {
+      retry: 2,
+    }
+  );
+  useEffect(() => {
+    if (optionsRef.current && challengeId) {
+      for (let i = 0; i < 5; i++) {
+        const target = optionsRef.current.children[i];
+        console.log(target);
+        const siblings = target.children;
+        if (typeof siblings !== "undefined") {
+          for (let i = 1; i < siblings.length; i++) {
+            siblings[i].classList.remove("selected_option");
+            console.log(siblings[i].innerHTML);
+            switch (siblings[i].classList[0]) {
+              case "mic":
+                if (options.mic === siblings[i].innerHTML)
+                  siblings[i].classList.add("selected_option");
+                continue;
+              case "cam":
+                if (options.cam === siblings[i].innerHTML)
+                  siblings[i].classList.add("selected_option");
+                continue;
+              case "atmosphere":
+                if (options.atmosphere === siblings[i].innerHTML)
+                  siblings[i].classList.add("selected_option");
+                continue;
+              case "character":
+                if (options.Character === siblings[i].innerHTML)
+                  siblings[i].classList.add("selected_option");
+                continue;
+              case "sexual":
+                if (options.sexual === siblings[i].innerHTML)
+                  siblings[i].classList.add("selected_option");
+                continue;
+            }
+          }
+        }
+      }
+    }
+  }, [optionsRef.current]);
   return (
     <StContentsWrapper onSubmit={handleSubmit}>
       <StTopContentsWrapper>
@@ -164,17 +274,33 @@ function PostingPage() {
             type="text"
             name="title"
             placeholder="챌린지 제목을 입력해주세요"
+            value={title}
             onChange={handleOnChange}
           />
         </div>
         <div className="day_input">
           <label htmlFor="startDate">시작일</label>
-          <input type="date" name="month" onChange={handleOnChange} />
-          <input type="time" name="time" onChange={handleOnChange} />
+          <input
+            type="date"
+            name="month"
+            onChange={handleOnChange}
+            value={month}
+          />
+          <input
+            type="time"
+            name="time"
+            onChange={handleOnChange}
+            value={time}
+          />
         </div>
         <div className="target_time_input">
           <label htmlFor="targetTime">목표시간</label>
-          <input type="text" name="targetTime" onChange={handleOnChange} />
+          <input
+            type="number"
+            name="targetTime"
+            onChange={handleOnChange}
+            value={targetTime}
+          />
           <span>분</span>
         </div>
       </StTopContentsWrapper>
@@ -187,6 +313,7 @@ function PostingPage() {
               cols={50}
               rows={10}
               onChange={handleOnChange}
+              value={desc}
             ></textarea>
           </div>
           <div className="info_section">
@@ -196,11 +323,12 @@ function PostingPage() {
               cols={25}
               rows={7}
               onChange={handleOnChange}
+              value={info}
             ></textarea>
           </div>
           <StOptionSelectContainer>
             <span className="option_title">옵션</span>
-            <div>
+            <div className="option_container" ref={optionsRef}>
               <div className="room_option">
                 <label htmlFor="mic">마이크</label>
                 <button name="mic" className="mic" onClick={handleClickOption}>
@@ -302,11 +430,8 @@ function PostingPage() {
         </StMainContentsWrapper>
         <StSideContentsWrapper>
           <FileBox>
-            {isImg ? (
-              <img src={upload} />
-            ) : (
-              <img src="https://ifh.cc/g/RCtOo7.png" />
-            )}
+            <img src={upload} />
+
             <label htmlFor="input-file">사진 등록하기</label>
             <input
               type="file"
@@ -320,6 +445,7 @@ function PostingPage() {
       </div>
       <StBottomContentsWrapper>
         <button>등록하기</button>
+        {challengeId && <button onClick={() => navigate("/")}>취소하기</button>}
       </StBottomContentsWrapper>
     </StContentsWrapper>
   );
@@ -492,8 +618,20 @@ const StBottomContentsWrapper = styled.div`
   button {
     width: 40rem;
     height: 5rem;
-    background-color: var(--purple-color);
-    color: white;
+    :nth-of-type(1) {
+      background-color: var(--purple-color);
+      color: white;
+    }
+    :nth-of-type(2) {
+      background-color: white;
+      border: 0.4rem solid #ffa115;
+      color: #ffa115;
+      :hover {
+        background-color: #ffa115;
+        color: white;
+      }
+    }
+
     border: none;
     font-size: 2rem;
     cursor: pointer;

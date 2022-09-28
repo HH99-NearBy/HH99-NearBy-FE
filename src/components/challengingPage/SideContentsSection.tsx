@@ -58,7 +58,8 @@ function SideContentsSection() {
                   type: "ADD_PEOPLE",
                   targetPerson: {
                     nickname: res.sender,
-                    level: "LV0",
+                    level: res.level,
+                    entryTime: Date.now(),
                   },
                 });
                 return;
@@ -69,6 +70,7 @@ function SideContentsSection() {
                   targetPerson: {
                     nickname: res.sender,
                     level: "",
+                    entryTime: 0,
                   },
                 });
                 return;
@@ -87,8 +89,8 @@ function SideContentsSection() {
       }
     );
     return () => {
+      console.log(stompClient.current);
       const nickname = sessionStorage.getItem("userName");
-      const level = sessionStorage.getItem("userLevel");
       stompClient.current.send(
         `/pub/chat/message`,
         JSON.stringify({
@@ -100,20 +102,25 @@ function SideContentsSection() {
           Authorization: sessionStorage.getItem("accessToken"),
         }
       );
-      if (nickname !== null && level !== null) {
-        dispatch({
-          type: "REMOVE_PEOPLE",
-          targetPerson: {
-            nickname,
-            level,
-          },
-        });
-      }
-
       subscription.unsubscribe();
       stompClient.current.disconnect();
     };
   }, []);
+  window.onbeforeunload = function () {
+    const nickname = sessionStorage.getItem("userName");
+    stompClient.current.send(
+      `/pub/chat/message`,
+      JSON.stringify({
+        type: "QUIT",
+        roomId: challengeId,
+        sender: nickname,
+      }),
+      {
+        Authorization: sessionStorage.getItem("accessToken"),
+      }
+    );
+    stompClient.current.disconnect();
+  };
   return (
     <StContentsWrapper>
       <SummeryInfoSection />
@@ -127,8 +134,9 @@ function SideContentsSection() {
 }
 
 const StContentsWrapper = styled.div`
-  width: 64rem;
+  flex-shrink: 1;
   height: 100%;
+  min-height: 101.35rem;
   background-color: #fff;
   display: flex;
   flex-direction: column;
