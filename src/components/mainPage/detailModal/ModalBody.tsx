@@ -55,6 +55,7 @@ function ModalBody({
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = () => {
     navigate(`/challenging/${state.challengeId}`);
+    handleToggleModal();
     fullScreenHandler.enter();
   };
   const handleRecruitChallenge = () => {

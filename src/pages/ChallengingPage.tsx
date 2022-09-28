@@ -51,10 +51,13 @@ function ChallengingPage() {
   //웹소켓 연결 여기서
   //채팅은 ChatSection에서 subscribe하고
   //인원수는 어떡해야하나?
+  const handleFullScreen = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    console.log(e);
+  };
   console.log(info);
   return (
     <FullScreen handle={fullScreenHandler}>
-      <StPageLayout>
+      <StPageLayout onKeyDown={handleFullScreen}>
         <VideoSection />
         <RoomContextProvider>
           <SideContentsSection />

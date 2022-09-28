@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { BsFillPersonFill } from "react-icons/bs";
 import { IoMdAlarm } from "react-icons/io";
 import UserListSection from "./UserListSection";
+import { BsDoorOpen } from "react-icons/bs";
 
 function SummeryInfoSection() {
   const navigate = useNavigate();
@@ -27,11 +28,8 @@ function SummeryInfoSection() {
       </StSummeyHeader>
       <UserListSection />
       <StNavigateBar>
-        <div className="switch_btn_group">
-          <button>&lt;</button>
-          <button>&gt;</button>
-        </div>
         <button className="leave_btn" onClick={handleLeaveRoom}>
+          <BsDoorOpen />
           나가기
         </button>
       </StNavigateBar>
@@ -73,18 +71,32 @@ const StNavigateBar = styled.div`
   background-color: var(--purple-color);
   display: flex;
   padding: 0 2rem;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   .switch_btn_group {
     button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       font-size: 2rem;
+      svg {
+        width: 2rem;
+        height: 2rem;
+      }
     }
   }
   .leave_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    svg {
+      width: 2.32rem;
+      height: 2.32rem;
+    }
     border: none;
     background: none;
     color: #fff;
-    font-size: 1.5rem;
     cursor: pointer;
   }
 `;
