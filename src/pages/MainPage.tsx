@@ -25,6 +25,7 @@ function MainPage() {
       dispatch({ type: "SYNC_USER_DATA", payload: -1, userName });
     }
   }, []);
+  console.log(mainContainerRef.current);
   return (
     <StMainContents ref={mainContainerRef}>
       <StContentsWrapper>
@@ -40,6 +41,7 @@ function MainPage() {
       {state.modalOpen && (
         <ModalPortal handleToggleModal={handleToggleModal} postId={1} />
       )}
+
       <StTopBtn onClick={handleToScrollTop}>↑</StTopBtn>
     </StMainContents>
   );
@@ -73,7 +75,6 @@ const StTopBtn = styled.button`
   background-color: white;
   border-radius: 50%;
   font-size: 3.5rem;
-  padding-top: 1rem;
   :hover {
     background-color: var(--purple-color);
     color: white;

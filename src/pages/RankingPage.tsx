@@ -133,7 +133,7 @@ const StContentsContainer = styled.div<{ isLogin: boolean }>`
       height: 3rem;
       display: flex;
       justify-content: center;
-      align-items: baseline;
+      align-items: center;
     }
 
     svg {
@@ -179,6 +179,9 @@ const StPluBtn = styled.button`
   border: 0.4rem solid var(--purple-color);
   border-radius: 50%;
   font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: white;
   color: var(--purple-color);
   align-self: center;

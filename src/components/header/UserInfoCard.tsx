@@ -33,7 +33,9 @@ function UserInfoCard() {
       </StInfoSection> */}
       <StNavModalBody ref={navModal} className="hidden">
         <h2>앞으로 나아간 시간</h2>
-        <div className="challenge_time_container">1122분</div>
+        <div className="challenge_time_container">
+          {sessionStorage.getItem("userTime")}
+        </div>
         <button className="move_to_mypage" onClick={() => navigate("/mypage")}>
           마이페이지
         </button>
@@ -69,6 +71,14 @@ const StCardContainer = styled.div`
     border: 0.33rem solid var(--purple-color);
     border-radius: 50%;
     background-color: white;
+  }
+  :hover {
+    div {
+      :nth-of-type(1) {
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+          rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+      }
+    }
   }
 `;
 

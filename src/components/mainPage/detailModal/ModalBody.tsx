@@ -49,6 +49,34 @@ function ModalBody({
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
     },
   });
+  const recruitChallengeMutation = useMutation(apis.recruitChallenge, {
+    onMutate: async (payload) => {
+      console.log("onmutate", payload);
+      await queryClient.cancelQueries(["MY_CHALLENGE"]);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {},
+    onSettled: () => {
+      queryClient.invalidateQueries(["MY_CHALLENGE"]);
+    },
+  });
+
+  const cancelRecruitMutation = useMutation(apis.recruitChallenge, {
+    onMutate: async (payload) => {
+      console.log("onmutate", payload);
+      await queryClient.cancelQueries(["MY_CHALLENGE"]);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {},
+    onSettled: () => {
+      queryClient.invalidateQueries(["MY_CHALLENGE"]);
+    },
+  });
+
   console.log(body);
   console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
@@ -59,11 +87,11 @@ function ModalBody({
     fullScreenHandler.enter();
   };
   const handleRecruitChallenge = () => {
-    apis.recruitChallenge(state.challengeId);
+    recruitChallengeMutation.mutate(state.challengeId);
     handleToggleModal();
   };
   const handleCancleChallenge = () => {
-    apis.cancelRecruit(state.challengeId);
+    cancelRecruitMutation.mutate(state.challengeId);
   };
   const handleModifyChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
