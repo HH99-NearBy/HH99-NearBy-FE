@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-function NeedLoginAlert() {}
+function AlertBody({ payload }: { payload: string }) {
+  return <div>{payload}</div>;
+}
 
-const AlertBody = styled.div``;
+const StBody = styled.div``;
 
-export default NeedLoginAlert;
+export default AlertBody;
