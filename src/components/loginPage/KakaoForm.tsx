@@ -3,14 +3,12 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-const REST_API_KEY = "06bbace6fde025ff72772cc94cc52876";
-const REDIRECT_URI = "http://localhost:3000/api/kakaologin";
 
-export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-function KakaoForm() {
-  const navigate = useNavigate();
+function KakaoForm({kakaoId,profileImg}:{kakaoId:number;profileImg:string}) {
+  const navigate = useNavigate()
   // 닉네임 검사
+
   const [nickname, setNickname] = useState<string>("");
 
   //오류메세지 상태저장
@@ -58,17 +56,18 @@ function KakaoForm() {
     [nickname]
   );
 
-  const code = new URL(window.location.href).searchParams.get("code");
+  
 
   const KakaoSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
         const response = await axios.post(
-          "http://ssggwan.site/api/kakaologin",
+          "http://ssggwan.site/api/kakaosign",
           {
-            code: code,
-            nickname: nickname,
+            kakaoId: kakaoId,
+            profileImg: profileImg,
+            nickname: nickname
           }
         );
         console.log(response);

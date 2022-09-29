@@ -73,6 +73,16 @@ const apis = {
       throw error;
     }
   },
+  kakaoLogin: async (code:string) => {
+    try {
+      const reqRes = await instance.post("/api/kakaologin", {
+        code,
+      });
+      return reqRes;
+    } catch (error) {
+      throw error;
+    }
+  },
   getMyChallengeList: async () => {
     try {
       const reqRes = await instance.get("/api/joinposts");
