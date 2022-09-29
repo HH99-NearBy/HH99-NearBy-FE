@@ -70,6 +70,7 @@ function RecruitContainer({
   const [pageNum, setPageNum] = useState<number>(0);
   const getChallengeList = useCallback(async () => {
     const reqRes = await apis.getFUllChallengeList(pageNum, 9);
+    console.log(reqRes);
     setChallengeList([...challengeList, ...reqRes.data]);
     setPageNum(reqRes.data.at(-1).id);
   }, [pageNum, challengeList]);
@@ -96,6 +97,7 @@ function RecruitContainer({
   const observeTarget = useRef<HTMLDivElement | null>(null);
   const req = useQuery(["ALL_CHALLENGE"], async () => {
     const res = await apis.getFUllChallengeList(0, 11);
+    console.log(res);
     setChallengeList(res.data);
     setPageNum(res.data.at(-1).id);
   });
@@ -120,6 +122,7 @@ function RecruitContainer({
       <StCardList>
         {challengeList.length !== 0
           ? challengeList.map((post, idx) => {
+              console.log(post);
               const now = new Date();
               const createdAt = new Date(`${post.startDay}T${post.startTime}`);
               return (

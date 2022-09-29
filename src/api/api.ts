@@ -80,6 +80,7 @@ const apis = {
       const reqRes = await instance.get(
         `/api/posts?challengeId=${pageNum}&size=${sizeNum}`
       );
+      console.log(reqRes);
       return reqRes;
     } catch (error) {
       throw error;

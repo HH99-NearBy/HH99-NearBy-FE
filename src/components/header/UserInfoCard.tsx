@@ -12,6 +12,7 @@ function UserInfoCard() {
   };
   const handleUserLogout = () => {
     sessionStorage.clear();
+    navigate("/");
     window.location.reload();
   };
   return (

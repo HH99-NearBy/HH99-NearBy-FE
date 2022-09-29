@@ -10,6 +10,8 @@ import { MdOutlineTimer } from "react-icons/md";
 import { GetModalDetail } from "../../../api/challengeDetail/types";
 import { AppContext } from "../../../api/context/index";
 import { useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import apis from "../../../api/api";
 import Button from "../../../elements/Button";
 
@@ -40,6 +42,7 @@ function ModalBody({
     onMutate: async (payload) => {
       console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
     onError(error, variables, context) {
       throw error;
@@ -47,6 +50,7 @@ function ModalBody({
     onSuccess: (res, variables, context) => {},
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
     },
   });
   const recruitChallengeMutation = useMutation(apis.recruitChallenge, {
@@ -67,6 +71,7 @@ function ModalBody({
     onMutate: async (payload) => {
       console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
     onError(error, variables, context) {
       throw error;
@@ -74,6 +79,7 @@ function ModalBody({
     onSuccess: (res, variables, context) => {},
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
     },
   });
 
@@ -213,6 +219,7 @@ function ModalBody({
           </StChallengeInfoContainer>
         </StModalContentsContainer>
       </StModalBody>
+      <ToastContainer autoClose={2000} position="bottom-right" />
     </StModalContainer>
   );
 }

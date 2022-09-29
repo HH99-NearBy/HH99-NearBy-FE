@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery, useInfiniteQuery } from "react-query";
+import { useQuery, useInfiniteQuery, useQueryClient } from "react-query";
 import apis from "../api/api";
 import MyChart from "../components/Chart";
 import { IoTrophy } from "react-icons/io5";
@@ -18,6 +18,7 @@ interface UserRaking {
 }
 
 function RankingPage() {
+  const queryClient = useQueryClient();
   const [pageNum, setPageNum] = useState<number>(1);
   const [myRanking, setMyRanking] = useState<UserRaking>({
     id: -1,
@@ -57,6 +58,7 @@ function RankingPage() {
       console.log(pages);
       return lastPage.nextPage;
     },
+    refetchOnWindowFocus: false,
   });
 
   // useQuery(
@@ -76,6 +78,12 @@ function RankingPage() {
   const handleAddRanking = () => {
     setPageNum(pageNum + 1);
   };
+  useEffect(() => {
+    return () => {
+      setRanking([]);
+      queryClient.resetQueries(["USER_RANKING"], { exact: true });
+    };
+  }, []);
   return (
     <StContentsContainer
       isLogin={sessionStorage.getItem("accessToken") !== null ? true : false}
@@ -122,7 +130,7 @@ const StContentsContainer = styled.div<{ isLogin: boolean }>`
   margin: 0 auto;
   margin-top: 7rem;
   margin-bottom: 10rem;
-  min-height: 100%;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   h1 {
