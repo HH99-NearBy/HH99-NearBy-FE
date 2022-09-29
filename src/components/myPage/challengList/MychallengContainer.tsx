@@ -22,25 +22,28 @@ function MychallengContainer() {
   const [challeng, setChalleng] = useState<Array<CardProps>>([])
   const [loading, setLoading] = useState<boolean>(false)
   const[page, setPage] = useState<number>(1)
-  const [Limit] = useState<number>(4)
+  const [pageNum, setPageNum] = useState<number>(1)
+  // const [Limit] = useState<number>(4)
 
   useEffect(() => {
     const CardList = async () => {
       setLoading(true)
-      const res = await apis.getMyInfo()
-      setChalleng(res.challengeLists)
+      const res = await apis.getMyInfoChall(pageNum)
+      setChalleng(res.mypageJoinList)
+      setPage(res.totalPage)
       setLoading(false)
-      console.log(res.challengeLists)
+      console.log(res)
     }
     CardList();
-  },[])
+  },[pageNum])
 
-  const paginate = (pageNumber:number) => setPage(pageNumber)
+  const paginate = (pageNumber:number) => setPageNum(pageNumber)
 
-  const indexOfLastCard = page * Limit;
-  const indexOfFirstCard = indexOfLastCard - Limit;
-  console.log(challeng)
-  const currentCard = challeng?.slice(indexOfFirstCard,indexOfLastCard)
+  // const indexOfLastCard = page * Limit;
+  // const indexOfFirstCard = indexOfLastCard - Limit;
+  // console.log(challeng)
+  // const currentCard = challeng?.slice(indexOfFirstCard,indexOfLastCard)
+  const currentCard = challeng
 
 
   return (
@@ -52,7 +55,7 @@ function MychallengContainer() {
       <CardContents>
       <MychallengCard challeng={currentCard} loading={loading}/>
       </CardContents>
-      <CardPagination Limit={Limit} totalCard={challeng.length} paginate={paginate}/>
+      <CardPagination totalCard={challeng} paginate={paginate} page={page}/>
     </CardContainer>
     </>
   )

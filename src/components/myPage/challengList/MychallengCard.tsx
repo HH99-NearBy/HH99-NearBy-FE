@@ -4,6 +4,7 @@ import {BsFillPersonFill} from 'react-icons/bs'
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   title:string;
@@ -18,22 +19,27 @@ interface CardProps {
 
 function MychallengCard({challeng,loading}:{challeng:Array<CardProps>;loading:boolean}) {
 
+const navigate = useNavigate()
 
-
+console.log(challeng)
   if (loading) {
     return <h2>Loading</h2>
   }
 
+  const InitChall = () => {
+    navigate("/challenging/:challengeId")
+  }
+
   return (
     <>
-      {challeng && challeng.map((challeng:any) => {
+      {challeng && challeng.map((challeng:any,i:any) => {
         return (
-          <CardContianer key = {challeng.id}>
+          <CardContianer key = {i}>
             <img src={challeng.challengeImg} alt="쓱-챌린지 썸네일 이미지"/>
             <CardContents>
               <div className='card_body'>
                 <div className='header_info'>
-                  <BsFillPersonFill/>"모집중 {challeng.people}/{challeng.limitPeople}"
+                  <BsFillPersonFill/>"모집중 {challeng.participatePeople}/{challeng.limitPeople}"
                 </div>
                 <div className='body_info'>{challeng.title}</div>
                 <div className='footer_info'>
@@ -52,7 +58,7 @@ function MychallengCard({challeng,loading}:{challeng:Array<CardProps>;loading:bo
                 </div>
               </div>
               <button
-              className='modal_open_btn'>
+              className='modal_open_btn' onClick={InitChall}>
                 입장하기
               </button>
             </CardContents>

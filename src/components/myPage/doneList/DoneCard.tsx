@@ -5,10 +5,10 @@ import Pagination from './Pagination'
 import DoneListContainer from './DoneListContainer'
 
 interface DoneCardProps {
-  title : string;
-  endtime : string;
-  startTime : string;
-  tagetTime : string;
+  title : undefined;
+  endtime : undefined;
+  startTime : undefined;
+  tagetTime : undefined;
 }
 
 
@@ -22,9 +22,9 @@ console.log(done)
 
   return (
     <>
-       {done && done.map((done:any) => {
+       {done && done.map((done:any,i:any) => {
       return(
-      <DoneBox key={done.id}>
+      <DoneBox key={i}>
           <TitleBox2 >
           {done.title}
           </TitleBox2>

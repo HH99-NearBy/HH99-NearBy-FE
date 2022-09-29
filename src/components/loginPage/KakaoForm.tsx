@@ -4,9 +4,10 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 const REST_API_KEY = "06bbace6fde025ff72772cc94cc52876";
-const REDIRECT_URI = "https://ssggwan.shop/api/kakaologin";
+const REDIRECT_URI = "http://localhost:3000/api/kakaologin";
 
 export const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
 function KakaoForm() {
   const navigate = useNavigate();
   // 닉네임 검사
@@ -45,10 +46,11 @@ function KakaoForm() {
             nickname: nickname,
           }
         );
-        setNickCheck(!nickCheck);
+        setNickCheck(true);
         alert("가입 가능한 닉네임입니다.");
         console.log(response);
       } catch (err) {
+        setNickCheck(false);
         alert("중복된 닉네임 입니다.");
         console.error(err);
       }
@@ -70,6 +72,12 @@ function KakaoForm() {
           }
         );
         console.log(response);
+        const { data, headers } = response;
+        console.log(data)
+      sessionStorage.setItem("accessToken", headers.authorization);
+      sessionStorage.setItem("userName", data.nickname);
+      sessionStorage.setItem("userLevel", data.level);
+      sessionStorage.setItem("userProfile", data.profileImg);
         alert("로그인 완료");
         navigate("/");
         console.log(response);
@@ -115,7 +123,6 @@ function KakaoForm() {
 export default KakaoForm;
 
 const SubmitBox = styled.div`
-  border: 1px solid black;
   width: 63rem;
   height: 6rem;
   margin: 0rem auto;
@@ -140,7 +147,6 @@ const ChcekP = styled.p`
 `;
 
 const CheckBox = styled.div`
-  border: 1px solid blue;
   width: 55rem;
   height: 10rem;
   margin: 0rem auto;

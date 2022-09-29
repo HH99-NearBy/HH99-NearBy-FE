@@ -93,7 +93,23 @@ const apis = {
   },
   getMyInfo: async () => {
     try {
-      const reqRes = await instance.get("/api/member");
+      const reqRes = await instance.get("/api/mypage/myinfo");
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getMyInfoChall: async (pageNum:number) => {
+    try {
+      const reqRes = await instance.get(`/api/mypage/joinchallenge?pageNum=${pageNum}`);
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getMyInfoDoneChall: async (pageNum: number) => {
+    try {
+      const reqRes = await instance.get(`/api/mypage/finishchallenge?pageNum=${pageNum}`);
       return reqRes.data;
     } catch (error) {
       throw error;
