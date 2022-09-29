@@ -1,31 +1,52 @@
 import React from 'react';
 import styled from 'styled-components';
+import {FaUserEdit} from "react-icons/fa"
+import {useNavigate} from 'react-router-dom'
 
-function UserInfoContainer() {
+
+interface infoData {
+  nickname : undefined;
+  email : undefined;
+  profileImg:undefined;
+  level:undefined;
+  remainingTime:undefined;
+}
+
+
+function UserInfoContainer({nickname,email,profileImg,level,remainingTime}:{nickname:undefined;email:undefined,profileImg:undefined;level:undefined;remainingTime:undefined}) {
+  const navigate = useNavigate();
+
+  const EditBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+      navigate('/edit')
+  }
+
   return (
     <UserContainer>
       <UserBox>
       <Nickname>
-      닉네임 들어갈곳
+      {nickname}
       </Nickname>
       <Email>
-          dydwns9310@gmail.com
+          {email}
       </Email>
       <UserImage>
-        <img src = "https://ifh.cc/g/RCtOo7.png"/>
+        <img src = {profileImg}/>
       </UserImage>
       <LevelBox>
         <div className="level">
-          Lv20
+          {level}
         </div>
         <div className='minute'>
-          70/100 분
+          {remainingTime}/70 분
         </div>
       </LevelBox>
       <ProgressBox>
-        <progress value="70"  max = "100"></progress>
+        <progress value={remainingTime}  max = "70"></progress>
       </ProgressBox>
       </UserBox>
+        <Editbutton onClick={EditBtn}>
+          <FaUserEdit/>
+        </Editbutton>
     </UserContainer>
   );
 }
@@ -51,7 +72,7 @@ const Nickname = styled.div`
   width: 20rem;
   height: 3rem;
   position: relative;
-  left: 4rem;
+  left: 5rem;
   justify-content: center;
   font-size: large;
   font-weight: bold;
@@ -62,7 +83,7 @@ const Email =styled.div`
   height: 2rem;
   font-size: larger;
     position: relative;
-    right: -4rem;
+    right: -5rem;
   justify-content: center;
   
 `
@@ -71,30 +92,32 @@ const UserImage = styled.div`
   height: 17rem;
   position: relative;
     top: 1rem;
-    left: 3rem;
+    left: 4rem;
     justify-content: center;
   img {
     width: 19rem;
     height: 16rem;
     border-radius: 50%;
   }
-  
 `
 const LevelBox = styled.div`
   position: relative;
   top: 2.5rem;
   .level{
     padding-top: 2px;
+    position: relative;
+    left: 1rem;
   }
   .minute{
     position: relative;
-    left: 20rem;
+    left: 21rem;
   }
 `
 
 const ProgressBox = styled.div`
   position: relative;
   top: 3rem;
+  left: 1rem;
   progress {
     appearance: none;
     ::-webkit-progress-value{
@@ -110,5 +133,21 @@ const ProgressBox = styled.div`
       box-shadow: inset 3px 3px 10px #ccc;
     }
   }
+`
+
+const Editbutton = styled.button`
+  border: 1px solid white;
+  width: 5rem;
+    height: 4rem;
+    background-color: white;
+    background-color: transparent;
+    position: relative;
+    top: 19rem;
+    right: 3rem;
+    cursor: pointer;
+    svg {
+      width: 3rem;
+      height: 3rem;
+    }
 `
 

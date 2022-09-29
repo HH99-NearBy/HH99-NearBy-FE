@@ -3,22 +3,23 @@ import styled from 'styled-components';
 
 
 
-function Pagination({Limit,totalDone,paginate}:{Limit:number;totalDone:number;paginate:any}) {
+function Pagination({done,paginate,page}:{done:any;paginate:any;page:any;}) {
 
   const pageNumbers = [];
-
-  for(let i = 1; i <= Math.ceil(totalDone / Limit); i ++) {
+  
+  for(let i = 1; i <= page; i ++) {
     pageNumbers.push(i)
   }
 
 
+    
  
 
   return (    
     <div>
       <StUl>
-        {pageNumbers.map(number => (
-          <StLi key={number} onClick={() =>  paginate(number) }>
+        {pageNumbers.map((number,i) => (
+          <StLi key={i} onClick={() =>  paginate(number) }>
             <span>
               {number}
             </span>

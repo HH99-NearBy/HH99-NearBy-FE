@@ -4,54 +4,61 @@ import {BsFillPersonFill} from 'react-icons/bs'
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
-  id : string;
-  title : string;
-  day : string;
-  date : string;
-  time : string;
-  people: string;
-  image : string;
+  title:string;
+  challengeImg:string;
+  endTime:string;
+  limitPeople:string;
+  startDay:string;
+  startTime:string;
+  tagetTime:number;
 }
+
 
 function MychallengCard({challeng,loading}:{challeng:Array<CardProps>;loading:boolean}) {
 
+const navigate = useNavigate()
 
-
+console.log(challeng)
   if (loading) {
     return <h2>Loading</h2>
   }
 
+  const InitChall = () => {
+    navigate("/challenging/:challengeId")
+  }
+
   return (
     <>
-      {challeng && challeng.map((challeng:any) => {
+      {challeng && challeng.map((challeng:any,i:any) => {
         return (
-          <CardContianer key = {challeng.id}>
-            <img src={challeng.image} alt="쓱-챌린지 썸네일 이미지"/>
+          <CardContianer key = {i}>
+            <img src={challeng.challengeImg} alt="쓱-챌린지 썸네일 이미지"/>
             <CardContents>
               <div className='card_body'>
                 <div className='header_info'>
-                  <BsFillPersonFill/>"모집중 {challeng.people}/30"
+                  <BsFillPersonFill/>"모집중 {challeng.participatePeople}/{challeng.limitPeople}"
                 </div>
                 <div className='body_info'>{challeng.title}</div>
                 <div className='footer_info'>
                   <span className='start_date'>
                       <BiCalendarCheck/>
-                      {challeng.day}
+                      {challeng.startDay}
                   </span>
                   <span className='start_time'>
                       <IoMdAlarm/>
-                      {challeng.date}
+                      {challeng.startTime}
                   </span>
                   <span className='running_time'>
                       <MdOutlineTimer/>
-                      {challeng.time}
+                      {challeng.tagetTime}분
                   </span>
                 </div>
               </div>
               <button
-              className='modal_open_btn'>
+              className='modal_open_btn' onClick={InitChall}>
                 입장하기
               </button>
             </CardContents>
@@ -74,7 +81,6 @@ const CardContianer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
-            background-color: red;
           }
           .modal_open_btn {
             background-color: #ffa115;

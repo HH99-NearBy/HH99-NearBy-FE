@@ -1,13 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function CardPagination({Limit,totalCard,paginate}:{Limit:number;totalCard:number;paginate:any}) {
+function CardPagination({totalCard,paginate,page}:{totalCard:any;paginate:any;page:any;}) {
 
   const pageNumbers= [];
 
-  for(let i=1; i <= Math.ceil(totalCard / Limit); i++) {
+  for(let i=1; i <= page; i++) {
     pageNumbers.push(i)
   }
+  
 
   return (
     <div>

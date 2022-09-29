@@ -73,6 +73,16 @@ const apis = {
       throw error;
     }
   },
+  kakaoLogin: async (code:string) => {
+    try {
+      const reqRes = await instance.post("/api/kakaologin", {
+        code,
+      });
+      return reqRes;
+    } catch (error) {
+      throw error;
+    }
+  },
   getMyChallengeList: async () => {
     try {
       const reqRes = await instance.get("/api/joinposts");
@@ -91,9 +101,25 @@ const apis = {
       throw error;
     }
   },
-  getMyInfo: async (userName: string) => {
+  getMyInfo: async () => {
     try {
-      const reqRes = await instance.get("/api/member");
+      const reqRes = await instance.get("/api/mypage/myinfo");
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getMyInfoChall: async (pageNum:number) => {
+    try {
+      const reqRes = await instance.get(`/api/mypage/joinchallenge?pageNum=${pageNum}`);
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getMyInfoDoneChall: async (pageNum: number) => {
+    try {
+      const reqRes = await instance.get(`/api/mypage/finishchallenge?pageNum=${pageNum}`);
       return reqRes.data;
     } catch (error) {
       throw error;
@@ -101,7 +127,7 @@ const apis = {
   },
   modifyMyInfo: async (payload: { nickname: string; profileImg: string }) => {
     const reqRes = await instance.put("/api/member", {
-      nickname: payload.nickname,
+      nickName: payload.nickname,
       profileImg: payload.profileImg,
     });
     return reqRes.data;
