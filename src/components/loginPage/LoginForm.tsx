@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { KAKAO_AUTH_URL } from "./KakaoForm";
+import { KAKAO_AUTH_URL } from "./KakaoLogin";
 import apis from "../../api/api";
 import { useMutation, useQuery } from "react-query";
 import { AppContext } from "../../api/context";
@@ -27,7 +27,8 @@ function LoginForm() {
     onMutate: (payload) => {
       console.log("onmutate", payload);
     },
-    onError(error, variables, context) {
+    onError(error:any, variables, context) {
+      alert(error.response.data.msg)
       throw error;
     },
     onSuccess: (res, variables, context) => {

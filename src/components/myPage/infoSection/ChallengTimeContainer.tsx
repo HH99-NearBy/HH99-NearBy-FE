@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function ChallengTimeContainer() {
+function ChallengTimeContainer(totalTime:any) {
   return (
     <TimeContainer>
       <TitleBox>
       습관을 위한시간
       </TitleBox>
       <TimeBox>
-        190시간 20분
+        {totalTime.totalTime}
       </TimeBox>
     </TimeContainer>
   )

@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
-import instance from "./core/axiosInstance";
+import instance, { arr } from "./core/axiosInstance";
+
 const apis = {
   reissue: async () => {
     const requestRes = await instance.post(
@@ -36,19 +37,23 @@ const apis = {
   },
   userNicknameValidationCheck: async (nickname: string) => {
     try {
-      const reqRes = await instance.post("api/nicknamecheck", {
+      const reqRes = await arr.post("api/nicknamecheck", {
         nickname,
       });
       return reqRes;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
-  userEmailValidationCheck: async (nickname: string) => {
+  userEmailValidationCheck: async (email: string) => {
     try {
-      const reqRes = await instance.post("api/emailcheck", {
-        nickname,
+      const reqRes = await arr.post("api/emailcheck", {
+        email,
       });
       return reqRes;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   },
   userLogin: async ({
     email,
@@ -61,6 +66,16 @@ const apis = {
       const reqRes = await instance.post("/api/login", {
         email,
         password,
+      });
+      return reqRes;
+    } catch (error) {
+      throw error;
+    }
+  },
+  kakaoLogin: async (code: string) => {
+    try {
+      const reqRes = await instance.post("/api/kakaologin", {
+        code,
       });
       return reqRes;
     } catch (error) {
@@ -86,17 +101,37 @@ const apis = {
       throw error;
     }
   },
-  getMyInfo: async (userName: string) => {
+  getMyInfo: async () => {
     try {
-      const reqRes = await instance.get("/api/member");
+      const reqRes = await instance.get("/api/mypage/myinfo");
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getMyInfoChall: async (pageNum: number) => {
+    try {
+      const reqRes = await instance.get(
+        `/api/mypage/joinchallenge?pageNum=${pageNum}`
+      );
+      return reqRes.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getMyInfoDoneChall: async (pageNum: number) => {
+    try {
+      const reqRes = await instance.get(
+        `/api/mypage/finishchallenge?pageNum=${pageNum}`
+      );
       return reqRes.data;
     } catch (error) {
       throw error;
     }
   },
   modifyMyInfo: async (payload: { nickname: string; profileImg: string }) => {
-    const reqRes = await instance.put("/api/member", {
-      nickname: payload.nickname,
+    const reqRes = await instance.put("/api/mypage/member", {
+      nickName: payload.nickname,
       profileImg: payload.profileImg,
     });
     return reqRes.data;

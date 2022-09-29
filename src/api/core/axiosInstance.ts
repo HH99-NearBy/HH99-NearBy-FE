@@ -1,6 +1,8 @@
 import axios from "axios";
 import apis from "../api";
 
+export const arr = axios.create({baseURL: process.env.REACT_APP_BASE_URI})
+
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URI,
 });
@@ -14,6 +16,7 @@ instance.interceptors.request.use(
     return req;
   },
   (err) => {
+    console.log("err",err)
     return Promise.reject(err);
   }
 );
@@ -23,7 +26,7 @@ instance.interceptors.response.use(
     return res;
   },
   async function (error) {
-    console.log(error);
+    console.log(error.response);
     const originalRequest = error.config;
     try {
       switch (error.response.data.msg) {
@@ -35,9 +38,10 @@ instance.interceptors.response.use(
           return await instance.request(originalRequest);
         }
       }
-    } catch (deepError) {
+    } catch (deepError) { 
       return console.log(deepError);
     }
+    return Promise.reject(error)
   }
 );
 

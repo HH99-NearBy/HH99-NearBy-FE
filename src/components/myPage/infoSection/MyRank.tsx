@@ -1,14 +1,14 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function MyRank() {
+function MyRank(rank:any) {
   return (
     <RankContainer>
       <TitleBox>
       쓱-관왕
       </TitleBox>
       <RankBox>
-        210990등
+        {rank.rank}
       </RankBox>
     </RankContainer>
   )

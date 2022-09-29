@@ -2,12 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import MyChart from "../../Chart";
 
-function TierGraphContainer() {
+function TierGraphContainer(graph:any) {
   return (
     <TierContainer>
       <TitleBox>습관을 위한 시간</TitleBox>
       <GraphBox>
-        <MyChart locate={"myPage"} scores={[10, 20, 30, 40, 50, 60, 70]} />
+        <MyChart locate={"myPage"} scores={graph.graph} />
       </GraphBox>
     </TierContainer>
   );
