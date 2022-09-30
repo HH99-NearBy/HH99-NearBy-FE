@@ -84,12 +84,15 @@ function EditContainer() {
       
     //중복확인
     const [nickCheck,setNickCheck] = useState<boolean>(false)
+    const [realCheck, setRealCheck] = useState<boolean>(false)
+    
 
 
     //닉네임
     const onChangeNick = useCallback ((e: React.ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
         setNickname(e.target.value)
+          setNickCheck(false)
           if(e.target.value.length < 2 || e.target.value.length > 5){
             setNicknameMessage('2글자 이상 5글자 미만으로 입력해주세요.')
             setIsNick(false)
@@ -102,18 +105,29 @@ function EditContainer() {
       const NicknameCheck = useCallback(
         async (e : React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault()
+          if(nickname === sessionStorage.getItem("userName")){
+            setNickCheck(true)
+            setIsNick(true)
+            setRealCheck(true)
+              alert('가입 가능한 닉네임입니다.') 
+              return
+                }
           try {
-            if(nickname === sessionStorage.getItem("userName")){
-              setNickCheck(!nickCheck)
-              setIsNick(!isNickname)
-                alert('가입 가능한 닉네임입니다.') 
-                return
-        }
-          const response =await apis.userNicknameValidationCheck(nickname)
-          alert('가능한 닉네임 입니다.')
-          setNickCheck(!nickCheck)
+            const response:any =await apis.userNicknameValidationCheck(nickname);
+           
+            if(response === undefined) {
+              setNickCheck(false)
+              setRealCheck(false)
+             alert('중복된 닉네임 입니다.')  
+            }else{
+              setNickCheck(true)
+              setIsNick(true)
+              setRealCheck(true)
+              alert('가입 가능한 닉네임 입니다.')
+            }
+            
           }catch (err) {
-            alert('중복된 닉네임 입니다.')
+           
 
           }
         },[nickname])
@@ -123,13 +137,16 @@ function EditContainer() {
               e.preventDefault()
               try {
                 const response = await apis.modifyMyInfo({nickname,profileImg})
+                console.log(response)
+                const {data, headers} = response;
+                sessionStorage.setItem("accessToken", headers.authorization);
                   alert('프로필 수정 완료')
                   navigate('/mypage')
                 
               }catch (err) {
                 console.error(err)
               }
-
+              console.log(profileImg)
             },[,nickname,profileImg])
 
             useEffect(() => {
@@ -173,7 +190,7 @@ function EditContainer() {
           </SignBox2>
           </SignupBox>
           <SubmitBtn>
-          <input type ="submit"  value= "확인" disabled={!(isNickname  && nickCheck)}/>
+          <input type ="submit"  value= "확인" disabled={!(isNickname  && nickCheck && realCheck)}/>
           </SubmitBtn>
         </FormBox>
     </SignupContainer>

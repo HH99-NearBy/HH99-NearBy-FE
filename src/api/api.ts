@@ -134,7 +134,7 @@ const apis = {
       nickName: payload.nickname,
       profileImg: payload.profileImg,
     });
-    return reqRes.data;
+    return reqRes;
   },
   postChallenge: async ({
     title,
