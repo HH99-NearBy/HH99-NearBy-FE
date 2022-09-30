@@ -13,6 +13,7 @@ export interface GetModalDetail {
     writer: string;
     level: string;
     challengeTag: string[];
+    isJoin: boolean;
   };
   msg: string;
 }
