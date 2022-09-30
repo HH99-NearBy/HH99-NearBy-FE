@@ -21,7 +21,6 @@ interface InitState {
 function VideoSection() {
   const { state, dispatch } = useContext(AppContext);
   const { challengeId } = useParams();
-  console.log(challengeId);
   const [initialState, setInitialState] = useState<InitState>({
     mySessionId: "",
     myUserName: "",
@@ -40,7 +39,6 @@ function VideoSection() {
   // dispatch({ type: "READ_SUBSCRIBERS", payload: -1, subscribe: subscribers });
   const handleVideoStatus = () => {
     publisher?.publishVideo(!publisher.stream.videoActive);
-    console.log(publisher);
   };
   const handleAudioStatus = () => {
     publisher?.publishAudio(!publisher.stream.audioActive);
@@ -56,7 +54,6 @@ function VideoSection() {
             },
           })
           .then(async () => {
-            console.log("session connect");
             await ov
               .getUserMedia({
                 audioSource: false,
@@ -66,7 +63,6 @@ function VideoSection() {
               })
               .then((mediaStream) => {
                 const videoTrack = mediaStream.getVideoTracks()[0];
-                console.log(mediaStream.getVideoTracks());
                 const publisher = ov.initPublisher("video_container", {
                   audioSource: undefined,
                   videoSource: videoTrack,
@@ -93,11 +89,7 @@ function VideoSection() {
     OV.enableProdMode();
     const session = OV.initSession();
     session.on("streamCreated", (event: any) => {
-      console.log("streamCreated");
       const sub = session.subscribe(event.stream, "video_container");
-      console.log(event);
-      console.log(state.ovSubscribers);
-      console.log(sub);
       // setSubscribers([...subscribers, sub]);
       dispatch({
         type: "READ_SUBSCRIBERS",
@@ -110,11 +102,8 @@ function VideoSection() {
         type: "REMOVE_SUBSCRIBERS",
         targetOvSub: event.stream.streamId,
       });
-      console.log("stream destroyed");
-      console.log(event.stream);
     });
     session.on("exception", (exception) => {
-      console.warn(exception);
     });
     setOv(OV);
     setSession(session);
@@ -194,8 +183,7 @@ function VideoSection() {
   window.onbeforeunload = function () {
     leaveSession();
   };
-  console.log(state.ovSubscribers);
-  console.log(publisher);
+
   return (
     <StVideoSection>
       <div className="video_wrapper">

@@ -9,7 +9,6 @@ import apis from "../../api/api";
 function UserListSection() {
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
-  console.log(state.people);
   return (
     <StUserListSection>
       {state.people.map((person) => {

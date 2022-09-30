@@ -108,7 +108,6 @@ function reducer(
       };
     }
     default: {
-      console.log("머하노");
       return state;
     }
   }

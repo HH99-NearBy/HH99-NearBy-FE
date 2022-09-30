@@ -33,7 +33,7 @@ function RankingPage() {
     ["GET_FULL_RANKING"],
     async () => {
       const res = await apis.getUserRanking(pageNum);
-      console.log(res);
+      
       setRanking([...ranking, ...res.data]);
       setMyRanking({ ...myRanking, ...res.myRank });
     },
@@ -45,8 +45,7 @@ function RankingPage() {
   const handleAddRanking = () => {
     setPageNum(pageNum + 1);
   };
-  console.log(pageNum);
-  console.log(ranking);
+ 
   return (
     <StContentsContainer
       isLogin={sessionStorage.getItem("accessToken") !== null ? true : false}

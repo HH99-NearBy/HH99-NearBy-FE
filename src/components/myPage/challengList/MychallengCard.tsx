@@ -21,7 +21,7 @@ function MychallengCard({challeng,loading}:{challeng:Array<CardProps>;loading:bo
 
 const navigate = useNavigate()
 
-console.log(challeng)
+
   if (loading) {
     return <h2>Loading</h2>
   }

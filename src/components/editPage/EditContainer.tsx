@@ -38,7 +38,6 @@ function EditContainer() {
       }
       const reImg = await imageCompression(fileList[0],options)
       setUpload(reImg)
-      console.log(reImg)
 
 
         
@@ -57,7 +56,6 @@ function EditContainer() {
         alert("이미지 업로드에 성공했습니다.")
         setProfileImg(data.Location)
         setIsimg(true)
-        console.log(data.Location)
       },
       function (err) {
         return alert (err) 
@@ -76,7 +74,6 @@ function EditContainer() {
     const [nickname, setNickname] = useState<string>('');
     const [profileImg,setProfileImg] = useState<string>('')
     const [upload,setUpload] = useState<File>()
-    console.log(profileImg)
 
     //오류메세지 상태저장
     const [NicknameMessage, setNicknameMessage] = useState<string>('');
@@ -117,7 +114,7 @@ function EditContainer() {
           setNickCheck(!nickCheck)
           }catch (err) {
             alert('중복된 닉네임 입니다.')
-            console.error(err)
+
           }
         },[nickname])
 
@@ -128,11 +125,11 @@ function EditContainer() {
                 const response = await apis.modifyMyInfo({nickname,profileImg})
                   alert('프로필 수정 완료')
                   navigate('/mypage')
-                  console.log(response)
+                
               }catch (err) {
                 console.error(err)
               }
-              console.log(profileImg)
+
             },[,nickname,profileImg])
 
             useEffect(() => {

@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 
 function UserIcon({ size, imgUrl }: { size: string; imgUrl: string | null }) {
-  console.log(imgUrl);
+ 
   return <StIcon size={size} imgUrl={imgUrl} />;
 }
 

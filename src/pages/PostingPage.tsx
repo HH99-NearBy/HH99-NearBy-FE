@@ -119,7 +119,7 @@ function PostingPage() {
         challengeId: Number(challengeId),
       });
     } else {
-      console.log("post!");
+      
       postingMutation.mutate({
         title,
         challengeImg: upload,
@@ -192,7 +192,7 @@ function PostingPage() {
           alert("이미지 업로드에 성공했습니다.");
           setUpload(data.Location);
           setIsimg(true);
-          console.log(data.Location);
+          
         },
         function (err) {
           return alert(err);
@@ -232,12 +232,12 @@ function PostingPage() {
     if (optionsRef.current && challengeId) {
       for (let i = 0; i < 5; i++) {
         const target = optionsRef.current.children[i];
-        console.log(target);
+        
         const siblings = target.children;
         if (typeof siblings !== "undefined") {
           for (let i = 1; i < siblings.length; i++) {
             siblings[i].classList.remove("selected_option");
-            console.log(siblings[i].innerHTML);
+            
             switch (siblings[i].classList[0]) {
               case "mic":
                 if (options.mic === siblings[i].innerHTML)

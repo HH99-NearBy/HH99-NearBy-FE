@@ -29,7 +29,6 @@ function ModalBody({
     "CHALLENGE_DETAIL",
     async () => {
       const res = await getChallengeDetail(state.challengeId);
-      console.log(res);
       setBody(res);
     },
     {
@@ -38,7 +37,6 @@ function ModalBody({
   );
   const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
     onError(error, variables, context) {
@@ -49,8 +47,6 @@ function ModalBody({
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
     },
   });
-  console.log(body);
-  console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = () => {
@@ -84,10 +80,7 @@ function ModalBody({
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
   const endTime = Date.parse(`${body?.detailModal.endTime}`);
-  console.log(startTime);
-  console.log(body?.detailModal.endTime);
-  console.log(endTime);
-  console.log(Date.now());
+ 
 
   return (
     <StModalContainer>

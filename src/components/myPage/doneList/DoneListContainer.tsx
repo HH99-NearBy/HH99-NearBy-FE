@@ -31,7 +31,6 @@ function DoneListContainer() {
       setDone(res.mypageFinishLists)
       setPage(res.totalPage)
       setLoading(false)
-      console.log(page)
     }
    
     // fetch('/data/done.json')
@@ -41,7 +40,7 @@ function DoneListContainer() {
     // })
     doneList();
   },[pageNum])
-  console.log(done)
+  
 
   const paginate = (pageNumber:number) => setPageNum(pageNumber)
 
@@ -49,10 +48,9 @@ function DoneListContainer() {
   // const indexOfFirstDone = indexOfLastDone - Limit;
   // const currentDone = done?.slice(indexOfFirstDone,indexOfLastDone);
   const currentDone = done
-  console.log(currentDone)
+
   // console.log(Limit)
-  console.log(done?.length)
-  console.log(page)
+
  
   return (
     <>

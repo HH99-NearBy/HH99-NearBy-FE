@@ -174,7 +174,7 @@ function RegisterForm() {
     async (e : React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
       try {
-        const response = await axios.post('http://ssggwan.site/api/emailcheck',{
+        const response = await axios.post('https://ssggwan.site/api/emailcheck',{
           email: email
         })
           setEmailCheck(true)
@@ -183,7 +183,6 @@ function RegisterForm() {
       }catch (err) {
         setEmailCheck(false)
         alert('중복된 이메일입니다.')
-        console.error(err)
       }
     },[email])
 
@@ -203,7 +202,7 @@ function RegisterForm() {
     async (e : React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault()
       try {
-       const response = await axios.post('http://ssggwan.site/api/nicknamecheck',{
+       const response = await axios.post('https://ssggwan.site/api/nicknamecheck',{
           nickname: nickname
         })
           setNickCheck(true)
@@ -212,7 +211,6 @@ function RegisterForm() {
       }catch (err) {
         alert('중복된 닉네임 입니다.')
         setNickCheck(false)
-        console.error(err)
       }
     },[nickname])
 

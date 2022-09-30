@@ -18,7 +18,6 @@ function ChatForm({
 
   const handleSubmitChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(sessionStorage.getItem("userName"), body);
     stompClient.current.send(
       `/pub/chat/message`,
       JSON.stringify({

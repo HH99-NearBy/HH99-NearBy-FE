@@ -20,7 +20,7 @@ function ChallengingPage() {
     ["CHALLENGE_DETAIL"],
     async () => {
       const res = await getChallengeDetail(Number(challengeId));
-      console.log(res);
+     
       setInfo(res);
     },
     {
@@ -52,9 +52,9 @@ function ChallengingPage() {
   //채팅은 ChatSection에서 subscribe하고
   //인원수는 어떡해야하나?
   const handleFullScreen = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(e);
+  
   };
-  console.log(info);
+ 
   return (
     <FullScreen handle={fullScreenHandler}>
       <StPageLayout onKeyDown={handleFullScreen}>
