@@ -1,94 +1,99 @@
-import React from 'react'
-import styled from 'styled-components'
-import {BsFillPersonFill} from 'react-icons/bs'
+import React from "react";
+import styled from "styled-components";
+import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 interface CardProps {
-  title:string;
-  challengeImg:string;
-  endTime:string;
-  limitPeople:string;
-  startDay:string;
-  startTime:string;
-  tagetTime:number;
+  title: string;
+  challengeImg: string;
+  endTime: string;
+  limitPeople: string;
+  startDay: string;
+  startTime: string;
+  tagetTime: number;
 }
 
+function MychallengCard({
+  challeng,
+  loading,
+}: {
+  challeng: Array<CardProps>;
+  loading: boolean;
+}) {
+  const navigate = useNavigate();
 
-function MychallengCard({challeng,loading}:{challeng:Array<CardProps>;loading:boolean}) {
-
-const navigate = useNavigate()
-
-console.log(challeng)
+  console.log(challeng);
   if (loading) {
-    return <h2>Loading</h2>
+    return <h2>Loading</h2>;
   }
 
   const InitChall = () => {
-    navigate("/challenging/:challengeId")
-  }
+    // navigate("/challenging/:challengeId")
+  };
 
   return (
     <>
-      {challeng && challeng.map((challeng:any,i:any) => {
-        return (
-          <CardContianer key = {i}>
-            <img src={challeng.challengeImg} alt="쓱-챌린지 썸네일 이미지"/>
-            <CardContents>
-              <div className='card_body'>
-                <div className='header_info'>
-                  <BsFillPersonFill/>"모집중 {challeng.participatePeople}/{challeng.limitPeople}"
-                </div>
-                <div className='body_info'>{challeng.title}</div>
-                <div className='footer_info'>
-                  <span className='start_date'>
-                      <BiCalendarCheck/>
+      {challeng &&
+        challeng.map((challeng: any, i: any) => {
+          return (
+            <CardContianer key={i}>
+              <img src={challeng.challengeImg} alt="쓱-챌린지 썸네일 이미지" />
+              <CardContents>
+                <div className="card_body">
+                  <div className="header_info">
+                    <BsFillPersonFill />
+                    "모집중 {challeng.participatePeople}/{challeng.limitPeople}"
+                  </div>
+                  <div className="body_info">{challeng.title}</div>
+                  <div className="footer_info">
+                    <span className="start_date">
+                      <BiCalendarCheck />
                       {challeng.startDay}
-                  </span>
-                  <span className='start_time'>
-                      <IoMdAlarm/>
+                    </span>
+                    <span className="start_time">
+                      <IoMdAlarm />
                       {challeng.startTime}
-                  </span>
-                  <span className='running_time'>
-                      <MdOutlineTimer/>
+                    </span>
+                    <span className="running_time">
+                      <MdOutlineTimer />
                       {challeng.tagetTime}분
-                  </span>
+                    </span>
+                  </div>
                 </div>
-              </div>
-              <button
-              className='modal_open_btn' onClick={InitChall}>
-                입장하기
-              </button>
-            </CardContents>
-        </CardContianer>
-        )
-      })}
+                <button className="modal_open_btn" onClick={InitChall}>
+                  입장하기
+                </button>
+              </CardContents>
+            </CardContianer>
+          );
+        })}
     </>
-  )
+  );
 }
 
-export default MychallengCard
+export default MychallengCard;
 
 const CardContianer = styled.div`
-         width: 61.1rem;
-          height: 21.1rem;
-          flex-direction: row;
-          display: flex;
-          margin: 2rem 1rem;
-         box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-          img {
-            width: 21.1rem;
-            height: 21.1rem;
-          }
-          .modal_open_btn {
-            background-color: #ffa115;
-          }
-        `;
+  width: 61.1rem;
+  height: 21.1rem;
+  flex-direction: row;
+  display: flex;
+  margin: 2rem 1rem;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  img {
+    width: 21.1rem;
+    height: 21.1rem;
+  }
+  .modal_open_btn {
+    background-color: #ffa115;
+  }
+`;
 
-const CardContents= styled.div`
-   width: 40rem;
+const CardContents = styled.div`
+  width: 40rem;
   height: 21.1rem;
   background-color: #fff;
   .card_body {
@@ -138,4 +143,4 @@ const CardContents= styled.div`
     letter-spacing: 0.1rem;
     cursor: pointer;
   }
-`
+`;

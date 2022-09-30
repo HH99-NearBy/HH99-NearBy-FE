@@ -60,7 +60,7 @@ function CategoryList() {
 }
 
 const StListContainer = styled.ul`
-  width: 33rem;
+  width: 31rem;
   height: 10rem;
   /* background-color: green; */
   display: flex;
@@ -72,10 +72,9 @@ const StListContainer = styled.ul`
   li {
     height: 100%;
     flex-grow: 1;
-    margin: 0 2rem;
+    margin: 0 1rem;
     font-size: 2.5rem;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     border-bottom: 0.5rem solid #fff;
     :nth-of-type(1) {
@@ -85,7 +84,7 @@ const StListContainer = styled.ul`
       height: 3rem;
       display: flex;
       justify-content: center;
-      align-items: baseline;
+      align-items: center;
     }
     svg {
       margin-left: 0.5rem;

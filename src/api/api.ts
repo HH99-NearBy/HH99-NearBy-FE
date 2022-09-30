@@ -1,6 +1,5 @@
 import { useQuery } from "react-query";
-import instance,{arr} from "./core/axiosInstance";
-
+import instance, { arr } from "./core/axiosInstance";
 
 const apis = {
   reissue: async () => {
@@ -43,7 +42,7 @@ const apis = {
       });
       return reqRes;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
   userEmailValidationCheck: async (email: string) => {
@@ -53,7 +52,7 @@ const apis = {
       });
       return reqRes;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
   userLogin: async ({
@@ -73,7 +72,7 @@ const apis = {
       throw error;
     }
   },
-  kakaoLogin: async (code:string) => {
+  kakaoLogin: async (code: string) => {
     try {
       const reqRes = await instance.post("/api/kakaologin", {
         code,
@@ -96,6 +95,7 @@ const apis = {
       const reqRes = await instance.get(
         `/api/posts?challengeId=${pageNum}&size=${sizeNum}`
       );
+      console.log(reqRes);
       return reqRes;
     } catch (error) {
       throw error;
@@ -109,9 +109,11 @@ const apis = {
       throw error;
     }
   },
-  getMyInfoChall: async (pageNum:number) => {
+  getMyInfoChall: async (pageNum: number) => {
     try {
-      const reqRes = await instance.get(`/api/mypage/joinchallenge?pageNum=${pageNum}`);
+      const reqRes = await instance.get(
+        `/api/mypage/joinchallenge?pageNum=${pageNum}`
+      );
       return reqRes.data;
     } catch (error) {
       throw error;
@@ -119,14 +121,16 @@ const apis = {
   },
   getMyInfoDoneChall: async (pageNum: number) => {
     try {
-      const reqRes = await instance.get(`/api/mypage/finishchallenge?pageNum=${pageNum}`);
+      const reqRes = await instance.get(
+        `/api/mypage/finishchallenge?pageNum=${pageNum}`
+      );
       return reqRes.data;
     } catch (error) {
       throw error;
     }
   },
   modifyMyInfo: async (payload: { nickname: string; profileImg: string }) => {
-    const reqRes = await instance.put("/api/member", {
+    const reqRes = await instance.put("/api/mypage/member", {
       nickName: payload.nickname,
       profileImg: payload.profileImg,
     });

@@ -1,6 +1,6 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery } from "react-query";
+import { useQuery, useInfiniteQuery, useQueryClient } from "react-query";
 import apis from "../api/api";
 import MyChart from "../components/Chart";
 import { IoTrophy } from "react-icons/io5";
@@ -18,6 +18,7 @@ interface UserRaking {
 }
 
 function RankingPage() {
+  const queryClient = useQueryClient();
   const [pageNum, setPageNum] = useState<number>(1);
   const [myRanking, setMyRanking] = useState<UserRaking>({
     id: -1,
@@ -28,25 +29,61 @@ function RankingPage() {
     score: -1,
     graph: [],
   });
+  const [isLastPage, setIsLastPage] = useState(false);
   const [ranking, setRanking] = useState<UserRaking[]>([]);
-  useQuery(
-    ["GET_FULL_RANKING"],
-    async () => {
-      const res = await apis.getUserRanking(pageNum);
-      console.log(res);
-      setRanking([...ranking, ...res.data]);
-      setMyRanking({ ...myRanking, ...res.myRank });
-    },
-    {
-      retry: 2,
+  const userRanking = async ({ pageParam = 1 }) => {
+    console.log(pageParam);
+    const reqRes = await apis.getUserRanking(pageParam);
+    console.log(reqRes);
+    if (reqRes.data.length === 0) {
+      setIsLastPage(true);
     }
-  );
+    setRanking([...ranking, ...reqRes.data]);
+    setMyRanking({ ...myRanking, ...reqRes.myRank });
+    return {
+      nextPage: pageParam + 1,
+    };
+  };
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteQuery(["USER_RANKING"], userRanking, {
+    getNextPageParam: (lastPage: any, pages) => {
+      console.log(lastPage);
+      console.log(pages);
+      return lastPage.nextPage;
+    },
+    refetchOnWindowFocus: false,
+  });
+
+  // useQuery(
+  //   ["GET_FULL_RANKING"],
+  //   async () => {
+  //     const res = await apis.getUserRanking(pageNum);
+  //     console.log(pageNum);
+  //     console.log(res);
+  //     setRanking([...ranking, ...res.data]);
+  //     setMyRanking({ ...myRanking, ...res.myRank });
+  //   },
+  //   {
+  //     retry: 2,
+  //   }
+  // );
 
   const handleAddRanking = () => {
     setPageNum(pageNum + 1);
   };
-  console.log(pageNum);
-  console.log(ranking);
+  useEffect(() => {
+    return () => {
+      setRanking([]);
+      queryClient.resetQueries(["USER_RANKING"], { exact: true });
+    };
+  }, []);
   return (
     <StContentsContainer
       isLogin={sessionStorage.getItem("accessToken") !== null ? true : false}
@@ -74,7 +111,16 @@ function RankingPage() {
         )}
       </div>
       <RankingList ranking={ranking} />
-      <StPluBtn onClick={handleAddRanking}>+</StPluBtn>
+      {isFetchingNextPage ? "loading,,," : null}
+      {!isLastPage ? (
+        <StPluBtn
+          onClick={() => {
+            fetchNextPage();
+          }}
+        >
+          +
+        </StPluBtn>
+      ) : null}
     </StContentsContainer>
   );
 }
@@ -83,7 +129,8 @@ const StContentsContainer = styled.div<{ isLogin: boolean }>`
   width: 128rem;
   margin: 0 auto;
   margin-top: 7rem;
-  min-height: 100%;
+  margin-bottom: 10rem;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   h1 {
@@ -94,7 +141,7 @@ const StContentsContainer = styled.div<{ isLogin: boolean }>`
       height: 3rem;
       display: flex;
       justify-content: center;
-      align-items: baseline;
+      align-items: center;
     }
 
     svg {
@@ -140,6 +187,9 @@ const StPluBtn = styled.button`
   border: 0.4rem solid var(--purple-color);
   border-radius: 50%;
   font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: white;
   color: var(--purple-color);
   align-self: center;
