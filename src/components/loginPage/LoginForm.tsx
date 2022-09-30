@@ -35,6 +35,7 @@ function LoginForm() {
       sessionStorage.setItem("userName", data.data.nickname);
       sessionStorage.setItem("userLevel", data.data.level);
       sessionStorage.setItem("userProfile", data.data.profileImg);
+      sessionStorage.setItem("userTime", data.data.totalTime);
 
       navigate("/");
     },

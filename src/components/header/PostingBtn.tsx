@@ -21,15 +21,22 @@ const StPostingBtn = styled.button`
   border-radius: 4rem;
   color: #fff;
   background-color: var(--purple-color);
+  cursor: pointer;
   span {
     display: inline-block;
     margin-left: 1rem;
     width: 2rem;
     height: 2rem;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.3rem;
     color: var(--purple-color);
     background-color: #fff;
     border-radius: 50%;
+  }
+  :hover {
+    opacity: 0.9;
   }
 `;
 

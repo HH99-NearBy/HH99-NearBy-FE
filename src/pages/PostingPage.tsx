@@ -6,9 +6,13 @@ import { useNavigate, useParams } from "react-router";
 import AWS from "aws-sdk";
 import imageCompression from "browser-image-compression";
 import { getChallengeDetail } from "../api/challengeDetail/api";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Button from "../elements/Button";
+import AlertBody from "../components/alerts/NeedLoginAlert";
 
 function PostingPage() {
+  const now = new Date();
   const { challengeId } = useParams();
   const [title, setTitle] = useState("");
   const [month, setMonth] = useState("");
@@ -26,6 +30,12 @@ function PostingPage() {
     Character: "",
     sexual: "",
   });
+  const titleRef = useRef<HTMLInputElement | null>(null);
+  const monthRef = useRef<HTMLInputElement | null>(null);
+  const timeRef = useRef<HTMLInputElement | null>(null);
+  const targetTimeRef = useRef<HTMLInputElement | null>(null);
+  const descRef = useRef<HTMLTextAreaElement | null>(null);
+  const infoRef = useRef<HTMLTextAreaElement | null>(null);
   const optionsRef = useRef<HTMLDivElement | null>(null);
   const queryClient = useQueryClient();
   const Config = {
@@ -119,7 +129,142 @@ function PostingPage() {
         challengeId: Number(challengeId),
       });
     } else {
-      
+      console.log("post!");
+      if (title.length === 0) {
+        titleRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          titleRef.current?.classList.remove("error_focus");
+        }, 1200);
+        toast.error("챌린지 제목을 입력해주세요.", {
+          position: toast.POSITION.BOTTOM_RIGHT,
+          autoClose: 1200,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          className: "toast_alert",
+        });
+
+        return;
+      }
+
+      if (month.length === 0) {
+        monthRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          monthRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("챌린지 시작일을 입력해주세요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      } else if (
+        Date.parse(
+          `${now.getFullYear()}-${
+            now.getMonth() + 1 < 10
+              ? `0${now.getMonth() + 1}`
+              : now.getMonth() + 1
+          }-${now.getDate()}T00:00`
+        ) > Date.parse(`${month}T00:00`)
+      ) {
+        monthRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          monthRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("과거날짜는 선택하실 수 없어요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      }
+      if (time.length === 0) {
+        timeRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          timeRef.current?.classList.remove("error_focus");
+        }, 1200);
+        console.log(Date.parse(`${month}T00:00`));
+        return toast.error("챌린지 시작시간을 입력해주세요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      } else if (now.getTime() > Date.parse(`${month}T${time}`)) {
+        timeRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          timeRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("과거시각은 선택할 수 없어요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      }
+      if (targetTime === 0) {
+        targetTimeRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          targetTimeRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("챌린지 목표시간을 입력해주세요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      } else if (targetTime < 30) {
+        targetTimeRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          targetTimeRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("챌린지 시간이 너무 짧아요!", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      }
+      if (desc.length === 0) {
+        descRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          descRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("챌린지 내용을 입력해주세요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      }
+      if (info.length === 0) {
+        infoRef.current?.classList.add("error_focus");
+        setTimeout(() => {
+          infoRef.current?.classList.remove("error_focus");
+        }, 1200);
+        return toast.error("챌린지 공지사항을 입력해주세요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      }
+      if (
+        options.mic === "" ||
+        options.cam === "" ||
+        options.atmosphere === "" ||
+        options.Character === "" ||
+        options.sexual === ""
+      ) {
+        return toast.error("챌린지 옵션을 모두 선책해주세요.", {
+          autoClose: 2000,
+          position: toast.POSITION.BOTTOM_RIGHT,
+          theme: "light",
+          className: "toast_alert",
+        });
+      }
       postingMutation.mutate({
         title,
         challengeImg: upload,
@@ -200,6 +345,12 @@ function PostingPage() {
       );
     }
   };
+  console.log(month);
+  console.log(now.getFullYear());
+  console.log(now.getMonth() + 1);
+  console.log(now.getDate());
+  console.log(time);
+  console.log(Date.parse(`${month}T${time}`));
   useQuery(
     "MP_DETAIL",
     async () => {
@@ -266,188 +417,225 @@ function PostingPage() {
     }
   }, [optionsRef.current]);
   return (
-    <StContentsWrapper onSubmit={handleSubmit}>
-      <StTopContentsWrapper>
-        <div className="title_input">
-          <label htmlFor="title">제목</label>
-          <input
-            type="text"
-            name="title"
-            placeholder="챌린지 제목을 입력해주세요"
-            value={title}
-            onChange={handleOnChange}
-          />
-        </div>
-        <div className="day_input">
-          <label htmlFor="startDate">시작일</label>
-          <input
-            type="date"
-            name="month"
-            onChange={handleOnChange}
-            value={month}
-          />
-          <input
-            type="time"
-            name="time"
-            onChange={handleOnChange}
-            value={time}
-          />
-        </div>
-        <div className="target_time_input">
-          <label htmlFor="targetTime">목표시간</label>
-          <input
-            type="number"
-            name="targetTime"
-            onChange={handleOnChange}
-            value={targetTime}
-          />
-          <span>분</span>
-        </div>
-      </StTopContentsWrapper>
-      <div className="center_wrapper">
-        <StMainContentsWrapper>
-          <div className="desc_section">
-            <label htmlFor="desc">내용</label>
-            <textarea
-              name="desc"
-              cols={50}
-              rows={10}
-              onChange={handleOnChange}
-              value={desc}
-            ></textarea>
-          </div>
-          <div className="info_section">
-            <label htmlFor="roomInfo">공지사항</label>
-            <textarea
-              name="info"
-              cols={25}
-              rows={7}
-              onChange={handleOnChange}
-              value={info}
-            ></textarea>
-          </div>
-          <StOptionSelectContainer>
-            <span className="option_title">옵션</span>
-            <div className="option_container" ref={optionsRef}>
-              <div className="room_option">
-                <label htmlFor="mic">마이크</label>
-                <button name="mic" className="mic" onClick={handleClickOption}>
-                  #마이크 ON
-                </button>
-                <button name="mic" className="mic" onClick={handleClickOption}>
-                  #마이크 OFF
-                </button>
-                <button name="mic" className="mic" onClick={handleClickOption}>
-                  #상관없음
-                </button>
-              </div>
-              <div className="room_option">
-                <label htmlFor="cam">화면</label>
-                <button name="cam" className="cam" onClick={handleClickOption}>
-                  #화면 ON
-                </button>
-                <button name="cam" className="cam" onClick={handleClickOption}>
-                  #화면 OFF
-                </button>
-                <button name="cam" className="cam" onClick={handleClickOption}>
-                  #상관없음
-                </button>
-              </div>
-              <div className="room_option">
-                <label htmlFor="atmosphere">분위기</label>
-                <button
-                  name="atmosphere"
-                  className="atmosphere"
-                  onClick={handleClickOption}
-                >
-                  #활발한
-                </button>
-                <button
-                  name="atmosphere"
-                  className="atmosphere"
-                  onClick={handleClickOption}
-                >
-                  #조용한
-                </button>
-                <button
-                  name="atmosphere"
-                  className="atmosphere"
-                  onClick={handleClickOption}
-                >
-                  #자유로운
-                </button>
-              </div>
-              <div className="room_option">
-                <label htmlFor="character">성격</label>
-                <button
-                  name="character"
-                  className="character"
-                  onClick={handleClickOption}
-                >
-                  #정보공유
-                </button>
-                <button
-                  name="character"
-                  className="character"
-                  onClick={handleClickOption}
-                >
-                  #동기부여
-                </button>
-                <button
-                  name="character"
-                  className="character"
-                  onClick={handleClickOption}
-                >
-                  #도전적인
-                </button>
-              </div>
-              <div className="room_option">
-                <label htmlFor="sexual">성별제한</label>
-                <button
-                  name="sexual"
-                  className="sexual"
-                  onClick={handleClickOption}
-                >
-                  #남성
-                </button>
-                <button
-                  name="sexual"
-                  className="sexual"
-                  onClick={handleClickOption}
-                >
-                  #여성
-                </button>
-                <button
-                  name="sexual"
-                  className="sexual"
-                  onClick={handleClickOption}
-                >
-                  #성별무관
-                </button>
-              </div>
-            </div>
-          </StOptionSelectContainer>
-        </StMainContentsWrapper>
-        <StSideContentsWrapper>
-          <FileBox>
-            <img src={upload} />
-
-            <label htmlFor="input-file">사진 등록하기</label>
+    <>
+      <StContentsWrapper onSubmit={handleSubmit}>
+        <StTopContentsWrapper>
+          <div className="title_input">
+            <label htmlFor="title">제목</label>
             <input
-              type="file"
-              id="input-file"
-              placeholder="사진추가"
-              accept="image/*"
-              onChange={handleImageChange}
+              type="text"
+              name="title"
+              placeholder="챌린지 제목을 입력해주세요 {30자 이내}"
+              value={title}
+              onChange={handleOnChange}
+              ref={titleRef}
             />
-          </FileBox>
-        </StSideContentsWrapper>
-      </div>
-      <StBottomContentsWrapper>
-        <button>등록하기</button>
-        {challengeId && <button onClick={() => navigate("/")}>취소하기</button>}
-      </StBottomContentsWrapper>
-    </StContentsWrapper>
+          </div>
+          <div className="day_input">
+            <label htmlFor="startDate">시작일</label>
+            <input
+              type="date"
+              name="month"
+              onChange={handleOnChange}
+              value={month}
+              ref={monthRef}
+            />
+            <input
+              type="time"
+              name="time"
+              onChange={handleOnChange}
+              value={time}
+              ref={timeRef}
+            />
+          </div>
+          <div className="target_time_input">
+            <label htmlFor="targetTime">목표시간</label>
+            <input
+              type="number"
+              name="targetTime"
+              onChange={handleOnChange}
+              value={targetTime}
+              ref={targetTimeRef}
+            />
+            <span>분</span>
+          </div>
+        </StTopContentsWrapper>
+        <div className="center_wrapper">
+          <StMainContentsWrapper>
+            <div className="desc_section">
+              <label htmlFor="desc">내용</label>
+              <textarea
+                name="desc"
+                cols={50}
+                rows={10}
+                onChange={handleOnChange}
+                value={desc}
+                placeholder="챌린지 목적, 내용을 작성해주세요 {300자 이내}"
+                ref={descRef}
+              ></textarea>
+            </div>
+            <div className="info_section">
+              <label htmlFor="roomInfo">공지사항</label>
+              <textarea
+                name="info"
+                cols={25}
+                rows={7}
+                onChange={handleOnChange}
+                value={info}
+                placeholder="챌린지 진행 시 유의 사항, 공지를 작성해주세요 {100자 이내}"
+                ref={infoRef}
+              ></textarea>
+            </div>
+            <StOptionSelectContainer>
+              <span className="option_title">옵션</span>
+              <div className="option_container" ref={optionsRef}>
+                <div className="room_option">
+                  <label htmlFor="mic">마이크</label>
+                  <button
+                    name="mic"
+                    className="mic"
+                    onClick={handleClickOption}
+                  >
+                    #마이크 ON
+                  </button>
+                  <button
+                    name="mic"
+                    className="mic"
+                    onClick={handleClickOption}
+                  >
+                    #마이크 OFF
+                  </button>
+                  <button
+                    name="mic"
+                    className="mic"
+                    onClick={handleClickOption}
+                  >
+                    #상관없음
+                  </button>
+                </div>
+                <div className="room_option">
+                  <label htmlFor="cam">화면</label>
+                  <button
+                    name="cam"
+                    className="cam"
+                    onClick={handleClickOption}
+                  >
+                    #화면 ON
+                  </button>
+                  <button
+                    name="cam"
+                    className="cam"
+                    onClick={handleClickOption}
+                  >
+                    #화면 OFF
+                  </button>
+                  <button
+                    name="cam"
+                    className="cam"
+                    onClick={handleClickOption}
+                  >
+                    #상관없음
+                  </button>
+                </div>
+                <div className="room_option">
+                  <label htmlFor="atmosphere">분위기</label>
+                  <button
+                    name="atmosphere"
+                    className="atmosphere"
+                    onClick={handleClickOption}
+                  >
+                    #활발한
+                  </button>
+                  <button
+                    name="atmosphere"
+                    className="atmosphere"
+                    onClick={handleClickOption}
+                  >
+                    #조용한
+                  </button>
+                  <button
+                    name="atmosphere"
+                    className="atmosphere"
+                    onClick={handleClickOption}
+                  >
+                    #자유로운
+                  </button>
+                </div>
+                <div className="room_option">
+                  <label htmlFor="character">성격</label>
+                  <button
+                    name="character"
+                    className="character"
+                    onClick={handleClickOption}
+                  >
+                    #정보공유
+                  </button>
+                  <button
+                    name="character"
+                    className="character"
+                    onClick={handleClickOption}
+                  >
+                    #동기부여
+                  </button>
+                  <button
+                    name="character"
+                    className="character"
+                    onClick={handleClickOption}
+                  >
+                    #도전적인
+                  </button>
+                </div>
+                <div className="room_option">
+                  <label htmlFor="sexual">성별제한</label>
+                  <button
+                    name="sexual"
+                    className="sexual"
+                    onClick={handleClickOption}
+                  >
+                    #남성
+                  </button>
+                  <button
+                    name="sexual"
+                    className="sexual"
+                    onClick={handleClickOption}
+                  >
+                    #여성
+                  </button>
+                  <button
+                    name="sexual"
+                    className="sexual"
+                    onClick={handleClickOption}
+                  >
+                    #성별무관
+                  </button>
+                </div>
+              </div>
+            </StOptionSelectContainer>
+          </StMainContentsWrapper>
+          <StSideContentsWrapper>
+            <FileBox>
+              <img src={upload} />
+
+              <label htmlFor="input-file">사진 등록하기</label>
+              <input
+                type="file"
+                id="input-file"
+                placeholder="사진추가"
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+            </FileBox>
+          </StSideContentsWrapper>
+        </div>
+        <StBottomContentsWrapper>
+          <button>등록하기</button>
+          {challengeId && (
+            <button onClick={() => navigate("/")}>취소하기</button>
+          )}
+        </StBottomContentsWrapper>
+        <ToastContainer autoClose={2000} position="bottom-right" />
+      </StContentsWrapper>
+    </>
   );
 }
 
@@ -480,7 +668,7 @@ const StTopContentsWrapper = styled.div`
   input {
     font-size: 2rem;
     background-color: #f5f5f5;
-    border: none;
+    border: 0.2rem solid transparent;
     height: 3.8rem;
     padding: 0.2rem;
     ::placeholder {
@@ -614,7 +802,7 @@ const StBottomContentsWrapper = styled.div`
   flex-grow: 1;
   display: flex;
   justify-content: center;
-  padding-top: 2rem;
+  padding-top: 3rem;
   button {
     width: 40rem;
     height: 5rem;

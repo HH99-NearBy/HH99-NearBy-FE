@@ -91,6 +91,7 @@ const StSearchBarBody = styled.form`
   align-items: center;
   input {
     height: 100%;
+    width: 90%;
     border: none;
     flex-grow: 1;
     font-size: 2rem;

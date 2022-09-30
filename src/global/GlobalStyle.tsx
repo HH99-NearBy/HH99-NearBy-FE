@@ -66,6 +66,26 @@ const GlobalStyle = createGlobalStyle`
   .static_scroll {
     scroll-behavior: auto !important;
   }
+  .toast_alert {
+    font-size: 1.6rem;
+  }
+  @keyframes error {
+        0% {
+          border-color: transparent;
+        }
+
+        50% {
+         border-color: red;
+        }
+
+        100% {
+           border-color: transparent;
+        }
+      }
+  .error_focus {
+    border: 0.2rem solid red;
+    animation: error 0.6s 2;
+  }
 
   /* .video_container {
     width: 100%;

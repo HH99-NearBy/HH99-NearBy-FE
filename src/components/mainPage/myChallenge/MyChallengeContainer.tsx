@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ChallengeCard from "../ChallengeCard";
 import { useQuery } from "react-query";
 import apis from "../../../api/api";
+import none_notification_icon from "../../../static/none_notification_icon.svg";
 
 interface ChallengeInfo {
   challengeImg: string;
@@ -120,6 +121,14 @@ function MyChallengeContainer({
         onMouseLeave={handleMouseOut}
         ref={listRef}
       >
+        {challengeList.length === 0 ? (
+          <div className="my_challenge_empty_container">
+            <img src={none_notification_icon} alt="" />
+            <h2 className="empty_my_challenge_notification">
+              아직 참여한 챌린지가 없어요!
+            </h2>
+          </div>
+        ) : null}
         {challengeList.map((post, idx) => {
           const now = Date.now();
           const startTime = Date.parse(`${post?.startDay}T${post?.startTime}`);
@@ -171,6 +180,17 @@ const StCardList = styled.div`
   column-gap: 4rem;
   row-gap: 4rem;
   scroll-behavior: smooth;
+  .my_challenge_empty_container {
+    opacity: 0.5;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5rem;
+    .empty_my_challenge_notification {
+      color: var(--purple-color);
+    }
+  }
 `;
 
 export default React.memo(MyChallengeContainer);

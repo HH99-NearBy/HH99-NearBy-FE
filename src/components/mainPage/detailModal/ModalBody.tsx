@@ -10,6 +10,8 @@ import { MdOutlineTimer } from "react-icons/md";
 import { GetModalDetail } from "../../../api/challengeDetail/types";
 import { AppContext } from "../../../api/context/index";
 import { useNavigate } from "react-router";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import apis from "../../../api/api";
 import Button from "../../../elements/Button";
 
@@ -38,6 +40,21 @@ function ModalBody({
   const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
     onMutate: async (payload) => {
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {},
+    onSettled: () => {
+      queryClient.invalidateQueries(["MY_CHALLENGE"]);
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
+    },
+  });
+  const recruitChallengeMutation = useMutation(apis.recruitChallenge, {
+    onMutate: async (payload) => {
+      console.log("onmutate", payload);
+      await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
     onError(error, variables, context) {
       throw error;
@@ -47,6 +64,25 @@ function ModalBody({
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
     },
   });
+
+  const cancelRecruitMutation = useMutation(apis.recruitChallenge, {
+    onMutate: async (payload) => {
+      console.log("onmutate", payload);
+      await queryClient.cancelQueries(["MY_CHALLENGE"]);
+      await queryClient.cancelQueries(["ALL_CHALLENGE"]);
+    },
+    onError(error, variables, context) {
+      throw error;
+    },
+    onSuccess: (res, variables, context) => {},
+    onSettled: () => {
+      queryClient.invalidateQueries(["MY_CHALLENGE"]);
+      queryClient.invalidateQueries(["ALL_CHALLENGE"]);
+    },
+  });
+
+  console.log(body);
+  console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = () => {
@@ -55,11 +91,11 @@ function ModalBody({
     fullScreenHandler.enter();
   };
   const handleRecruitChallenge = () => {
-    apis.recruitChallenge(state.challengeId);
+    recruitChallengeMutation.mutate(state.challengeId);
     handleToggleModal();
   };
   const handleCancleChallenge = () => {
-    apis.cancelRecruit(state.challengeId);
+    cancelRecruitMutation.mutate(state.challengeId);
   };
   const handleModifyChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -178,6 +214,7 @@ function ModalBody({
           </StChallengeInfoContainer>
         </StModalContentsContainer>
       </StModalBody>
+      <ToastContainer autoClose={2000} position="bottom-right" />
     </StModalContainer>
   );
 }
