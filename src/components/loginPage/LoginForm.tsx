@@ -16,16 +16,13 @@ function LoginForm() {
 
   const onChange1 = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
-    console.log(email);
   };
 
   const onChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
-    console.log(password);
   };
   const loginMutation = useMutation(apis.userLogin, {
     onMutate: (payload) => {
-      console.log("onmutate", payload);
     },
     onError(error:any, variables, context) {
       alert(error.response.data.msg)
@@ -43,7 +40,6 @@ function LoginForm() {
       navigate("/");
     },
     onSettled: () => {
-      console.log("end");
     },
   });
 

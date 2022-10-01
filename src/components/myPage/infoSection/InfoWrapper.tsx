@@ -25,7 +25,7 @@ function InfoWrapper() {
 
  const getData = async () => {
   const data = await apis.getMyInfo();
-  console.log(data)
+  
   setInfo(data)
  }
  
@@ -34,7 +34,7 @@ function InfoWrapper() {
   getData();
  },[])
 
- console.log(info?.nickname)
+
 
   return (
     <InfoContainer>

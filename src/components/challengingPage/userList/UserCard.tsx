@@ -38,7 +38,6 @@ function UserCard({
       clearInterval(timerInterval);
     };
   }, []);
-  console.log(joinAt);
   return (
     <StCardBody>
       <div className="user_info">

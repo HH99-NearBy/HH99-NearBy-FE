@@ -32,7 +32,6 @@ function MychallengContainer() {
       setChalleng(res.mypageJoinList)
       setPage(res.totalPage)
       setLoading(false)
-      console.log(res)
     }
     CardList();
   },[pageNum])

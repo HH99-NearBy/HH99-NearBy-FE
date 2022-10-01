@@ -27,7 +27,6 @@ function SearchBar() {
       if (e.target.value.length !== 0) {
         const reqRes = await apis.searchTitle(e.target.value);
         setResult([...result, ...reqRes]);
-        console.log(reqRes);
       } else {
         setResult([]);
       }
@@ -35,7 +34,7 @@ function SearchBar() {
   };
   const handleSubmitInput = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(input);
+
     dispatch({ type: "SET_SEARCH", searchParam: input });
     setInput("");
     setResult([]);
@@ -51,7 +50,7 @@ function SearchBar() {
 
     setResult([]);
   };
-  console.log(input);
+
   return (
     <StSearchBarBody onSubmit={handleSubmitInput}>
       <input

@@ -28,13 +28,12 @@ function SearchPage() {
   useQuery(["SEARCH_CHALLENGE"], async () => {
     const res = await apis.searchChallengeList(state.searchParam, 1);
     setChallengeList(res);
-    console.log(res);
+    
   });
   useEffect(() => {
     setChallengeList([]);
   }, [state.searchParam]);
-  console.log(state.searchParam);
-  console.log(state.modalOpen);
+  
   return (
     <StContentsWrapper>
       <h2>찾으신 챌린지 목록이에요!</h2>

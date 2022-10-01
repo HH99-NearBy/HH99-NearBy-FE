@@ -18,7 +18,6 @@ function DoneCard({done,loading}:{done:Array<DoneCardProps>;loading:boolean}) {
     return <h2>Loading...</h2>
   }
 // const time:Date = new Date(done.tagetTime)
-console.log(done)
 
   return (
     <>

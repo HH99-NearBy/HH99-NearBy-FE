@@ -32,7 +32,6 @@ function MyChallengeContainer({
         (post: ChallengeInfo) => Date.now() < Date.parse(`${post.endTime}`)
       )
     );
-    console.log(res);
   });
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(false);
   const listRef = useRef<HTMLDivElement>(null);

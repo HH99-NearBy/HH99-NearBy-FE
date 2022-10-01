@@ -31,7 +31,6 @@ function ModalBody({
     "CHALLENGE_DETAIL",
     async () => {
       const res = await getChallengeDetail(state.challengeId);
-      console.log(res);
       setBody(res);
     },
     {
@@ -40,7 +39,6 @@ function ModalBody({
   );
   const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
       await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
@@ -118,10 +116,7 @@ function ModalBody({
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
   const endTime = Date.parse(`${body?.detailModal.endTime}`);
-  console.log(startTime);
-  console.log(body?.detailModal.endTime);
-  console.log(endTime);
-  console.log(Date.now());
+ 
 
   return (
     <StModalContainer>

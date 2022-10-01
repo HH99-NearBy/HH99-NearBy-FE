@@ -14,7 +14,7 @@ function MainPage() {
   const handleToggleModal = () => {
     dispatch({ type: "TOGGLE_MODAL" });
   };
-  console.log(modalShow);
+
 
   const handleToScrollTop = () => {
     mainContainerRef.current?.scrollTo(0, 0);

@@ -10,7 +10,6 @@ function OvVideo({ streamManager }: { streamManager: any }) {
     }
   }, [streamManager]);
 
-  console.log(streamManager);
   return (
     <>
       {/* {streamManager.stream.videoActive ? (
