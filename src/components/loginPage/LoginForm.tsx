@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState, useCallback, useContext } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { KAKAO_AUTH_URL } from "./KakaoLogin";
 import apis from "../../api/api";
 import { useMutation, useQuery } from "react-query";
@@ -27,8 +29,17 @@ function LoginForm() {
     onMutate: (payload) => {
       console.log("onmutate", payload);
     },
-    onError(error:any, variables, context) {
-      alert(error.response.data.msg)
+    onError(error: any, variables, context) {
+      toast.error(error.response.data.msg, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
       throw error;
     },
     onSuccess: (res, variables, context) => {
@@ -105,10 +116,10 @@ function LoginForm() {
                 onChange={onChange2}
               />
               <LoginBtn type="submit">로그인</LoginBtn>
-              <AutoLogin>
+              {/* <AutoLogin>
                 <label htmlFor="chk">자동 로그인</label>
                 <input type="checkbox" id="chk" />
-              </AutoLogin>
+              </AutoLogin> */}
             </LoginBox>
           </form>
           <UnderBox>
@@ -117,7 +128,11 @@ function LoginForm() {
             <UnderBar2 />
           </UnderBox>
           <SocialBox>
-            <a>
+            <a
+              onClick={() => {
+                alert("아직 미구현 서비스입니다 ㅜㅜ");
+              }}
+            >
               <img src="https://ifh.cc/g/17Vbfz.png" />
             </a>
             <a href={KAKAO_AUTH_URL}>
@@ -130,6 +145,7 @@ function LoginForm() {
           </SignUpBox>
         </LoginContainer>
       </AllContainer>
+      <ToastContainer />
     </>
   );
 }

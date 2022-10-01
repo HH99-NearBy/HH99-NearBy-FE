@@ -8,6 +8,7 @@ import imageCompression from "browser-image-compression";
 import { getChallengeDetail } from "../api/challengeDetail/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import thumbnail_info_img from "../static/thumbnail_info_img.svg";
 import Button from "../elements/Button";
 import AlertBody from "../components/alerts/NeedLoginAlert";
 
@@ -136,8 +137,8 @@ function PostingPage() {
           titleRef.current?.classList.remove("error_focus");
         }, 1200);
         toast.error("챌린지 제목을 입력해주세요.", {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          autoClose: 1200,
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -156,7 +157,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 시작일을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -175,7 +176,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("과거날짜는 선택하실 수 없어요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -188,7 +189,7 @@ function PostingPage() {
         console.log(Date.parse(`${month}T00:00`));
         return toast.error("챌린지 시작시간을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -199,7 +200,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("과거시각은 선택할 수 없어요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -211,7 +212,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 목표시간을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -220,9 +221,9 @@ function PostingPage() {
         setTimeout(() => {
           targetTimeRef.current?.classList.remove("error_focus");
         }, 1200);
-        return toast.error("챌린지 시간이 너무 짧아요!", {
+        return toast.error("챌린지 최소시간은 30분입니다!", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -234,7 +235,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 내용을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -246,7 +247,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 공지사항을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -260,7 +261,7 @@ function PostingPage() {
       ) {
         return toast.error("챌린지 옵션을 모두 선책해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -429,6 +430,7 @@ function PostingPage() {
               value={title}
               onChange={handleOnChange}
               ref={titleRef}
+              maxLength={30}
             />
           </div>
           <div className="day_input">
@@ -446,6 +448,7 @@ function PostingPage() {
               onChange={handleOnChange}
               value={time}
               ref={timeRef}
+              min={30}
             />
           </div>
           <div className="target_time_input">
@@ -456,6 +459,7 @@ function PostingPage() {
               onChange={handleOnChange}
               value={targetTime}
               ref={targetTimeRef}
+              maxLength={1200}
             />
             <span>분</span>
           </div>
@@ -470,8 +474,9 @@ function PostingPage() {
                 rows={10}
                 onChange={handleOnChange}
                 value={desc}
-                placeholder="챌린지 목적, 내용을 작성해주세요 {300자 이내}"
+                placeholder="챌린지 목적, 내용을 작성해주세요 {250자 이내}"
                 ref={descRef}
+                maxLength={250}
               ></textarea>
             </div>
             <div className="info_section">
@@ -484,6 +489,7 @@ function PostingPage() {
                 value={info}
                 placeholder="챌린지 진행 시 유의 사항, 공지를 작성해주세요 {100자 이내}"
                 ref={infoRef}
+                maxLength={100}
               ></textarea>
             </div>
             <StOptionSelectContainer>
@@ -633,7 +639,7 @@ function PostingPage() {
             <button onClick={() => navigate("/")}>취소하기</button>
           )}
         </StBottomContentsWrapper>
-        <ToastContainer autoClose={2000} position="bottom-right" />
+        <ToastContainer />
       </StContentsWrapper>
     </>
   );
@@ -643,8 +649,9 @@ const StContentsWrapper = styled.form`
   min-height: 100vh;
   width: 128rem;
   margin: 0 auto;
+  margin-bottom: 5rem;
   background-color: white;
-  overflow: hidden;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -717,6 +724,7 @@ const StMainContentsWrapper = styled.div`
   textarea {
     outline: none;
     resize: none;
+    width: 80.3rem;
     :focus {
       outline: 0.1rem solid var(--purple-color);
     }

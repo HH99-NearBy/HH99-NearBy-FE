@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState, useContext } from "react";
 import styled from "styled-components";
 import webstomp from "webstomp-client";
 import SockJs from "sockjs-client";
+import { useQuery } from "react-query";
+import { getChallengeDetail } from "../../api/challengeDetail/api";
 import { useParams } from "react-router";
 import ChatSection from "./ChatSection";
 import SummeryInfoSection from "./SummeryInfoSection";
+import { GetModalDetail } from "../../api/challengeDetail/types";
 import { RoomContext } from "../../api/context/roomContext";
 import apis from "../../api/api";
 
@@ -17,6 +20,35 @@ function SideContentsSection() {
   const WSURI = process.env.REACT_APP_BASE_URI + "/ws";
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
+  const [body, setBody] = useState<GetModalDetail>({
+    detailModal: {
+      title: "",
+      challengeImg: "",
+      startDay: "",
+      startTime: "",
+      targetTime: 0,
+      endTime: "",
+      limitPeople: 0,
+      participatePeople: 0,
+      content: "",
+      notice: "",
+      writer: "",
+      level: "",
+      challengeTag: [],
+      isJoin: true,
+    },
+    msg: "",
+  });
+  const req = useQuery(
+    "CHALLENGE_DETAIL",
+    async () => {
+      const res = await getChallengeDetail(Number(challengeId));
+      setBody(res);
+    },
+    {
+      retry: 2,
+    }
+  );
   const getInitUserList = async () => {
     const res = await apis.getParticipantList(Number(challengeId));
     dispatch({ type: "INIT_PEOPLE", userList: res.data });
@@ -123,7 +155,7 @@ function SideContentsSection() {
   };
   return (
     <StContentsWrapper>
-      <SummeryInfoSection />
+      <SummeryInfoSection body={body !== null ? body : null} />
       <ChatSection
         chats={state.chat}
         stompClient={stompClient}

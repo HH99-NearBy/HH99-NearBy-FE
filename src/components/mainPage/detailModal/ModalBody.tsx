@@ -99,7 +99,7 @@ function ModalBody({
     },
   });
 
-  const cancelRecruitMutation = useMutation(apis.recruitChallenge, {
+  const cancelRecruitMutation = useMutation(apis.cancelRecruit, {
     onMutate: async (payload) => {
       console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);

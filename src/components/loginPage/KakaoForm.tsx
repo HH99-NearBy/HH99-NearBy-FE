@@ -3,10 +3,14 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-
-
-function KakaoForm({kakaoId,profileImg}:{kakaoId:number;profileImg:string}) {
-  const navigate = useNavigate()
+function KakaoForm({
+  kakaoId,
+  profileImg,
+}: {
+  kakaoId: number;
+  profileImg: string;
+}) {
+  const navigate = useNavigate();
   // 닉네임 검사
 
   const [nickname, setNickname] = useState<string>("");
@@ -56,27 +60,25 @@ function KakaoForm({kakaoId,profileImg}:{kakaoId:number;profileImg:string}) {
     [nickname]
   );
 
-  
-
   const KakaoSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
         const response = await axios.post(
-          "http://ssggwan.site/api/kakaosign",
+          "https://ssggwan.site/api/kakaosign",
           {
             kakaoId: kakaoId,
             profileImg: profileImg,
-            nickname: nickname
+            nickname: nickname,
           }
         );
         console.log(response);
         const { data, headers } = response;
-        console.log(data)
-      sessionStorage.setItem("accessToken", headers.authorization);
-      sessionStorage.setItem("userName", data.nickname);
-      sessionStorage.setItem("userLevel", data.level);
-      sessionStorage.setItem("userProfile", data.profileImg);
+        console.log(data);
+        sessionStorage.setItem("accessToken", headers.authorization);
+        sessionStorage.setItem("userName", data.nickname);
+        sessionStorage.setItem("userLevel", data.level);
+        sessionStorage.setItem("userProfile", data.profileImg);
         alert("로그인 완료");
         navigate("/");
         console.log(response);

@@ -68,6 +68,9 @@ function ChallengingPage() {
 }
 
 const StPageLayout = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   min-width: 160rem;
   height: 100vh;
