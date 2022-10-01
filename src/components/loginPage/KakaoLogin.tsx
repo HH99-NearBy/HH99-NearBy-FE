@@ -27,7 +27,6 @@ function KakaoLogin() {
   const [islogin, setIsLogin] = useState<boolean>(true);
 
   const code: any = new URL(window.location.href).searchParams.get("code");
-  console.log(code);
 
   useEffect(() => {
     const login = async () => {

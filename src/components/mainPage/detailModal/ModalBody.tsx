@@ -72,7 +72,6 @@ function ModalBody({
   );
   const deleteChallengeMutation = useMutation(apis.deleteChallenge, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
       await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },

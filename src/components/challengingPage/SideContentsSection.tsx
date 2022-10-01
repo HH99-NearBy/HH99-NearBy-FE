@@ -80,10 +80,7 @@ function SideContentsSection() {
         subscription = stompClient.current.subscribe(
           `/sub/chat/room/${challengeId}`,
           function name(frame: any) {
-            console.log("sub sucessfully");
-            console.log(frame);
             const res = JSON.parse(frame.body);
-            console.log(res);
             switch (res.type) {
               case "ENTER": {
                 dispatch({
@@ -121,7 +118,6 @@ function SideContentsSection() {
       }
     );
     return () => {
-      console.log(stompClient.current);
       const nickname = sessionStorage.getItem("userName");
       stompClient.current.send(
         `/pub/chat/message`,

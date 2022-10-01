@@ -50,11 +50,9 @@ function KakaoForm({
         );
         setNickCheck(true);
         alert("가입 가능한 닉네임입니다.");
-        console.log(response);
       } catch (err) {
         setNickCheck(false);
         alert("중복된 닉네임 입니다.");
-        console.error(err);
       }
     },
     [nickname]
@@ -72,19 +70,16 @@ function KakaoForm({
             nickname: nickname,
           }
         );
-        console.log(response);
         const { data, headers } = response;
-        console.log(data);
         sessionStorage.setItem("accessToken", headers.authorization);
         sessionStorage.setItem("userName", data.nickname);
         sessionStorage.setItem("userLevel", data.level);
         sessionStorage.setItem("userProfile", data.profileImg);
+        sessionStorage?.setItem("userTime", data.data.totalTime);
         alert("로그인 완료");
         navigate("/");
-        console.log(response);
       } catch (err) {
         alert("로그인 실패");
-        console.error(err);
       }
     },
     [nickname]

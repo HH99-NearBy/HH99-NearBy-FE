@@ -78,7 +78,6 @@ function reducer(
       return { ...state, people: newArr };
     }
     default: {
-      console.log("머하노");
       return state;
     }
   }

@@ -134,7 +134,7 @@ const apis = {
       nickName: payload.nickname,
       profileImg: payload.profileImg,
     });
-    return reqRes.data;
+    return reqRes;
   },
   postChallenge: async ({
     title,
@@ -167,7 +167,6 @@ const apis = {
         challengeTag,
         limit: 16,
       });
-      console.log(reqRes);
       const reReq = await instance.post(
         `/api/challenge/ok/${reqRes.data.data}`
       );
