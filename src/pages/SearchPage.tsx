@@ -1,10 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import { useQuery } from "react-query";
+import { useParams } from "react-router";
+import { useQuery, useQueryClient } from "react-query";
 import { AppContext } from "../api/context";
 import apis from "../api/api";
 import ChallengeCard from "../components/mainPage/ChallengeCard";
 import ModalPortal from "../components/mainPage/detailModal/ModalPortal";
+import { query } from "express";
 
 interface ChallengeInfo {
   challengeImg: string;
@@ -19,21 +21,35 @@ interface ChallengeInfo {
 }
 
 function SearchPage() {
+  const { searchParam } = useParams();
+  const queryClient = useQueryClient();
   const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
   const { state, dispatch } = useContext(AppContext);
   const handleToggleModal = () => {
     dispatch({ type: "TOGGLE_MODAL" });
   };
 
-  useQuery(["SEARCH_CHALLENGE"], async () => {
-    const res = await apis.searchChallengeList(state.searchParam, 1);
-    setChallengeList(res);
-    
-  });
+  useQuery(
+    ["SEARCH_CHALLENGE"],
+    async () => {
+      const res = await apis.searchChallengeList(searchParam, 1);
+      console.log("param", searchParam);
+      console.log("res", res);
+      setChallengeList([...res]);
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   useEffect(() => {
-    setChallengeList([]);
-  }, [state.searchParam]);
-  
+    return () => {
+      setChallengeList([]);
+      console.log("g");
+      queryClient.clear();
+    };
+  }, [searchParam]);
+  console.log(searchParam);
+  console.log(challengeList);
   return (
     <StContentsWrapper>
       <h2>찾으신 챌린지 목록이에요!</h2>

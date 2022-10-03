@@ -79,7 +79,17 @@ function ChallengeCard(props: StyleProps) {
             도전하기
           </button>
         ) : props.status === "done" ? (
-          <button className="modal_open_btn">완료된 챌린지입니다.</button>
+          <button
+            className="modal_open_btn"
+            onClick={() => {
+              if (typeof props.challengeId !== "undefined")
+                handleReadChallengeId(props.challengeId);
+              if (typeof props.handleToggleModal !== "undefined")
+                props.handleToggleModal();
+            }}
+          >
+            완료된 챌린지입니다.
+          </button>
         ) : (
           <button
             className="modal_open_btn"
@@ -121,6 +131,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
         `;
@@ -129,6 +140,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
           .modal_open_btn {
@@ -144,6 +156,7 @@ const StCardContainer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
           .modal_open_btn {
@@ -158,6 +171,7 @@ const StCardContainer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
           .modal_open_btn {
@@ -216,6 +230,7 @@ const StCardContents = styled.div`
       font-size: 2rem;
       font-weight: 600;
       letter-spacing: 0.2rem;
+      word-break: break-all;
     }
     .footer_info {
       display: flex;

@@ -122,7 +122,6 @@ function RecruitContainer({
       <StCardList>
         {challengeList.length !== 0
           ? challengeList.map((post, idx) => {
-              console.log(post);
               const now = new Date();
               const createdAt = new Date(`${post.startDay}T${post.startTime}`);
               return (

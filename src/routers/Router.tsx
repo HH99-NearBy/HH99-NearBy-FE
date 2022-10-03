@@ -19,14 +19,15 @@ function Router() {
       <Route path="/" element={<MainPage />} />
       <Route path="/ranking" element={<RankingPage />} />
       <Route path="/challenging/:challengeId" element={<ChallengingPage />} />
-      <Route path="/login" element= {<LoginPage/>}/>
-      <Route path="/api/kakaologin" element={<KakaoLogin/>}/>
-      <Route path="/register" element={<RegisterPage/>}/>
-      <Route path ="/mypage" element = {<MyPage/>}/>
-      <Route path = "/info" element ={<InformationPage/>}/>
-      <Route path = '/edit' element = {<EditContainer/>}/>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/api/kakaologin" element={<KakaoLogin />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/mypage" element={<MyPage />} />
+      <Route path="/info" element={<InformationPage />} />
+      <Route path="/edit" element={<EditContainer />} />
       <Route path="/posting" element={<PostingPage />} />
-      <Route path="/search" element={<SearchPage />} />
+      <Route path="/modify/:challengeId" element={<PostingPage />} />
+      <Route path="/search/:searchParam" element={<SearchPage />} />
     </Routes>
   );
 }

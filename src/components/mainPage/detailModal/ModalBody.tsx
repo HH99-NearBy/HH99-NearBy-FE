@@ -59,7 +59,7 @@ function ModalBody({
           setStatus("running");
         } else {
           console.log("두잉2");
-          setStatus("doing");
+          setStatus("done");
         }
       }
       console.log(now);
@@ -133,13 +133,14 @@ function ModalBody({
   const handleModifyChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    handleToggleModal();
     navigate(`/modify/${state.challengeId}`);
   };
   const handleDeleteChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    deleteChallengeMutation.mutate(state.challengeId);
     handleToggleModal();
+    deleteChallengeMutation.mutate(state.challengeId);
   };
   const now = new Date();
   const createdAt = new Date(
@@ -151,8 +152,8 @@ function ModalBody({
   const endTime = Date.parse(`${body?.detailModal.endTime}`);
   // console.log(startTime);
   // console.log(body?.detailModal.endTime);
-  // console.log(endTime);
-  // console.log(Date.now());
+  console.log(endTime);
+  console.log(Date.now());
   useState(() => {
     return () => {
       setStatus("");
@@ -217,6 +218,8 @@ function ModalBody({
                 </button>
               ) : now < createdAt ? (
                 <button className="not_yet_button">시작 전</button>
+              ) : Date.now() > endTime ? (
+                <button className="challenge_end_button">종료된 챌린지</button>
               ) : (
                 <button
                   className="challenge_enter_button"
@@ -309,6 +312,9 @@ const StModalHeader = styled.div`
       height: 3rem;
       display: flex;
       align-items: center;
+      :nth-of-type(1) {
+        margin-right: 0.5rem;
+      }
     }
     .challenge_btn_container {
       button {
@@ -352,6 +358,7 @@ const StSummeryContainer = styled.div`
   .challenge_detail_thumbnail {
     width: 100%;
     height: 24rem;
+    object-fit: cover;
   }
 
   .footer_button_group {
@@ -392,6 +399,9 @@ const StSummeryContainer = styled.div`
       background-color: #e3e3e3;
       color: black;
     }
+    .challenge_end_button {
+      color: black;
+    }
   }
 `;
 
@@ -423,7 +433,7 @@ const StChallengeInfoContainer = styled.div`
   width: 80.1rem;
   height: 51rem;
   padding-left: 4rem;
-
+  word-break: break-all;
   display: flex;
   flex-direction: column;
   .detail_description {

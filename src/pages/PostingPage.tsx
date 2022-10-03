@@ -18,7 +18,7 @@ function PostingPage() {
   const [title, setTitle] = useState("");
   const [month, setMonth] = useState("");
   const [time, setTime] = useState("");
-  const [targetTime, setTargetTime] = useState(0);
+  const [targetTime, setTargetTime] = useState(30);
   const [desc, setDesc] = useState("");
   const [info, setInfo] = useState("");
   const [upload, setUpload] = useState<string>("https://ifh.cc/g/RCtOo7.png");
@@ -338,7 +338,6 @@ function PostingPage() {
           alert("이미지 업로드에 성공했습니다.");
           setUpload(data.Location);
           setIsimg(true);
-          
         },
         function (err) {
           return alert(err);
@@ -384,12 +383,12 @@ function PostingPage() {
     if (optionsRef.current && challengeId) {
       for (let i = 0; i < 5; i++) {
         const target = optionsRef.current.children[i];
-        
+
         const siblings = target.children;
         if (typeof siblings !== "undefined") {
           for (let i = 1; i < siblings.length; i++) {
             siblings[i].classList.remove("selected_option");
-            
+
             switch (siblings[i].classList[0]) {
               case "mic":
                 if (options.mic === siblings[i].innerHTML)
@@ -448,7 +447,6 @@ function PostingPage() {
               onChange={handleOnChange}
               value={time}
               ref={timeRef}
-              min={30}
             />
           </div>
           <div className="target_time_input">
@@ -459,7 +457,8 @@ function PostingPage() {
               onChange={handleOnChange}
               value={targetTime}
               ref={targetTimeRef}
-              maxLength={1200}
+              min={30}
+              max={1200}
             />
             <span>분</span>
           </div>

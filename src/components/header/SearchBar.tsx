@@ -38,7 +38,7 @@ function SearchBar() {
     dispatch({ type: "SET_SEARCH", searchParam: input });
     setInput("");
     setResult([]);
-    navigate("/search");
+    navigate(`/search/${input}`);
   };
   const handleToDetail = (e: React.MouseEvent<HTMLDivElement>) => {
     dispatch({
