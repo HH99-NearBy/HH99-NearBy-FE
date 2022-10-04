@@ -45,6 +45,9 @@ Web Service '쓱관
 <img src="https://img.shields.io/badge/WebRTC-333333?style=flat-square&logo=WebRTC&logoColor=ffffff"/>
 <img src="https://img.shields.io/badge/NGINX-009639?style=flat-square&logo=NGINX&logoColor=ffffff"/>
 
+### 서비스 아키텍쳐
+
+![image (12)](https://user-images.githubusercontent.com/75843118/193716645-745baa08-997b-4e7a-9ee2-344c3f2dbeda.png)
 
 ### 주요기능
 
