@@ -42,6 +42,7 @@ function KakaoLogin() {
         sessionStorage?.setItem("userLevel", data.data.level);
         sessionStorage?.setItem("userProfile", data.data.profileImg);
         sessionStorage.setItem("userTime", data.data.totalTime);
+        sessionStorage.setItem("remainTime", data.data.remainingTime);
         navigate("/");
       }
       if (aar === false) {
@@ -59,7 +60,7 @@ function KakaoLogin() {
   return (
     <div>
       {islogin ? (
-        <div>loading..</div>
+        <div></div>
       ) : (
         <KakaoForm kakaoId={kakaoId} profileImg={profileImg} />
       )}

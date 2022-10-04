@@ -15,6 +15,7 @@ function UserInfoCard() {
     navigate("/");
     window.location.reload();
   };
+  const remainTime = sessionStorage.getItem("remainTime");
   return (
     <StCardContainer onClick={handleNaveModalShow}>
       <UserIcon size="medium" imgUrl={sessionStorage.getItem("userProfile")} />
@@ -37,7 +38,7 @@ function UserInfoCard() {
         <div className="challenge_time_container">
           <div className="level_text_container">
             <span>{sessionStorage.getItem("userLevel")}</span>
-            <span>{sessionStorage.getItem("remainTime")}/70</span>
+            {remainTime !== null && <span>{Number(remainTime[0])}/70</span>}
           </div>
 
           <progress value={30} max={70}></progress>
@@ -135,17 +136,27 @@ const StNavModalBody = styled.div`
       padding-bottom: 0.5rem;
     }
     progress[value] {
-      font-size: 2rem;
-      width: 100%;
-      -webkit-appearance: none;
-      -moz-appearance: none;
+      width: 28rem;
       appearance: none;
       height: 1rem;
+      -webkit-appearance: none;
+      -moz-appearance: none;
       ::-webkit-progress-value {
-        background-color: var(--purple-color);
+        border-radius: 1rem;
+        background: -webkit-linear-gradient(to right, #dda0dd, #6627f5);
+        background: linear-gradient(to right, #dda0dd, #6627f5);
       }
+      ::-webkit-progress-bar {
+        background-color: #d9d9d9;
+        border-radius: 1rem;
+        box-shadow: inset 3px 3px 10px #ccc;
+      }
+      border-radius: 1rem;
+      background-color: #d9d9d9;
       ::-moz-progress-bar {
-        background-color: var(--purple-color);
+        background: -webkit-linear-gradient(to right, #dda0dd, #6627f5);
+        background: linear-gradient(to right, #dda0dd, #6627f5);
+        border-radius: 1rem;
       }
     }
     /* ::-webkit-progress-bar {

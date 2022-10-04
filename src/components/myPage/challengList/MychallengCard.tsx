@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   title: string;
@@ -23,14 +22,9 @@ function MychallengCard({
   challeng: Array<CardProps>;
   loading: boolean;
 }) {
-  const navigate = useNavigate();
   if (loading) {
     return <h2>Loading</h2>;
   }
-
-  const InitChall = () => {
-    // navigate("/challenging/:challengeId")
-  };
 
   return (
     <>
@@ -61,9 +55,6 @@ function MychallengCard({
                     </span>
                   </div>
                 </div>
-                <button className="modal_open_btn" onClick={InitChall}>
-                  입장하기
-                </button>
               </CardContents>
             </CardContianer>
           );
@@ -100,6 +91,7 @@ const CardContents = styled.div`
     width: 40rem;
     height: 16.1rem;
     padding: 0 1rem;
+    word-break: break-all;
     .header_info {
       display: flex;
       align-items: center;
@@ -119,7 +111,8 @@ const CardContents = styled.div`
     .footer_info {
       display: flex;
       font-size: 1.6rem;
-      height: 3rem;
+      position: relative;
+      top: 3rem;
       color: #323232;
       span {
         display: flex;

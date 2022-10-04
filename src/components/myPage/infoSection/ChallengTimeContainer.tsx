@@ -17,10 +17,10 @@ function ChallengTimeContainer(totalTime:any) {
 export default ChallengTimeContainer
 
 const TimeContainer = styled.div`
-  width: 35rem;
+  width: 43rem;
   height: 15rem;
   border: 2px solid whitesmoke;
-  box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+  background-color: white;
 `
 
 const TitleBox = styled.div`
@@ -31,7 +31,7 @@ const TitleBox = styled.div`
   font-weight: bold;
   position: relative;
   top: 2rem;
-  left: 10.5rem;
+  left: 14rem;
 `
 const TimeBox = styled.div`
   width: 41rem;

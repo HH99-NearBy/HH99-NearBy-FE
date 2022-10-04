@@ -12,12 +12,12 @@ function CardPagination({totalCard,paginate,page}:{totalCard:any;paginate:any;pa
 
   return (
     <div>
-      <StUl>
+      <StUl >
         {pageNumbers.map(number => (
           <StLi key = {number} onClick = {() => paginate(number)}>
-            <span>
+            <StSpan >
               {number}
-            </span>
+            </StSpan>
           </StLi>
         ))}
       </StUl>
@@ -32,6 +32,7 @@ const StUl = styled.ul`
     margin-top: 50px;
     margin-bottom: 50px;
     justify-content: center;
+  
 `
 
 const StLi = styled.li`
@@ -43,6 +44,16 @@ const StLi = styled.li`
     height: 20px;
     text-align: center;
     line-height: 20px;
-    border: 1px solid #cdcdcd;
-    border-radius: 5px;
+    font-size: medium;
+   
+ 
+`
+const StSpan =styled.a`
+  color: black;
+  &:active{
+    color: black;
+  }
+  &:hover{
+      color: #6627F5;
+  }
 `

@@ -48,17 +48,17 @@ function DoneListContainer() {
 export default DoneListContainer;
 
 const DoneContainer = styled.div`
-  width: 100rem;
   display: flex;
-  margin: 10rem auto;
+  margin: 0 auto;
   justify-content: center;
   flex-direction: column;
-  box-shadow: grey 1px 1px 10px;
+  width: 128rem;
 `;
 const TitleBox1 = styled.div`
-  width: 12rem;
+  width: 128rem;
   display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-  font-size: large;
+  justify-content: flex-start;
+  font-size: x-large;
+  padding: 5rem 0;
+  font-weight: bold;
 `;
