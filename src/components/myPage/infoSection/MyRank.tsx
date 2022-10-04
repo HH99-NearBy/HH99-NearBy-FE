@@ -17,13 +17,14 @@ function MyRank(rank:any) {
 export default MyRank
 
 const RankContainer = styled.div`
-  width: 35rem;
+  width: 45rem;
   height: 15rem;
   position: relative;
-  left: 35rem;
+  left: 43rem;
   top: 15rem;
+  background-color: white;
   border: 2px solid whitesmoke;
-    box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+    
 `
 
 const TitleBox = styled.div`
@@ -34,7 +35,7 @@ const TitleBox = styled.div`
   font-weight: bold;
   position: relative;
   top: 2rem;
-  left: 10.5rem;
+  left: 13rem;
   padding-top: 0.5rem;
 `
 const RankBox = styled.div`
@@ -43,7 +44,7 @@ const RankBox = styled.div`
   justify-content: center;
     position: relative;
     top: 6rem;
-    right: 7rem;
+    right: 9rem;
     font-size: xx-large;
     color: #6627F5;
     padding-top: 0.5rem;

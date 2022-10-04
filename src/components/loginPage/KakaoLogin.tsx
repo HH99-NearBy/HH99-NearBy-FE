@@ -62,7 +62,7 @@ function KakaoLogin () {
 
     return (
         <div>
-            {islogin ? <div>loading..</div> : <KakaoForm kakaoId={kakaoId} profileImg={profileImg} />}
+            {islogin ? <div></div> : <KakaoForm kakaoId={kakaoId} profileImg={profileImg} />}
         </div>
     )
 }

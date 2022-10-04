@@ -35,9 +35,10 @@ export default Pagination
 
 const StUl = styled.ul`
     display: flex;
-    margin-top: 50px;
-    margin-bottom: 50px;
     justify-content: center;
+    padding: 5rem 0;
+    background-color:  rgb(245, 245, 245);;
+  
 `
 
 const StLi = styled.li`
@@ -49,6 +50,14 @@ const StLi = styled.li`
     height: 20px;
     text-align: center;
     line-height: 20px;
-    border: 1px solid #cdcdcd;
-    border-radius: 5px;
+    font-size: medium;
+    &:hover{
+      color: #6627F5;
+    }
+   .span{
+    color: gray;
+   }
+   .span:focus{
+    color: black;
+   }
 `

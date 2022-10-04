@@ -62,13 +62,14 @@ function MychallengContainer() {
 
 export default MychallengContainer
 
+
+
 const CardContainer = styled.div`
   margin: 5rem auto;
   width: 130rem;
   justify-content: center;
   margin: 3rem auto;
   border: 2px solid whitesmoke;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 `
 const CardContents = styled.div`
   margin: 5rem auto;
@@ -83,4 +84,5 @@ const TitleBox = styled.div`
   width: 25rem;
   font-size: x-large;
   margin: 2rem 0;
+  font-weight: bold;
 `

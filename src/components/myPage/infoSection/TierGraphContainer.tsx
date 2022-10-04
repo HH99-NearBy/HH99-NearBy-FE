@@ -16,10 +16,10 @@ function TierGraphContainer(graph:any) {
 export default TierGraphContainer;
 
 const TierContainer = styled.div`
-  width: 70rem;
+      width: 88rem;
   height: 15rem;
   border: 2px solid whitesmoke;
-  box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+  background-color: white;
 `;
 const TitleBox = styled.div`
   width: 16rem;
