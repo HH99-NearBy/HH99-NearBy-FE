@@ -15,7 +15,7 @@
 Web Service '쓱관
 :::좋은습관 개발을 위한 챌린지를 수행할 수 있는 공간을 제공하는 플랫폼 서비스
 
-##주요기능
+###주요기능
 
 💻 Infinite Scroll
 💻 CreatePotal
@@ -26,7 +26,7 @@ Web Service '쓱관
 💻 WebSocket Live Chatting
 💻 WebRTC Live Camera Share
 
-####Trouble Shooting
+###Trouble Shooting
 
 이미지 프리뷰 업로드 및 리사이징, 서버 전송
 
@@ -40,7 +40,7 @@ Web Service '쓱관
 
 자동 스크롤이 브라우저마다 동작이 다르거나 아예 동작하지 않는 현상
 
-#####패키지
+###패키지
 
 스타일 적용 : styled-components
 s3 연결 : aws-sdk
@@ -53,7 +53,7 @@ react 상의 페이징 처리 : react-router-dom
 챌린지 페이지에서 전체화면 제어 : react-full-screenf
 
 
-######git commit rules
+###git commit rules
 
 파일 생성 ✨add : ~~~ 생성에 대한 커밋
 파일 수정 ✂modify : ~~~ 수정에 대한 커밋
