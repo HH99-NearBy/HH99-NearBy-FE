@@ -59,9 +59,10 @@ export default InfoWrapper
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100rem;
   margin: 0 auto;
   justify-content: center;
+  width: 128rem;
+
   div {
     display: flex;
   }
@@ -77,6 +78,7 @@ const MyTitle = styled.div`
   position: relative;
   top: 10rem;
   font-size: x-large;
+  font-weight: bold;
 
 `
 

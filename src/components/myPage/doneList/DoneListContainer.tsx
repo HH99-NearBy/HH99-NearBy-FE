@@ -55,9 +55,10 @@ function DoneListContainer() {
   return (
     <>
     <DoneContainer>
-      <TitleBox1>
+    
+    <TitleBox1>
       완료한 챌린지
-      </TitleBox1>
+    </TitleBox1>
       <DoneCard done={currentDone} loading={loading}/>
       <Pagination  done={currentDone} paginate={paginate} page={page}/>
     </DoneContainer>
@@ -69,17 +70,19 @@ function DoneListContainer() {
 export default DoneListContainer;
 
 const DoneContainer = styled.div`
-  width: 100rem;
   display: flex;
-  margin: 10rem auto;
+  margin: 0 auto;
   justify-content: center;
   flex-direction: column;
-  box-shadow: grey 1px 1px 10px;
+  background-color: white;
+  width: 128rem;
 `
 const TitleBox1 = styled.div`
-  width: 12rem;
+  width: 128rem;
   display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-  font-size: large;
+  justify-content: flex-start;
+  font-size: x-large;
+  padding: 5rem 0;
+  font-weight: bold;
+  background-color: rgb(245, 245, 245);
 `

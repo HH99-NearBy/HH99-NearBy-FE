@@ -54,13 +54,13 @@ function UserInfoContainer({nickname,email,profileImg,level,remainingTime}:{nick
 export default UserInfoContainer;
 
 const UserContainer = styled.div`
-  width: 30rem;
+  width: 40rem;
   height: 30rem;
   position: relative;
   top: 15rem;
   justify-content: center;
   border: 2px solid whitesmoke;
-  box-shadow: rgb(0 0 0 / 10%) 0px 4px 12px;
+  background-color: white;
 `
 const UserBox = styled.div`
   width: 28rem;
@@ -72,7 +72,7 @@ const Nickname = styled.div`
   width: 20rem;
   height: 3rem;
   position: relative;
-  left: 5rem;
+  left: 7rem;
   justify-content: center;
   font-size: large;
   font-weight: bold;
@@ -83,7 +83,7 @@ const Email =styled.div`
   height: 2rem;
   font-size: larger;
     position: relative;
-    right: -5rem;
+    right: -7rem;
   justify-content: center;
   
 `
@@ -92,7 +92,7 @@ const UserImage = styled.div`
   height: 17rem;
   position: relative;
     top: 1rem;
-    left: 4rem;
+    left: 7rem;
     justify-content: center;
   img {
     width: 19rem;
@@ -106,18 +106,18 @@ const LevelBox = styled.div`
   .level{
     padding-top: 2px;
     position: relative;
-    left: 1rem;
+    left: 3rem;
   }
   .minute{
     position: relative;
-    left: 21rem;
+    left: 25rem;
   }
 `
 
 const ProgressBox = styled.div`
   position: relative;
   top: 3rem;
-  left: 1rem;
+  left: 3rem;
   progress {
     appearance: none;
     ::-webkit-progress-value{
