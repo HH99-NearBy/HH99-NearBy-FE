@@ -39,58 +39,11 @@ function MyChallengeContainer({
   const handleScrolling = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
       const target = e.currentTarget;
-      // console.log(e.currentTarget.clientWidth);
-      // console.log(e.currentTarget.scrollWidth);
-      // console.log(Math.ceil(target.scrollLeft));
-
-      // document.body.classList.add("block_scroll");
-      // if (
-      //   (target.scrollLeft === 0 && e.deltaY < 0) ||
-      //   (target.clientWidth + Math.ceil(target.scrollLeft) ===
-      //     target.scrollWidth &&
-      //     e.deltaY > 0)
-      // ) {
-      //   document.body.classList.remove("block_scroll");
-      // }
       target.scrollLeft += e.deltaY * 1.2;
-      // if (listRef.current !== null && listRef.current.scrollLeft > 618) {
-      //   if (!flag.current) {
-      //     flag.current = true;
-      //     setChallengeList([
-      //       ...challengeList.filter((el, idx) => idx !== 0),
-      //       challengeList[0],
-      //     ]);
-      //     if (listRef.current !== null) {
-      //       listRef.current.classList.add("static_scroll");
-      //       listRef.current.scrollLeft = 0;
-      //       listRef.current.classList.remove("static_scroll");
-      //     }
-      //     setTimeout(function () {
-      //       flag.current = false;
-      //     }, 300);
-      //   }
-      // }
     },
     [challengeList]
   );
-  // const handleScrolling = (e: React.WheelEvent<HTMLDivElement>) => {
-  //   const target = e.currentTarget;
-  //   // console.log(e.currentTarget.clientWidth);
-  //   // console.log(e.currentTarget.scrollWidth);
-  //   // console.log(Math.ceil(target.scrollLeft));
 
-  //   document.body.classList.add("block_scroll");
-  //   // if (
-  //   //   (target.scrollLeft === 0 && e.deltaY < 0) ||
-  //   //   (target.clientWidth + Math.ceil(target.scrollLeft) ===
-  //   //     target.scrollWidth &&
-  //   //     e.deltaY > 0)
-  //   // ) {
-  //   //   document.body.classList.remove("block_scroll");
-  //   // }
-
-  //   target.scrollLeft += e.deltaY * 2;
-  // };
   const handleMouseEntering = () => {
     setIsMouseEnter(true);
     Ref?.classList.add("block_scroll");

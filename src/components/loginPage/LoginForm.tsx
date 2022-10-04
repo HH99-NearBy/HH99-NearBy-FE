@@ -24,10 +24,10 @@ function LoginForm() {
     setPassword(e.target.value);
   };
   const loginMutation = useMutation(apis.userLogin, {
-    onMutate: (payload) => {
-    },
+    onMutate: (payload) => {},
     onError(error: any, variables, context) {
-      toast.error(error.response.data.msg, {
+      console.log(error);
+      toast.error(error.response.data.errorMsg, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
         hideProgressBar: false,
@@ -40,18 +40,19 @@ function LoginForm() {
       throw error;
     },
     onSuccess: (res, variables, context) => {
-      console.log("success", res, variables, context);
       const { data, headers } = res;
+      console.log(data);
+      console.log(headers);
       sessionStorage.setItem("accessToken", headers.authorization);
       sessionStorage.setItem("userName", data.data.nickname);
       sessionStorage.setItem("userLevel", data.data.level);
       sessionStorage.setItem("userProfile", data.data.profileImg);
       sessionStorage.setItem("userTime", data.data.totalTime);
+      sessionStorage.setItem("remainTime", data.data.remainingTime);
 
       navigate("/");
     },
-    onSettled: () => {
-    },
+    onSettled: () => {},
   });
 
   const onSubmit = useCallback(
@@ -64,30 +65,6 @@ function LoginForm() {
   const handleToRegister = () => {
     navigate("/register");
   };
-
-  // const onSubmit = useCallback(
-  //   async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     try {
-  //       const response = await axios.post("http://ssggwan.site/api/login", {
-  //         email: email,
-  //         password: password,
-  //       });
-  //       alert("로그인 완료");
-  //       console.log(response);
-  //     } catch (err) {
-  //       alert("로그인 실패");
-  //       console.error(err);
-  //     }
-  //   },
-  //   [email, password]
-  // );
-  // const handleToRegister = () => {
-  //   navigate("/register");
-  // };
-  // const KakaoLogin = useCallback(e: React.MouseEvent<HTMLButtonElement>) => {
-  //   location:Location.href = KAKAO_AUTH_URL
-  // }
 
   return (
     <>
@@ -126,7 +103,7 @@ function LoginForm() {
           <SocialBox>
             <a
               onClick={() => {
-                alert("아직 미구현 서비스입니다 ㅜㅜ");
+                alert("아직 구현중인 서비스입니다.");
               }}
             >
               <img src="https://ifh.cc/g/17Vbfz.png" />

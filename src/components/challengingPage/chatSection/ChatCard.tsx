@@ -38,6 +38,7 @@ const StChatContainer = styled.div`
   position: relative;
   display: flex;
   max-width: calc(100% - 80px);
+  min-width: 2rem;
   padding: 7px;
   margin-top: 7px;
   .create-time {

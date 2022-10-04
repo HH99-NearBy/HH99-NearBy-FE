@@ -31,15 +31,12 @@ function KakaoLogin() {
   useEffect(() => {
     const login = async () => {
       const res: any | undefined = await apis.kakaoLogin(code);
-      console.log(res);
+
       const aar: boolean | undefined = res.data?.logincheck;
-      console.log(res);
+
       if (aar === true) {
         setIsLogin(true);
         const { data, headers } = res;
-        console.log(res);
-        console.log(data);
-        console.log(data.data);
         sessionStorage.setItem("accessToken", headers.authorization);
         sessionStorage?.setItem("userName", data.data.nickname);
         sessionStorage?.setItem("userLevel", data.data.level);
@@ -49,7 +46,6 @@ function KakaoLogin() {
       }
       if (aar === false) {
         setIsLogin(false);
-        console.log(res);
         setChalleng(res);
 
         // navigate("/kakaoform")

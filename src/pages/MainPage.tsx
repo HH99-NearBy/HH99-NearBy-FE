@@ -15,7 +15,6 @@ function MainPage() {
     dispatch({ type: "TOGGLE_MODAL" });
   };
 
-
   const handleToScrollTop = () => {
     mainContainerRef.current?.scrollTo(0, 0);
   };
@@ -25,7 +24,6 @@ function MainPage() {
       dispatch({ type: "SYNC_USER_DATA", payload: -1, userName });
     }
   }, []);
-  console.log(mainContainerRef.current);
   return (
     <StMainContents ref={mainContainerRef}>
       <StContentsWrapper>

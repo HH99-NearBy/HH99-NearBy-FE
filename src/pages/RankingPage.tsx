@@ -21,12 +21,12 @@ function RankingPage() {
   const queryClient = useQueryClient();
   const [pageNum, setPageNum] = useState<number>(1);
   const [myRanking, setMyRanking] = useState<UserRaking>({
-    id: -1,
+    id: 0,
     profileImg: "",
     nickname: "",
     level: "",
     rank: "",
-    score: -1,
+    score: 0,
     graph: [],
   });
   const [isLastPage, setIsLastPage] = useState(false);

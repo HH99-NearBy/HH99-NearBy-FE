@@ -70,37 +70,21 @@ function RecruitContainer({
   const [pageNum, setPageNum] = useState<number>(0);
   const getChallengeList = useCallback(async () => {
     const reqRes = await apis.getFUllChallengeList(pageNum, 9);
-    console.log(reqRes);
     setChallengeList([...challengeList, ...reqRes.data]);
     setPageNum(reqRes.data.at(-1).id);
   }, [pageNum, challengeList]);
-  // const { canFetchMore, isLoading, error, data, fetchMore } = useInfiniteQuery<
-  //   { items: any; page: number },
-  //   [string, { page: number }],
-  //   number | boolean,
-  //   Error
-  // >(
-  //   ["ALL_CHALLENGE", { pageNum: 1 }],
-  //   async () => {
-  //     return await apis.getFUllChallengeList(pageNum, pageNum === 1 ? 11 : 10);
-  //   },
-  //   {
-  //     getFetchMore: (lastPage, allPages) => {
-  //       let morePagesExist = true;
-  //       if (lastPage && lastPage.items.result) {
-  //         morePagesExist = lastPage.items.result !== null;
-  //       }
-  //     },
-  //   }
-  // );
-  // const [challengeList, setChallengeList] = useState<ChallengeInfo[]>([]);
   const observeTarget = useRef<HTMLDivElement | null>(null);
-  const req = useQuery(["ALL_CHALLENGE"], async () => {
-    const res = await apis.getFUllChallengeList(0, 11);
-    console.log(res);
-    setChallengeList(res.data);
-    setPageNum(res.data.at(-1).id);
-  });
+  const req = useQuery(
+    ["ALL_CHALLENGE"],
+    async () => {
+      const res = await apis.getFUllChallengeList(0, 11);
+      setChallengeList(res.data);
+      setPageNum(res.data.at(-1).id);
+    },
+    {
+      refetchOnWindowFocus: false,
+    }
+  );
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting && pageNum !== 0) {

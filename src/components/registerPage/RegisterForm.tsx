@@ -42,7 +42,6 @@ function RegisterForm() {
       };
       const reImg = await imageCompression(fileList[0], options);
       setProfileImg(reImg);
-      console.log(reImg);
 
       const upload = new AWS.S3.ManagedUpload({
         params: {
@@ -59,7 +58,6 @@ function RegisterForm() {
           alert("이미지 업로드에 성공했습니다.");
           setUpload(data.Location);
           setIsimg(true);
-          console.log(data.Location);
         },
         function (err) {
           return alert(err);
@@ -182,7 +180,6 @@ function RegisterForm() {
         );
         setEmailCheck(true);
         alert("가입 가능한 이메일입니다.");
-        console.log(response);
       } catch (err) {
         setEmailCheck(false);
         alert("중복된 이메일입니다.");
@@ -191,19 +188,6 @@ function RegisterForm() {
     },
     [email]
   );
-
-  // const EmailCheck =  (
-  //   async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     let result;
-  //     try {
-  //       result = await emailMutation();
-  //     } catch (error) {
-  //       console.log(error)
-  //       // error handler
-  //     }
-  //   });
-
   const NicknameCheck = useCallback(
     async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
@@ -225,14 +209,6 @@ function RegisterForm() {
     },
     [nickname]
   );
-
-  // const NicknameCheck = useCallback(
-  //   (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     nickNameMutation.mutate(nickname);
-  //   },
-  //   [nickname]
-  // );
 
   const registerMutation = useMutation(apis.userRegister, {
     onMutate: (payload) => {

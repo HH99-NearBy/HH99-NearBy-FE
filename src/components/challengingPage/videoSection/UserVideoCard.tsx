@@ -21,7 +21,6 @@ function UserVideoCard({
     video: true,
     audio: true,
   });
-  console.log(streamManager.stream.connection.data.split("%")[0] + '"');
   return (
     <StVideoCardContainer>
       <OvVideo streamManager={streamManager} />

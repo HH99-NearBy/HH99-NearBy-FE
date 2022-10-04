@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import apis from "../api/api";
@@ -8,16 +8,17 @@ import imageCompression from "browser-image-compression";
 import { getChallengeDetail } from "../api/challengeDetail/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/esm/locale";
 import thumbnail_info_img from "../static/thumbnail_info_img.svg";
-import Button from "../elements/Button";
-import AlertBody from "../components/alerts/NeedLoginAlert";
 
 function PostingPage() {
   const now = new Date();
   const { challengeId } = useParams();
   const [title, setTitle] = useState("");
-  const [month, setMonth] = useState("");
-  const [time, setTime] = useState("");
+  const [month, setMonth] = useState(`${new Date()}`);
+  const [time, setTime] = useState("00:00");
   const [targetTime, setTargetTime] = useState(30);
   const [desc, setDesc] = useState("");
   const [info, setInfo] = useState("");
@@ -32,7 +33,7 @@ function PostingPage() {
     sexual: "",
   });
   const titleRef = useRef<HTMLInputElement | null>(null);
-  const monthRef = useRef<HTMLInputElement | null>(null);
+  const monthRef = useRef<DatePicker | null>(null);
   const timeRef = useRef<HTMLInputElement | null>(null);
   const targetTimeRef = useRef<HTMLInputElement | null>(null);
   const descRef = useRef<HTMLTextAreaElement | null>(null);
@@ -95,8 +96,8 @@ function PostingPage() {
       switch (name) {
         case "title":
           return setTitle(value);
-        case "month":
-          return setMonth(value);
+        // case "month":
+        //   return setMonth(value);
         case "time":
           return setTime(value);
         case "targetTime":
@@ -111,11 +112,10 @@ function PostingPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (challengeId) {
-      console.log("modify!");
       modifyingMutation.mutate({
         title,
         challengeImg: upload,
-        startDay: month,
+        startDay: `${month}`,
         startTime: time,
         targetTime: targetTime,
         content: desc,
@@ -130,7 +130,6 @@ function PostingPage() {
         challengeId: Number(challengeId),
       });
     } else {
-      console.log("post!");
       if (title.length === 0) {
         titleRef.current?.classList.add("error_focus");
         setTimeout(() => {
@@ -149,12 +148,11 @@ function PostingPage() {
 
         return;
       }
-
-      if (month.length === 0) {
-        monthRef.current?.classList.add("error_focus");
-        setTimeout(() => {
-          monthRef.current?.classList.remove("error_focus");
-        }, 1200);
+      if (month !== null && `${month}`.length === 0) {
+        // monthRef.current?.classList.add("error_focus");
+        // setTimeout(() => {
+        //   monthRef.current?.classList.remove("error_focus");
+        // }, 1200);
         return toast.error("챌린지 시작일을 입력해주세요.", {
           autoClose: 2000,
           position: toast.POSITION.TOP_RIGHT,
@@ -170,10 +168,10 @@ function PostingPage() {
           }-${now.getDate()}T00:00`
         ) > Date.parse(`${month}T00:00`)
       ) {
-        monthRef.current?.classList.add("error_focus");
-        setTimeout(() => {
-          monthRef.current?.classList.remove("error_focus");
-        }, 1200);
+        // monthRef.current?.classList.add("error_focus");
+        // setTimeout(() => {
+        //   monthRef.current?.classList.remove("error_focus");
+        // }, 1200);
         return toast.error("과거날짜는 선택하실 수 없어요.", {
           autoClose: 2000,
           position: toast.POSITION.TOP_RIGHT,
@@ -186,7 +184,6 @@ function PostingPage() {
         setTimeout(() => {
           timeRef.current?.classList.remove("error_focus");
         }, 1200);
-        console.log(Date.parse(`${month}T00:00`));
         return toast.error("챌린지 시작시간을 입력해주세요.", {
           autoClose: 2000,
           position: toast.POSITION.TOP_RIGHT,
@@ -266,10 +263,21 @@ function PostingPage() {
           className: "toast_alert",
         });
       }
+      console.log(
+        `${new Date(month).getFullYear()}.${
+          new Date(month).getMonth() + 1
+        }.${new Date(month).getDate()}`
+      );
       postingMutation.mutate({
         title,
         challengeImg: upload,
-        startDay: month,
+        startDay: `${new Date(month).getFullYear()}-${
+          new Date(month).getMonth() + 1
+        }-${
+          new Date(month).getDate() < 10
+            ? `0${new Date(month).getDate()}`
+            : `${new Date(month).getDate()}`
+        }`,
         startTime: time,
         targetTime: targetTime,
         content: desc,
@@ -345,12 +353,6 @@ function PostingPage() {
       );
     }
   };
-  console.log(month);
-  console.log(now.getFullYear());
-  console.log(now.getMonth() + 1);
-  console.log(now.getDate());
-  console.log(time);
-  console.log(Date.parse(`${month}T${time}`));
   useQuery(
     "MP_DETAIL",
     async () => {
@@ -416,6 +418,10 @@ function PostingPage() {
       }
     }
   }, [optionsRef.current]);
+  console.log(month);
+  console.log(new Date(month).getFullYear());
+  console.log(new Date(month).getDate());
+  console.log(new Date(month).getMonth());
   return (
     <>
       <StContentsWrapper onSubmit={handleSubmit}>
@@ -434,18 +440,27 @@ function PostingPage() {
           </div>
           <div className="day_input">
             <label htmlFor="startDate">시작일</label>
-            <input
+            <StDatePicker
+              selected={new Date(month)}
+              onChange={(date) => setMonth(`${date}`)}
+              locale={ko}
+              minDate={new Date()}
+              ref={monthRef}
+              dateFormat="yyyy년 MM월 dd일"
+            />
+            {/* <input
               type="date"
               name="month"
               onChange={handleOnChange}
               value={month}
               ref={monthRef}
-            />
+            /> */}
             <input
               type="time"
               name="time"
               onChange={handleOnChange}
               value={time}
+              step={600}
               ref={timeRef}
             />
           </div>
@@ -671,17 +686,6 @@ const StTopContentsWrapper = styled.div`
   label {
     padding-right: 3rem;
   }
-  input {
-    font-size: 2rem;
-    background-color: #f5f5f5;
-    border: 0.2rem solid transparent;
-    height: 3.8rem;
-    padding: 0.2rem;
-    ::placeholder {
-      font-size: 1.5rem;
-      font-weight: 300;
-    }
-  }
   div {
     display: flex;
     align-items: center;
@@ -689,15 +693,79 @@ const StTopContentsWrapper = styled.div`
   .title_input {
     input {
       width: 32rem;
+      font-size: 2rem;
+      background-color: #f5f5f5;
+      border: 0.2rem solid transparent;
+      height: 3.8rem;
+      padding: 0.2rem;
+      ::placeholder {
+        font-size: 1.5rem;
+        font-weight: 300;
+      }
     }
   }
   .day_input {
     padding-left: 8rem;
-    input {
+    /* input {
       font-size: 1.5rem;
       width: 13.5rem;
-      :nth-of-type(1) {
-        margin-right: 2rem;
+    } */
+    .react-datepicker-wrapper {
+      width: 13.5rem;
+      margin-right: 2rem;
+    }
+    .react-datepicker {
+      font-size: 2rem;
+    }
+    .react-datepicker__day--selected {
+      background-color: var(--purple-color);
+      border-radius: 50%;
+    }
+    .react-datepicker__header {
+      flex-direction: column;
+      padding-top: 0.8rem;
+      margin: 0.4rem 1rem;
+    }
+    .react-datepicker__month {
+      flex-direction: column;
+    }
+    .react-datepicker__month-container {
+      flex-direction: column;
+    }
+    .react-datepicker__day-name,
+    .react-datepicker__day {
+      width: 4.4rem;
+      line-height: 4.4rem;
+      margin: 0.166rem;
+      justify-content: center;
+    }
+    .react-datepicker__current-month {
+      font-size: 3rem;
+    }
+    .react-datepicker__navigation {
+      top: 1rem;
+      line-height: 1.7rem;
+      border: 0.45rem solid transparent;
+    }
+    .react-datepicker__navigation--previous {
+      border-right-color: #ccc;
+      left: 1rem;
+    }
+    .react-datepicker__navigation--next {
+      border-left-color: #ccc;
+      right: 1rem;
+    }
+    input[type="time"] {
+      font-size: 1.5rem;
+      width: 13.5rem;
+      font-size: 2rem;
+      background-color: #f5f5f5;
+      border: 0.2rem solid transparent;
+      height: 3.8rem;
+      padding: 0.2rem;
+      ::placeholder {
+        font-size: 1.5rem;
+        font-weight: 300;
       }
     }
   }
@@ -705,6 +773,15 @@ const StTopContentsWrapper = styled.div`
     padding-left: 12rem;
     input {
       width: 12.5rem;
+      font-size: 2rem;
+      background-color: #f5f5f5;
+      border: 0.2rem solid transparent;
+      height: 3.8rem;
+      padding: 0.2rem;
+      ::placeholder {
+        font-size: 1.5rem;
+        font-weight: 300;
+      }
     }
     span {
       padding-left: 1rem;
@@ -738,6 +815,15 @@ const StMainContentsWrapper = styled.div`
   .info_section {
     display: flex;
   }
+`;
+
+const StDatePicker = styled(DatePicker)`
+  width: 13.5rem;
+  font-size: 1.5rem;
+  background-color: #f5f5f5;
+  border: 0.2rem solid transparent;
+  height: 3.8rem;
+  padding: 0.2rem;
 `;
 
 const StOptionSelectContainer = styled.div`

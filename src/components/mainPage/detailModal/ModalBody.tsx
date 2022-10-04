@@ -37,16 +37,13 @@ function ModalBody({
         `${res.detailModal.startDay}T${res.detailModal.startTime}`
       );
       const writer = res.detailModal.writer;
-      console.log(now);
-      console.log(start);
       if (now < start) {
         //시작 전 챌린지 상태
         if (res.detailModal.isJoin) {
           //내가 참여한 챌린지 일때 => recruit
-          console.log("리크루시");
+
           setStatus("recruit");
         } else {
-          console.log("두잉1");
           setStatus("doing");
         }
         // if (writer === sessionStorage.getItem("userName")) {
@@ -58,12 +55,10 @@ function ModalBody({
           //내가 참여한 챌린지 일때 => running
           setStatus("running");
         } else {
-          console.log("두잉2");
           setStatus("done");
         }
       }
-      console.log(now);
-      console.log(res);
+
       setBody(res);
     },
     {
@@ -86,7 +81,6 @@ function ModalBody({
   });
   const recruitChallengeMutation = useMutation(apis.recruitChallenge, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
     onError(error, variables, context) {
@@ -100,7 +94,6 @@ function ModalBody({
 
   const cancelRecruitMutation = useMutation(apis.cancelRecruit, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
       await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
@@ -114,8 +107,6 @@ function ModalBody({
     },
   });
 
-  console.log(body);
-  console.log(status);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
   const handleEnterRoom = () => {
@@ -150,15 +141,13 @@ function ModalBody({
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
   const endTime = Date.parse(`${body?.detailModal.endTime}`);
-  // console.log(startTime);
-  // console.log(body?.detailModal.endTime);
-  console.log(endTime);
-  console.log(Date.now());
+
   useState(() => {
     return () => {
       setStatus("");
     };
   });
+  console.log(body);
   return (
     <StModalContainer>
       <StModalBody>
@@ -235,9 +224,9 @@ function ModalBody({
               {status === "doing" ? null : body?.detailModal.writer ===
                 sessionStorage.getItem("userName") ? (
                 <button onClick={handleDeleteChallenge}>챌린지 삭제</button>
-              ) : (
+              ) : body?.detailModal.isJoin ? (
                 <button onClick={handleCancleChallenge}>취소하기</button>
-              )}
+              ) : null}
             </StButtonGroup>
           </StSummeryContainer>
           <StChallengeInfoContainer>
