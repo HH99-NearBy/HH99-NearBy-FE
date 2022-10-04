@@ -1,46 +1,52 @@
-# Getting Started with Create React App
+#WHO
+💻 Front-end developer :::
+🏆 강태훈 [FE리더]
+메인페이지 네비게이션, 메인 이미지 기능 구현, 상세페이지 게시글 Read, 댓글 CRUD, 무한스크롤
+🏆 나유진
+게시글 Add, 이미지 미리보기, 이미지 리사이징, 메소리니 레이아웃, createPotal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##WHEN
+2022.08.12 ~ 2022.08.18
 
-## Available Scripts
+###WHAT
+Web Service '쓱관
+:::좋은습관 개발을 위한 챌린지를 수행할 수 있는 공간을 제공하는 플랫폼 서비스
+##주요기능
+💻 Infinite Scroll
+💻 CreatePotal
+💻 Image Upload
+💻 Image Resizing(Compression)
+💻 LogIn & SignIn
+💻 Post CRUD
+💻 WebSocket Live Chatting
+💻 WebRTC Live Camera Share
 
-In the project directory, you can run:
+####Trouble Shooting
+이미지 프리뷰 업로드 및 리사이징, 서버 전송
 
-### `yarn start`
+게시글 이미지(AWS S3) 전송 후 게시글 컨텐츠 전송
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+모달창 구현으로 상세 게시글 불러올 때 랜더링 안되는 현상
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+무한 스크롤 게시글 중복 현상
 
-### `yarn test`
+자동 스크롤 시 내역이 중복되어 렌더링 되는 현상/ 레이아웃이 깨지면서 스크롤 자체가 동작하지 않는 현상
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+자동 스크롤이 브라우저마다 동작이 다르거나 아예 동작하지 않는 현상
 
-### `yarn build`
+#####패키지
+스타일 적용 : styled-components
+s3 연결 : aws-sdk
+axios(통신) 설치 : yarn add axios
+image resizing : yarn add browser-image-compression
+openvidu를 이용한 webRTC 제어 : openvidu-broswer
+websocket을 이용한 리얼타임 채팅 : webstomp-client
+websocket을 지원하지 않는 브라우저를 위한 크로스 브라우징 : sockJs
+react 상의 페이징 처리 : react-router-dom
+챌린지 페이지에서 전체화면 제어 : react-full-screenf
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+######git commit rules
+파일 생성 ✨add : ~~~ 생성에 대한 커밋
+파일 수정 ✂modify : ~~~ 수정에 대한 커밋
+파일 삭제 🗑delete : ~~~ 삭제에 대한 커밋
