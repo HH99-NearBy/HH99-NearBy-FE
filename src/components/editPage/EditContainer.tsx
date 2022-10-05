@@ -124,6 +124,7 @@ function EditContainer() {
         const response = await apis.modifyMyInfo({ nickname, profileImg });
         const { data, headers } = response;
         sessionStorage.setItem("accessToken", headers.authorization);
+        sessionStorage.setItem("userProfile", profileImg);
         alert("프로필 수정 완료");
         navigate("/mypage");
       } catch (err) {
@@ -150,15 +151,17 @@ function EditContainer() {
           <ImgBox>
             <TitleBox>프로필 수정</TitleBox>
             <FileBox>
-              <img src={profileImg} />
-              <label htmlFor="input-file">사진 등록하기</label>
-              <input
-                type="file"
-                id="input-file"
-                placeholder="사진추가"
-                accept="image/*"
-                onChange={handleImageChange}
-              />
+              <div className="file_container">
+                <img src={profileImg} />
+                <label htmlFor="input-file">사진 등록하기</label>
+                <input
+                  type="file"
+                  id="input-file"
+                  placeholder="사진추가"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </div>
             </FileBox>
           </ImgBox>
           <TetxBox>
@@ -226,13 +229,43 @@ const FileBox = styled.div`
   width: 45rem;
   vertical-align: middle;
   border: 1px solid white;
-  img {
+  .file_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 36rem;
+    img {
+      width: 100%;
+    }
+    label {
+      background-color: #6627f5;
+      text-align: center;
+      color: white;
+      width: 100%;
+      padding: 1rem 0;
+      position: relative;
+      font-size: large;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    input[type="file"] {
+      position: absolute;
+      width: 0;
+      height: 0;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+  }
+  /* img {
     width: 36rem;
   }
   label {
     background-color: #6627f5;
     color: white;
-    padding: 1rem 12.5rem;
+    padding: 1rem 12.8rem;
     position: relative;
     font-size: large;
     font-weight: bold;
@@ -247,7 +280,7 @@ const FileBox = styled.div`
     overflow: hidden;
     clip: rect(0, 0, 0, 0);
     border: 0;
-  }
+  } */
 `;
 
 const CheckBox = styled.div`
@@ -327,7 +360,7 @@ const SubmitBtn = styled.div`
   left: 4rem;
   input[type="submit"] {
     width: 45rem;
-    height: 4rem;
+    height: 5rem;
     background-color: #6627f5;
     border: 1px solid white;
     color: white;

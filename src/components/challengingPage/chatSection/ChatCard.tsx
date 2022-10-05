@@ -38,9 +38,9 @@ const StChatContainer = styled.div`
   position: relative;
   display: flex;
   max-width: calc(100% - 80px);
-  min-width: 2rem;
-  padding: 7px;
-  margin-top: 7px;
+  word-break: break-all;
+  padding: 0.7rem;
+  margin-top: 0.7rem;
   .create-time {
     align-self: flex-end;
     padding-left: 8px;
@@ -83,8 +83,8 @@ const StChatCard = styled.div`
   display: inline-block;
   font-size: 1.5rem;
   letter-spacing: 0.1rem;
-  border-radius: 4px;
-  padding: 5px;
+  border-radius: 0.4rem;
+  padding: 0.5rem 1rem;
   ${({ author }: { author: string }) => {
     switch (author === "me") {
       case true:

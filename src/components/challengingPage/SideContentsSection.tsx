@@ -20,6 +20,7 @@ function SideContentsSection() {
   const WSURI = process.env.REACT_APP_BASE_URI + "/ws";
   const { challengeId } = useParams();
   const { state, dispatch } = useContext(RoomContext);
+  const chatListRef = useRef<HTMLDivElement | null>(null);
   const [body, setBody] = useState<GetModalDetail>({
     detailModal: {
       title: "",
@@ -156,6 +157,7 @@ function SideContentsSection() {
         chats={state.chat}
         stompClient={stompClient}
         challengeId={Number(challengeId)}
+        Ref={chatListRef}
       />
     </StContentsWrapper>
   );

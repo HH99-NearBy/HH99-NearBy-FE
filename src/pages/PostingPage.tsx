@@ -115,7 +115,13 @@ function PostingPage() {
       modifyingMutation.mutate({
         title,
         challengeImg: upload,
-        startDay: `${month}`,
+        startDay: `${new Date(month).getFullYear()}-${
+          new Date(month).getMonth() + 1
+        }-${
+          new Date(month).getDate() < 10
+            ? `0${new Date(month).getDate()}`
+            : `${new Date(month).getDate()}`
+        }`,
         startTime: time,
         targetTime: targetTime,
         content: desc,
@@ -353,34 +359,61 @@ function PostingPage() {
       );
     }
   };
-  useQuery(
-    "MP_DETAIL",
-    async () => {
-      if (challengeId) {
-        const res = await getChallengeDetail(Number(challengeId));
-        const target = res.detailModal;
-        const tags = target.challengeTag;
-        setTitle(target.title);
-        setDesc(target.content);
-        setMonth(target.startDay);
-        setTime(target.startTime);
-        setTargetTime(target.targetTime);
-        setInfo(target.notice);
-        setUpload(target.challengeImg);
-        setOptions({
-          ...options,
-          mic: tags[0],
-          cam: tags[1],
-          atmosphere: tags[2],
-          Character: tags[3],
-          sexual: tags[4],
-        });
-      }
-    },
-    {
-      retry: 2,
+  // useQuery(
+  //   ["MP_DETAIL"],
+  //   async () => {
+  //     if (challengeId) {
+  //       const res = await getChallengeDetail(Number(challengeId));
+  //       console.log(res);
+  //       const target = res.detailModal;
+  //       const tags = target.challengeTag;
+  //       setTitle(target.title);
+  //       setDesc(target.content);
+  //       setMonth(target.startDay);
+  //       setTime(target.startTime);
+  //       setTargetTime(target.targetTime);
+  //       setInfo(target.notice);
+  //       setUpload(target.challengeImg);
+  //       setOptions({
+  //         ...options,
+  //         mic: tags[0],
+  //         cam: tags[1],
+  //         atmosphere: tags[2],
+  //         Character: tags[3],
+  //         sexual: tags[4],
+  //       });
+  //     }
+  //   },
+  //   {
+  //     retry: 2,
+  //   }
+  // );
+  const getInitData = async () => {
+    const res = await getChallengeDetail(Number(challengeId));
+    console.log(res);
+    const target = res.detailModal;
+    const tags = target.challengeTag;
+    setTitle(target.title);
+    setDesc(target.content);
+    setMonth(target.startDay);
+    setTime(target.startTime);
+    setTargetTime(target.targetTime);
+    setInfo(target.notice);
+    setUpload(target.challengeImg);
+    setOptions({
+      ...options,
+      mic: tags[0],
+      cam: tags[1],
+      atmosphere: tags[2],
+      Character: tags[3],
+      sexual: tags[4],
+    });
+  };
+  useEffect(() => {
+    if (challengeId) {
+      getInitData();
     }
-  );
+  }, [challengeId]);
   useEffect(() => {
     if (optionsRef.current && challengeId) {
       for (let i = 0; i < 5; i++) {
@@ -418,10 +451,8 @@ function PostingPage() {
       }
     }
   }, [optionsRef.current]);
-  console.log(month);
-  console.log(new Date(month).getFullYear());
-  console.log(new Date(month).getDate());
-  console.log(new Date(month).getMonth());
+  console.log(upload);
+  console.log(challengeId);
   return (
     <>
       <StContentsWrapper onSubmit={handleSubmit}>
@@ -757,7 +788,7 @@ const StTopContentsWrapper = styled.div`
     }
     input[type="time"] {
       font-size: 1.5rem;
-      width: 13.5rem;
+      width: 15rem;
       font-size: 2rem;
       background-color: #f5f5f5;
       border: 0.2rem solid transparent;

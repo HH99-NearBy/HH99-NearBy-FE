@@ -17,7 +17,11 @@ function UserInfoCard() {
   };
   const remainTime = sessionStorage.getItem("remainTime");
   return (
-    <StCardContainer onClick={handleNaveModalShow}>
+    <StCardContainer
+      // onClick={handleNaveModalShow}
+      onMouseEnter={handleNaveModalShow}
+      onMouseLeave={handleNaveModalShow}
+    >
       <UserIcon size="medium" imgUrl={sessionStorage.getItem("userProfile")} />
       <div className="toggle_navigate">
         <IoCaretDownOutline className="selected_icon" />
@@ -33,15 +37,16 @@ function UserInfoCard() {
           {sessionStorage.getItem("userName")}
         </span>
       </StInfoSection> */}
-      <StNavModalBody ref={navModal}>
+      <StNavModalBody ref={navModal} className="hidden">
         <h2>{sessionStorage.getItem("userName")}</h2>
         <div className="challenge_time_container">
           <div className="level_text_container">
             <span>{sessionStorage.getItem("userLevel")}</span>
-            {remainTime !== null && <span>{Number(remainTime[0])}/70</span>}
+            {remainTime !== null && <span>{remainTime}/70</span>}
           </div>
-
-          <progress value={30} max={70}></progress>
+          {remainTime !== null && (
+            <progress value={Number(remainTime)} max={70}></progress>
+          )}
         </div>
         <button className="move_to_mypage" onClick={() => navigate("/mypage")}>
           마이페이지
@@ -57,7 +62,7 @@ function UserInfoCard() {
 const StCardContainer = styled.div`
   position: relative;
   width: 9rem;
-  height: 9rem;
+  height: 10rem;
   margin-left: 2.5rem;
   border-radius: 0.8rem;
   display: flex;
@@ -89,7 +94,7 @@ const StNavModalBody = styled.div`
   position: absolute;
   z-index: 100;
   right: 0;
-  top: 9.5rem;
+  top: 10rem;
   width: 30rem;
   height: 17rem;
   display: flex;

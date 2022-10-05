@@ -37,7 +37,7 @@ function MychallengCard({
                 <div className="card_body">
                   <div className="header_info">
                     <BsFillPersonFill />
-                    "모집중 {challeng.participatePeople}/{challeng.limitPeople}"
+                    모집중 {challeng.participatePeople}/{challeng.limitPeople}
                   </div>
                   <div className="body_info">{challeng.title}</div>
                   <div className="footer_info">
@@ -70,7 +70,6 @@ const CardContianer = styled.div`
   height: 21.1rem;
   flex-direction: row;
   display: flex;
-  margin: 2rem 1rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   img {
     width: 21.1rem;

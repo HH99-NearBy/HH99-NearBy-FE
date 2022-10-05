@@ -4,6 +4,7 @@ import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallenge
 import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
 import ModalPortal from "../components/mainPage/detailModal/ModalPortal";
 import { AppContext } from "../api/context";
+import { ToastContainer } from "react-toastify";
 import { useQuery } from "react-query";
 import apis from "../api/api";
 
@@ -41,6 +42,7 @@ function MainPage() {
       )}
 
       <StTopBtn onClick={handleToScrollTop}>↑</StTopBtn>
+      <ToastContainer />
     </StMainContents>
   );
 }

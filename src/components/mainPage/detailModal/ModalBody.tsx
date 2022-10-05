@@ -13,7 +13,6 @@ import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apis from "../../../api/api";
-import Button from "../../../elements/Button";
 
 function ModalBody({
   handleToggleModal,
@@ -73,7 +72,18 @@ function ModalBody({
     onError(error, variables, context) {
       throw error;
     },
-    onSuccess: (res, variables, context) => {},
+    onSuccess: (res, variables, context) => {
+      toast.success("챌린지 삭제 완료!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
+    },
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
       queryClient.invalidateQueries(["ALL_CHALLENGE"]);
@@ -83,10 +93,32 @@ function ModalBody({
     onMutate: async (payload) => {
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
-    onError(error, variables, context) {
+    onError: (error: any, variables, context) => {
+      console.log(error);
+      toast.error("로그인 후 서비스를 이용해주세요!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
       throw error;
     },
-    onSuccess: (res, variables, context) => {},
+    onSuccess: (res, variables, context) => {
+      toast.success("성공적으로 챌린지에 참가하였습니다!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
+    },
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
     },
@@ -100,7 +132,18 @@ function ModalBody({
     onError(error, variables, context) {
       throw error;
     },
-    onSuccess: (res, variables, context) => {},
+    onSuccess: (res, variables, context) => {
+      toast.success("챌린지 참가를 취소하였습니다.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
+    },
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
       queryClient.invalidateQueries(["ALL_CHALLENGE"]);
@@ -109,17 +152,21 @@ function ModalBody({
 
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
-  const handleEnterRoom = () => {
+  const handleEnterRoom = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigate(`/challenging/${state.challengeId}`);
     handleToggleModal();
     fullScreenHandler.enter();
   };
-  const handleRecruitChallenge = () => {
+  const handleRecruitChallenge = (e: React.MouseEvent) => {
+    e.stopPropagation();
     recruitChallengeMutation.mutate(state.challengeId);
     handleToggleModal();
   };
-  const handleCancleChallenge = () => {
+  const handleCancleChallenge = (e: React.MouseEvent) => {
+    e.stopPropagation();
     cancelRecruitMutation.mutate(state.challengeId);
+    handleToggleModal();
   };
   const handleModifyChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -207,7 +254,7 @@ function ModalBody({
                 </button>
               ) : now < createdAt ? (
                 <button className="not_yet_button">시작 전</button>
-              ) : Date.now() > endTime ? (
+              ) : Date.now() > endTime || !body?.detailModal.isJoin ? (
                 <button className="challenge_end_button">종료된 챌린지</button>
               ) : (
                 <button
@@ -246,7 +293,7 @@ function ModalBody({
           </StChallengeInfoContainer>
         </StModalContentsContainer>
       </StModalBody>
-      <ToastContainer autoClose={2000} position="bottom-right" />
+      {/* <ToastContainer /> */}
     </StModalContainer>
   );
 }

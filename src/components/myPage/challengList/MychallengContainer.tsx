@@ -37,31 +37,31 @@ function MychallengContainer() {
   const currentCard = challeng;
 
   return (
-    <>
-      <CardContainer>
-        <TitleBox>도전중인 챌린지</TitleBox>
-        <CardContents>
-          <MychallengCard challeng={currentCard} loading={loading} />
-        </CardContents>
-        <CardPagination totalCard={challeng} paginate={paginate} page={page} />
-      </CardContainer>
-    </>
+    <CardContainer>
+      <TitleBox>도전중인 챌린지</TitleBox>
+      <CardContents>
+        <MychallengCard challeng={currentCard} loading={loading} />
+      </CardContents>
+      <CardPagination totalCard={challeng} paginate={paginate} page={page} />
+    </CardContainer>
   );
 }
 
 const CardContainer = styled.div`
   margin: 5rem auto;
-  width: 130rem;
+  width: 128rem;
   justify-content: center;
   margin: 3rem auto;
 `;
 const CardContents = styled.div`
   margin: 5rem auto;
-  width: 130rem;
+  width: 128rem;
   justify-content: center;
   margin: 3rem auto;
-  display: flex;
-  flex-wrap: wrap;
+  height: 46.7rem;
+  display: grid;
+  gap: 5rem;
+  grid: auto auto / auto auto;
 `;
 
 const TitleBox = styled.div`

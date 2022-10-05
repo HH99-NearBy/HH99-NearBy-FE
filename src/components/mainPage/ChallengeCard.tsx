@@ -43,8 +43,8 @@ function ChallengeCard(props: StyleProps) {
             )}
             {props.status !== "running" && (
               <>
-                <BsFillPersonFill /> `모집중 {props.participatePeople}/
-                {props.limitPeople}`
+                <BsFillPersonFill /> 모집중 {props.participatePeople}/
+                {props.limitPeople}
               </>
             )}
           </div>

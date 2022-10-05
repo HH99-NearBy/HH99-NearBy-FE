@@ -11,6 +11,7 @@ import InformationPage from "../pages/InformationPage";
 import EditContainer from "../components/editPage/EditContainer";
 import PostingPage from "../pages/PostingPage";
 import SearchPage from "../pages/SearchPage";
+import PathErrorPage from "../pages/PathErrorPage";
 import KakaoLogin from "../components/loginPage/KakaoLogin";
 
 function Router() {
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/posting" element={<PostingPage />} />
       <Route path="/modify/:challengeId" element={<PostingPage />} />
       <Route path="/search/:searchParam" element={<SearchPage />} />
+      <Route path="/*" element={<PathErrorPage />} />
     </Routes>
   );
 }

@@ -6,10 +6,11 @@ import Pagination from "./Pagination";
 import apis from "../../../api/api";
 
 interface DoneCardProps {
-  title: undefined;
-  endtime: undefined;
-  startTime: undefined;
-  tagetTime: undefined;
+  title: string;
+  endtime: string;
+  startTime: string;
+  startDay: string;
+  tagetTime: number;
 }
 
 function DoneListContainer() {
@@ -23,6 +24,7 @@ function DoneListContainer() {
     const doneList = async () => {
       setLoading(true);
       const res = await apis.getMyInfoDoneChall(pageNum);
+      console.log(res);
       setDone(res.mypageFinishLists);
       setPage(res.totalPage);
       setLoading(false);

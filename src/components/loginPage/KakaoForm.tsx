@@ -72,10 +72,11 @@ function KakaoForm({
         );
         const { data, headers } = response;
         sessionStorage.setItem("accessToken", headers.authorization);
-        sessionStorage.setItem("userName", data.nickname);
-        sessionStorage.setItem("userLevel", data.level);
-        sessionStorage.setItem("userProfile", data.profileImg);
+        sessionStorage.setItem("userName", data.data.nickname);
+        sessionStorage.setItem("userLevel", data.data.level);
+        sessionStorage.setItem("userProfile", data.data.profileImg);
         sessionStorage?.setItem("userTime", data.data.totalTime);
+        sessionStorage?.setItem("remainTime", data.data.remainingTime);
         alert("로그인 완료");
         navigate("/");
       } catch (err) {
@@ -157,6 +158,8 @@ const CheckBox = styled.div`
     height: 5rem;
     font-size: xx-large;
     font-weight: bold;
+    color: white;
+    border: none;
     background-color: #6627f5;
     &:disabled {
       background-color: gray;

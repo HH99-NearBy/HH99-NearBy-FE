@@ -5,10 +5,11 @@ import Pagination from "./Pagination";
 import DoneListContainer from "./DoneListContainer";
 
 interface DoneCardProps {
-  title: undefined;
-  endtime: undefined;
-  startTime: undefined;
-  tagetTime: undefined;
+  title: string;
+  endtime: string;
+  startTime: string;
+  startDay: string;
+  tagetTime: number;
 }
 
 function DoneCard({
@@ -32,11 +33,11 @@ function DoneCard({
               <TitleBox2>{done.title}</TitleBox2>
               <Date>
                 <img src="https://ifh.cc/g/Ylpc4J.png" />
-                {done.endtime}
+                {done.startDay}
                 <img src="https://ifh.cc/g/6md8RO.png" />
                 {done.startTime}
                 <img src="https://ifh.cc/g/bFlJmL.png" />
-                {done.tagetTime}분
+                {`${done.tagetTime} 분`}
               </Date>
             </DoneBox>
           );
@@ -68,6 +69,7 @@ const TitleBox2 = styled.div`
 const Date = styled.div`
   width: 30rem;
   float: right;
+  font-size: 1.3rem;
   margin: 1.5rem 0;
   position: relative;
   bottom: 3rem;
@@ -76,6 +78,7 @@ const Date = styled.div`
     width: 2rem;
     position: relative;
     top: 0.5rem;
-    margin: 0 1rem;
+    margin-left: 1rem;
+    margin-right: 0.5rem;
   }
 `;

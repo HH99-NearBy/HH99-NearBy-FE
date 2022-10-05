@@ -44,7 +44,7 @@ function UserInfoContainer({
         </LevelBox>
         <ProgressBox>
           {remainingTime !== undefined && (
-            <progress value={Number(remainingTime[0])} max={70}></progress>
+            <progress value={Number(remainingTime)} max={70}></progress>
           )}
         </ProgressBox>
       </UserBox>

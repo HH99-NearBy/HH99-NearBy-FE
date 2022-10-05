@@ -94,14 +94,13 @@ const StVideoCardContainer = styled.div`
   margin: 0.25rem;
   position: relative;
   height: calc(100% / 4);
-  background-color: red;
+  background-color: var(--purple-color);
   /* display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center; */
 
   .user_info_section {
-    background-color: rgba(0, 0, 0, 0.6);
     position: absolute;
     bottom: 0;
     width: 100%;
