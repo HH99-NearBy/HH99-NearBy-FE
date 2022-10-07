@@ -94,7 +94,6 @@ function ModalBody({
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
     onError: (error: any, variables, context) => {
-      console.log(error);
       toast.error("로그인 후 서비스를 이용해주세요!", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
@@ -194,7 +193,6 @@ function ModalBody({
       setStatus("");
     };
   });
-  console.log(body);
   return (
     <StModalContainer>
       <StModalBody>

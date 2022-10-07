@@ -54,10 +54,9 @@ function SideContentsSection() {
     const res = await apis.getParticipantList(Number(challengeId));
     dispatch({ type: "INIT_PEOPLE", userList: res.data });
   };
-  console.log(state);
   useEffect(() => {
     getInitUserList();
-    console.log(WSURI);
+
     let sock = new SockJs(WSURI);
     let subscription: any;
     stompClient.current = webstomp.over(sock);

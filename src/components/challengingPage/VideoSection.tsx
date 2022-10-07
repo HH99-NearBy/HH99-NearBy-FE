@@ -46,6 +46,7 @@ function VideoSection() {
   const connection = useCallback(() => {
     if (session !== undefined && ov !== undefined) {
       ovApis.getOVToken(async (token: string) => {
+        console.log(token);
         session
           .connect(token, {
             clientData: {

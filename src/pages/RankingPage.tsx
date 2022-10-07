@@ -32,9 +32,8 @@ function RankingPage() {
   const [isLastPage, setIsLastPage] = useState(false);
   const [ranking, setRanking] = useState<UserRaking[]>([]);
   const userRanking = async ({ pageParam = 1 }) => {
-    console.log(pageParam);
     const reqRes = await apis.getUserRanking(pageParam);
-    console.log(reqRes);
+
     if (reqRes.data.length === 0) {
       setIsLastPage(true);
     }
@@ -54,26 +53,10 @@ function RankingPage() {
     status,
   } = useInfiniteQuery(["USER_RANKING"], userRanking, {
     getNextPageParam: (lastPage: any, pages) => {
-      console.log(lastPage);
-      console.log(pages);
       return lastPage.nextPage;
     },
     refetchOnWindowFocus: false,
   });
-
-  // useQuery(
-  //   ["GET_FULL_RANKING"],
-  //   async () => {
-  //     const res = await apis.getUserRanking(pageNum);
-  //     console.log(pageNum);
-  //     console.log(res);
-  //     setRanking([...ranking, ...res.data]);
-  //     setMyRanking({ ...myRanking, ...res.myRank });
-  //   },
-  //   {
-  //     retry: 2,
-  //   }
-  // );
 
   const handleAddRanking = () => {
     setPageNum(pageNum + 1);

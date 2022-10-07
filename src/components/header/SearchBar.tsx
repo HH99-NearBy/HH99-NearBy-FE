@@ -26,7 +26,7 @@ function SearchBar() {
     debouncer.current = setTimeout(async function () {
       if (e.target.value.length !== 0) {
         const reqRes = await apis.searchTitle(e.target.value);
-        setResult([...result, ...reqRes]);
+        setResult([...result, ...reqRes.data]);
       } else {
         setResult([]);
       }

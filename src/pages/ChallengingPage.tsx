@@ -22,7 +22,6 @@ function ChallengingPage() {
     ["CHALLENGING_DETAIL"],
     async () => {
       const res = await getChallengeDetail(Number(challengeId));
-      console.log(res);
 
       setInfo(res);
     },

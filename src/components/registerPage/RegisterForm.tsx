@@ -200,34 +200,26 @@ function RegisterForm() {
         );
         setNickCheck(true);
         alert("가입 가능한 닉네임입니다.");
-        console.log(response);
       } catch (err) {
         alert("중복된 닉네임 입니다.");
         setNickCheck(false);
-        console.error(err);
       }
     },
     [nickname]
   );
 
   const registerMutation = useMutation(apis.userRegister, {
-    onMutate: (payload) => {
-      console.log("onmutate", payload);
-    },
+    onMutate: (payload) => {},
     onError(error, variables, context) {
-      console.log(error);
       throw error;
     },
     onSuccess: (data, variables, context) => {
-      console.log("success", data, variables, context);
       const rrs = "인증 메일이 발송되었습니다.\n";
       const aar = "인증을 완료해 주십시오.";
       alert(rrs + aar);
       navigate("/login");
     },
-    onSettled: () => {
-      console.log("end");
-    },
+    onSettled: () => {},
   });
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -241,26 +233,6 @@ function RegisterForm() {
     },
     [email, nickname, password, upload]
   );
-
-  // const onSubmit = useCallback(
-  //   async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     try {
-  //       const response = await axios.post("http://ssggwan.site/api/signup", {
-  //         email: email,
-  //         nickname: nickname,
-  //         password: password,
-  //         profileImg: upload,
-  //       });
-  //       alert("회원가입을 축하드립니다!");
-  //       navigate("/login")
-  //       console.log(response);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   },
-  //   [email, nickname, password, upload]
-  // );
 
   const toggleHidePassword = (e: React.MouseEvent) => {
     e.stopPropagation();

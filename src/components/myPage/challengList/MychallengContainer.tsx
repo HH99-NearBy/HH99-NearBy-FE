@@ -26,8 +26,8 @@ function MychallengContainer() {
     const CardList = async () => {
       setLoading(true);
       const res = await apis.getMyInfoChall(pageNum);
-      setChalleng(res.mypageJoinList);
-      setPage(res.totalPage);
+      setChalleng(res.data.mypageJoinList);
+      setPage(res.data.totalPage);
       setLoading(false);
     };
     CardList();

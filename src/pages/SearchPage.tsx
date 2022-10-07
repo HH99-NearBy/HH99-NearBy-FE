@@ -33,9 +33,8 @@ function SearchPage() {
     ["SEARCH_CHALLENGE"],
     async () => {
       const res = await apis.searchChallengeList(searchParam, 1);
-      console.log("param", searchParam);
-      console.log("res", res);
-      setChallengeList([...res]);
+
+      setChallengeList([...res.data]);
     },
     {
       refetchOnWindowFocus: false,
@@ -44,12 +43,11 @@ function SearchPage() {
   useEffect(() => {
     return () => {
       setChallengeList([]);
-      console.log("g");
+
       queryClient.clear();
     };
   }, [searchParam]);
-  console.log(searchParam);
-  console.log(challengeList);
+
   return (
     <StContentsWrapper>
       <h2>찾으신 챌린지 목록이에요!</h2>

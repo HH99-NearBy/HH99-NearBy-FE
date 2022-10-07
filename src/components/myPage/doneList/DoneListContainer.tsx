@@ -24,9 +24,9 @@ function DoneListContainer() {
     const doneList = async () => {
       setLoading(true);
       const res = await apis.getMyInfoDoneChall(pageNum);
-      console.log(res);
-      setDone(res.mypageFinishLists);
-      setPage(res.totalPage);
+
+      setDone(res.data.mypageFinishLists);
+      setPage(res.data.totalPage);
       setLoading(false);
     };
     doneList();

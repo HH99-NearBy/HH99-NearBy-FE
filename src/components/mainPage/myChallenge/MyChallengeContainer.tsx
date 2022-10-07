@@ -28,7 +28,7 @@ function MyChallengeContainer({
   useQuery(["MY_CHALLENGE"], async () => {
     const res = await apis.getMyChallengeList();
     setChallengeList(
-      res.filter(
+      res.data.filter(
         (post: ChallengeInfo) => Date.now() < Date.parse(`${post.endTime}`)
       )
     );
@@ -100,6 +100,7 @@ function MyChallengeContainer({
       }
     };
   }, [challengeList]);
+  console.log(challengeList);
   return (
     <StContentsWrapper>
       <h2>참여한 챌린지</h2>

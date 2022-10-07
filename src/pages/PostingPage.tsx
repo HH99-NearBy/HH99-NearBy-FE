@@ -62,7 +62,6 @@ function PostingPage() {
       await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
     onSuccess: (res) => {
-      console.log(res);
       navigate("/");
     },
     onError: (error) => {
@@ -269,11 +268,7 @@ function PostingPage() {
           className: "toast_alert",
         });
       }
-      console.log(
-        `${new Date(month).getFullYear()}.${
-          new Date(month).getMonth() + 1
-        }.${new Date(month).getDate()}`
-      );
+
       postingMutation.mutate({
         title,
         challengeImg: upload,
@@ -359,38 +354,10 @@ function PostingPage() {
       );
     }
   };
-  // useQuery(
-  //   ["MP_DETAIL"],
-  //   async () => {
-  //     if (challengeId) {
-  //       const res = await getChallengeDetail(Number(challengeId));
-  //       console.log(res);
-  //       const target = res.detailModal;
-  //       const tags = target.challengeTag;
-  //       setTitle(target.title);
-  //       setDesc(target.content);
-  //       setMonth(target.startDay);
-  //       setTime(target.startTime);
-  //       setTargetTime(target.targetTime);
-  //       setInfo(target.notice);
-  //       setUpload(target.challengeImg);
-  //       setOptions({
-  //         ...options,
-  //         mic: tags[0],
-  //         cam: tags[1],
-  //         atmosphere: tags[2],
-  //         Character: tags[3],
-  //         sexual: tags[4],
-  //       });
-  //     }
-  //   },
-  //   {
-  //     retry: 2,
-  //   }
-  // );
+
   const getInitData = async () => {
     const res = await getChallengeDetail(Number(challengeId));
-    console.log(res);
+
     const target = res.detailModal;
     const tags = target.challengeTag;
     setTitle(target.title);
@@ -451,8 +418,6 @@ function PostingPage() {
       }
     }
   }, [optionsRef.current]);
-  console.log(upload);
-  console.log(challengeId);
   return (
     <>
       <StContentsWrapper onSubmit={handleSubmit}>

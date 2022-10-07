@@ -26,7 +26,6 @@ function LoginForm() {
   const loginMutation = useMutation(apis.userLogin, {
     onMutate: (payload) => {},
     onError(error: any, variables, context) {
-      console.log(error);
       toast.error(error.response.data.errorMsg, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
@@ -41,8 +40,6 @@ function LoginForm() {
     },
     onSuccess: (res, variables, context) => {
       const { data, headers } = res;
-      console.log(data);
-      console.log(headers);
       sessionStorage.setItem("accessToken", headers.authorization);
       sessionStorage.setItem("userName", data.data.nickname);
       sessionStorage.setItem("userLevel", data.data.level);
