@@ -54,7 +54,7 @@
 | 이름  | GitHub | email |
 |:---:|:------:|:-----:|
 | 강태훈 | https://github.com/taetaehoon  | rad572985@gmail.com   |
-| 권용준 | https://github.com/projectmiluju  | project.miluju@gmail.com  |
+| 권용준 | https://github.com/donamgunner  | donamgunner@gmail.com  |
 
 
 <hr>
