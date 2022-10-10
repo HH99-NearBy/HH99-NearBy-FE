@@ -112,6 +112,7 @@ function RecruitContainer({
               return (
                 <ChallengeCard
                   key={post.id}
+                  className="challengeCard"
                   status={now < createdAt ? "doing" : "done"}
                   handleToggleModal={handleToggleModal}
                   challengeTitle={post.title}

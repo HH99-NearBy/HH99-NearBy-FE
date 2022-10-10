@@ -16,6 +16,7 @@ interface StyleProps {
   startTime?: string;
   targetTime?: number;
   endTime?: string;
+  className?: string;
   Ref?: React.MutableRefObject<HTMLDivElement | null>;
   challengeId?: number;
   handleToggleModal?: () => void;
@@ -31,7 +32,11 @@ function ChallengeCard(props: StyleProps) {
     });
   };
   return (
-    <StCardContainer status={props.status} ref={props.Ref}>
+    <StCardContainer
+      status={props.status}
+      ref={props.Ref}
+      className={props.className}
+    >
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
       <StCardContents>
         <div className="card_body">
@@ -109,7 +114,7 @@ function ChallengeCard(props: StyleProps) {
 }
 
 const StCardContainer = styled.div`
-  @keyframes mount {
+  /* @keyframes mount {
     0% {
       opacity: 0;
     }
@@ -117,13 +122,14 @@ const StCardContainer = styled.div`
       opacity: 1;
     }
   }
+  animation: mount 500ms 1; */
   width: 40rem;
   height: 42.2rem;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  animation: mount 500ms 1;
+
   ${(props: StyleProps) => {
     switch (props.status) {
       case "doing":

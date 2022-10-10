@@ -35,6 +35,7 @@ function MyChallengeContainer({
   });
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const observeTarget = useRef<HTMLDivElement | null>(null);
   const flag = useRef<boolean>(false);
   const handleScrolling = useCallback(
     (e: React.WheelEvent<HTMLDivElement>) => {
@@ -56,23 +57,23 @@ function MyChallengeContainer({
     (bool: boolean) => {
       if (!bool && listRef.current !== null) {
         listRef.current.scrollLeft += 8;
-        if (listRef.current.scrollLeft > 618) {
-          if (!flag.current) {
-            flag.current = true;
-            setChallengeList([
-              ...challengeList.filter((el, idx) => idx !== 0),
-              challengeList[0],
-            ]);
-            if (listRef.current !== null) {
-              listRef.current.classList.add("static_scroll");
-              listRef.current.scrollLeft = 0;
-              listRef.current.classList.remove("static_scroll");
-            }
-            setTimeout(function () {
-              flag.current = false;
-            }, 300);
-          }
-        }
+        // if (listRef.current.scrollLeft > 618) {
+        //   if (!flag.current) {
+        //     flag.current = true;
+        //     setChallengeList([
+        //       ...challengeList.filter((el, idx) => idx !== 0),
+        //       challengeList[0],
+        //     ]);
+        //     if (listRef.current !== null) {
+        //       listRef.current.classList.add("static_scroll");
+        //       listRef.current.scrollLeft = 0;
+        //       listRef.current.classList.remove("static_scroll");
+        //     }
+        //     setTimeout(function () {
+        //       flag.current = false;
+        //     }, 300);
+        //   }
+        // }
       }
     },
     [challengeList]
@@ -100,6 +101,31 @@ function MyChallengeContainer({
       }
     };
   }, [challengeList]);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        console.log(entries[0]);
+      } else {
+        setChallengeList([
+          ...challengeList.filter((el, idx) => idx !== 0),
+          challengeList[0],
+        ]);
+        if (listRef.current !== null) {
+          listRef.current.classList.add("static_scroll");
+          listRef.current.scrollLeft = 11;
+          listRef.current.classList.remove("static_scroll");
+        }
+      }
+    });
+    if (observeTarget.current !== null) {
+      observer.observe(observeTarget.current);
+    }
+    return () => {
+      if (observeTarget.current !== null) {
+        observer.unobserve(observeTarget.current);
+      }
+    };
+  }, [observeTarget, challengeList]);
   console.log(challengeList);
   return (
     <StContentsWrapper>
@@ -123,20 +149,25 @@ function MyChallengeContainer({
           const startTime = Date.parse(`${post?.startDay}T${post?.startTime}`);
 
           return (
-            <ChallengeCard
-              key={post.id}
-              status={now < startTime ? "recruit" : "running"}
-              handleToggleModal={handleToggleModal}
-              challengeTitle={post.title}
-              limitPeople={post.limitPeople}
-              participatePeople={post.participatePeople}
-              startDay={post.startDay}
-              startTime={post.startTime}
-              targetTime={post.tagetTime}
-              thumbnailImg={post.challengeImg}
-              endTime={post.endTime}
-              challengeId={post.id}
-            />
+            <>
+              <ChallengeCard
+                key={post.id}
+                status={now < startTime ? "recruit" : "running"}
+                handleToggleModal={handleToggleModal}
+                challengeTitle={post.title}
+                limitPeople={post.limitPeople}
+                participatePeople={post.participatePeople}
+                startDay={post.startDay}
+                startTime={post.startTime}
+                targetTime={post.tagetTime}
+                thumbnailImg={post.challengeImg}
+                endTime={post.endTime}
+                challengeId={post.id}
+              />
+              {idx === 0 && (
+                <StObserveTarget key="observer" ref={observeTarget} />
+              )}
+            </>
           );
         })}
         {/* <ChallengeCard status="running" />
@@ -165,7 +196,7 @@ const StCardList = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: row;
-  overflow-x: hidden;
+  overflow-x: scroll;
   overflow-y: hidden;
   column-gap: 4rem;
   row-gap: 4rem;
@@ -181,6 +212,12 @@ const StCardList = styled.div`
       color: var(--purple-color);
     }
   }
+`;
+
+const StObserveTarget = styled.div`
+  position: absolute;
+  left: 63.1rem;
+  height: 1px;
 `;
 
 export default React.memo(MyChallengeContainer);

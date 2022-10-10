@@ -99,6 +99,17 @@ const GlobalStyle = createGlobalStyle`
     width: 128rem !important;
     position: relative !important;
   }
+  .challengeCard {
+    @keyframes mount {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+   animation: mount 500ms 1;
+  }
 `;
 
 export default GlobalStyle;
