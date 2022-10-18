@@ -18,19 +18,21 @@ function ChatForm({
 
   const handleSubmitChat = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    stompClient.current.send(
-      `/pub/chat/message`,
-      JSON.stringify({
-        type: "TALK",
-        roomId: challengeId,
-        sender: sessionStorage.getItem("userName"),
-        message: body,
-      }),
-      {
-        Authorization: sessionStorage.getItem("accessToken"),
-      }
-    );
-    setBody("");
+    if (body.length !== 0) {
+      stompClient.current.send(
+        `/pub/chat/message`,
+        JSON.stringify({
+          type: "TALK",
+          roomId: challengeId,
+          sender: sessionStorage.getItem("userName"),
+          message: body,
+        }),
+        {
+          Authorization: sessionStorage.getItem("accessToken"),
+        }
+      );
+      setBody("");
+    }
   };
   return (
     <StChatFormContainer onSubmit={handleSubmitChat}>

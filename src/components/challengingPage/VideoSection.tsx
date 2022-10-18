@@ -46,6 +46,7 @@ function VideoSection() {
   const connection = useCallback(() => {
     if (session !== undefined && ov !== undefined) {
       ovApis.getOVToken(async (token: string) => {
+        console.log(token);
         session
           .connect(token, {
             clientData: {
@@ -103,59 +104,9 @@ function VideoSection() {
         targetOvSub: event.stream.streamId,
       });
     });
-    session.on("exception", (exception) => {
-    });
+    session.on("exception", (exception) => {});
     setOv(OV);
     setSession(session);
-    // if (initialState.session !== undefined) {
-    //   const mySession = initialState.session;
-    //   initialState.session.on("streamCreated", (event: any) => {
-    //     console.log("streamCreated");
-    //     const sub = mySession.subscribe(event.stream, "video_container");
-    //     let subs = initialState.subscribers;
-    //     console.log(sub);
-    //     subs.push(sub);
-    //     setInitialState({
-    //       ...initialState,
-    //       subscribers: subs,
-    //     });
-    //   });
-    //   mySession.on("streamDestroyed", (event: any) => {});
-    //   mySession.on("exception", (exception) => {
-    //     console.warn(exception);
-    //   });
-    //   apis.getOVToken(async (token: string) => {
-    //     mySession
-    //       .connect(token, { clientData: initialState.myUserName })
-    //       .then(async () => {
-    //         console.log("session connect");
-    //         const devices = await OV.getDevices();
-    //         console.log(devices);
-    //         const videoDevices = devices.filter(
-    //           (device) => device.kind === "videoinput"
-    //         );
-    //         console.log(videoDevices);
-    //         const publisher = OV.initPublisher("video_container", {
-    //           audioSource: undefined, // The source of audio. If undefined default microphone
-    //           videoSource: videoDevices[0].deviceId, // The source of video. If undefined default webcam
-    //           publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-    //           publishVideo: true, // Whether you want to start publishing with your video enabled or not
-    //           resolution: "320x220", // The resolution of your video
-    //           frameRate: 60, // The frame rate of your video
-    //           insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-    //           mirror: false, // Whether to mirror your local video or not
-    //         });
-
-    //         mySession.publish(publisher);
-    //         console.log(publisher);
-    //         console.log(initialState);
-    //         setInitialState({ ...initialState, publisher });
-    //       })
-    //       .catch((error) => {
-    //         throw error;
-    //       });
-    //   });
-    // }
   };
   const leaveSession = useCallback(() => {
     if (session) {
@@ -165,6 +116,9 @@ function VideoSection() {
       setOv(undefined);
     }
   }, [session]);
+  window.onbeforeunload = function () {
+    leaveSession();
+  };
   useEffect(() => {
     joinSession();
   }, []);
@@ -174,15 +128,6 @@ function VideoSection() {
       leaveSession();
     };
   }, [session]);
-  // console.log(ov);
-  // console.log(session);
-  // console.log(subscribers);
-  // console.log(publisher);
-  // console.log(state);
-
-  window.onbeforeunload = function () {
-    leaveSession();
-  };
 
   return (
     <StVideoSection>

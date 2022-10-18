@@ -16,6 +16,7 @@ interface StyleProps {
   startTime?: string;
   targetTime?: number;
   endTime?: string;
+  className?: string;
   Ref?: React.MutableRefObject<HTMLDivElement | null>;
   challengeId?: number;
   handleToggleModal?: () => void;
@@ -31,7 +32,11 @@ function ChallengeCard(props: StyleProps) {
     });
   };
   return (
-    <StCardContainer status={props.status} ref={props.Ref}>
+    <StCardContainer
+      status={props.status}
+      ref={props.Ref}
+      className={props.className}
+    >
       <img src={props.thumbnailImg} alt="쓱-챌린지 썸네일 이미지" />
       <StCardContents>
         <div className="card_body">
@@ -43,8 +48,8 @@ function ChallengeCard(props: StyleProps) {
             )}
             {props.status !== "running" && (
               <>
-                <BsFillPersonFill /> `모집중 {props.participatePeople}/
-                {props.limitPeople}`
+                <BsFillPersonFill /> 모집중 {props.participatePeople}/
+                {props.limitPeople}
               </>
             )}
           </div>
@@ -79,7 +84,17 @@ function ChallengeCard(props: StyleProps) {
             도전하기
           </button>
         ) : props.status === "done" ? (
-          <button className="modal_open_btn">완료된 챌린지입니다.</button>
+          <button
+            className="modal_open_btn"
+            onClick={() => {
+              if (typeof props.challengeId !== "undefined")
+                handleReadChallengeId(props.challengeId);
+              if (typeof props.handleToggleModal !== "undefined")
+                props.handleToggleModal();
+            }}
+          >
+            완료된 챌린지입니다.
+          </button>
         ) : (
           <button
             className="modal_open_btn"
@@ -99,12 +114,22 @@ function ChallengeCard(props: StyleProps) {
 }
 
 const StCardContainer = styled.div`
+  /* @keyframes mount {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  animation: mount 500ms 1; */
   width: 40rem;
   height: 42.2rem;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
   ${(props: StyleProps) => {
     switch (props.status) {
       case "doing":
@@ -112,6 +137,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
         `;
@@ -120,6 +146,7 @@ const StCardContainer = styled.div`
           img {
             width: 100%;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
           .modal_open_btn {
@@ -135,6 +162,7 @@ const StCardContainer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
           .modal_open_btn {
@@ -149,6 +177,7 @@ const StCardContainer = styled.div`
           img {
             width: 21.1rem;
             height: 21.1rem;
+            object-fit: cover;
             background-color: #e1e1e1;
           }
           .modal_open_btn {
@@ -207,6 +236,7 @@ const StCardContents = styled.div`
       font-size: 2rem;
       font-weight: 600;
       letter-spacing: 0.2rem;
+      word-break: break-all;
     }
     .footer_info {
       display: flex;

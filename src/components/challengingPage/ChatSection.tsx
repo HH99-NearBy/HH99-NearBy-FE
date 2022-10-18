@@ -10,14 +10,16 @@ function ChatSection({
   chats,
   stompClient,
   challengeId,
+  Ref,
 }: {
   chats: ChatType[];
   stompClient: React.MutableRefObject<any>;
   challengeId: number;
+  Ref: React.MutableRefObject<HTMLDivElement | null>;
 }) {
   return (
     <StChatSection>
-      <ChatList chats={chats} />
+      <ChatList chats={chats} Ref={Ref} />
       <ChatForm stompClient={stompClient} challengeId={challengeId} />
     </StChatSection>
   );

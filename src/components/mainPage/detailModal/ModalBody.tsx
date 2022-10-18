@@ -13,7 +13,6 @@ import { useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import apis from "../../../api/api";
-import Button from "../../../elements/Button";
 
 function ModalBody({
   handleToggleModal,
@@ -25,12 +24,40 @@ function ModalBody({
   const fullScreenHandler = useFullScreenHandle();
   const queryClient = useQueryClient();
   const [body, setBody] = useState<GetModalDetail | null>(null);
+  const [status, setStatus] = useState("");
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
   const req = useQuery(
     "CHALLENGE_DETAIL",
     async () => {
       const res = await getChallengeDetail(state.challengeId);
+      const now = Date.now();
+      const start = Date.parse(
+        `${res.detailModal.startDay}T${res.detailModal.startTime}`
+      );
+      const writer = res.detailModal.writer;
+      if (now < start) {
+        //시작 전 챌린지 상태
+        if (res.detailModal.isJoin) {
+          //내가 참여한 챌린지 일때 => recruit
+
+          setStatus("recruit");
+        } else {
+          setStatus("doing");
+        }
+        // if (writer === sessionStorage.getItem("userName")) {
+        //   setStatus('')
+        // }
+      } else {
+        //시작 후 챌린지 상태
+        if (res.detailModal.isJoin) {
+          //내가 참여한 챌린지 일때 => running
+          setStatus("running");
+        } else {
+          setStatus("done");
+        }
+      }
+
       setBody(res);
     },
     {
@@ -45,7 +72,18 @@ function ModalBody({
     onError(error, variables, context) {
       throw error;
     },
-    onSuccess: (res, variables, context) => {},
+    onSuccess: (res, variables, context) => {
+      toast.success("챌린지 삭제 완료!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
+    },
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
       queryClient.invalidateQueries(["ALL_CHALLENGE"]);
@@ -53,60 +91,93 @@ function ModalBody({
   });
   const recruitChallengeMutation = useMutation(apis.recruitChallenge, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
     },
-    onError(error, variables, context) {
+    onError: (error: any, variables, context) => {
+      toast.error("로그인 후 서비스를 이용해주세요!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
       throw error;
     },
-    onSuccess: (res, variables, context) => {},
+    onSuccess: (res, variables, context) => {
+      toast.success("성공적으로 챌린지에 참가하였습니다!", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
+    },
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
     },
   });
 
-  const cancelRecruitMutation = useMutation(apis.recruitChallenge, {
+  const cancelRecruitMutation = useMutation(apis.cancelRecruit, {
     onMutate: async (payload) => {
-      console.log("onmutate", payload);
       await queryClient.cancelQueries(["MY_CHALLENGE"]);
       await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
     onError(error, variables, context) {
       throw error;
     },
-    onSuccess: (res, variables, context) => {},
+    onSuccess: (res, variables, context) => {
+      toast.success("챌린지 참가를 취소하였습니다.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        className: "toast_alert",
+      });
+    },
     onSettled: () => {
       queryClient.invalidateQueries(["MY_CHALLENGE"]);
       queryClient.invalidateQueries(["ALL_CHALLENGE"]);
     },
   });
 
-  console.log(body);
-  console.log(state.challengeStatus);
   const hour = body?.detailModal.startTime.slice(0, 2);
   const minute = body?.detailModal.startTime.slice(3, 5);
-  const handleEnterRoom = () => {
+  const handleEnterRoom = (e: React.MouseEvent) => {
+    e.stopPropagation();
     navigate(`/challenging/${state.challengeId}`);
     handleToggleModal();
     fullScreenHandler.enter();
   };
-  const handleRecruitChallenge = () => {
+  const handleRecruitChallenge = (e: React.MouseEvent) => {
+    e.stopPropagation();
     recruitChallengeMutation.mutate(state.challengeId);
     handleToggleModal();
   };
-  const handleCancleChallenge = () => {
+  const handleCancleChallenge = (e: React.MouseEvent) => {
+    e.stopPropagation();
     cancelRecruitMutation.mutate(state.challengeId);
+    handleToggleModal();
   };
   const handleModifyChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    handleToggleModal();
     navigate(`/modify/${state.challengeId}`);
   };
   const handleDeleteChallenge = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    deleteChallengeMutation.mutate(state.challengeId);
     handleToggleModal();
+    deleteChallengeMutation.mutate(state.challengeId);
   };
   const now = new Date();
   const createdAt = new Date(
@@ -116,8 +187,12 @@ function ModalBody({
     `${body?.detailModal.startDay}T${body?.detailModal.startTime}`
   );
   const endTime = Date.parse(`${body?.detailModal.endTime}`);
- 
 
+  useState(() => {
+    return () => {
+      setStatus("");
+    };
+  });
   return (
     <StModalContainer>
       <StModalBody>
@@ -168,7 +243,7 @@ function ModalBody({
               </li>
             </StSummeryInfoContainer>
             <StButtonGroup className="footer_button_group">
-              {state.challengeStatus === "doing" ? (
+              {status === "doing" ? (
                 <button
                   className="challenge_recruit_button"
                   onClick={handleRecruitChallenge}
@@ -177,6 +252,8 @@ function ModalBody({
                 </button>
               ) : now < createdAt ? (
                 <button className="not_yet_button">시작 전</button>
+              ) : Date.now() > endTime || !body?.detailModal.isJoin ? (
+                <button className="challenge_end_button">종료된 챌린지</button>
               ) : (
                 <button
                   className="challenge_enter_button"
@@ -186,15 +263,15 @@ function ModalBody({
                 </button>
               )}
               {/* //status => doing:모집중, recruit: 신청했으나 시작하지 않음, running: 신청했고 시작한 챌린지 */}
-              {/* {state.challengeStatus === "doing" ? null : (
+              {/* {status === "doing" ? null : (
                 <button onClick={handleCancleChallenge}>취소하기</button>
               )} */}
-              {state.challengeStatus === "doing" ? null : body?.detailModal
-                  .writer === sessionStorage.getItem("userName") ? (
+              {status === "doing" ? null : body?.detailModal.writer ===
+                sessionStorage.getItem("userName") ? (
                 <button onClick={handleDeleteChallenge}>챌린지 삭제</button>
-              ) : (
+              ) : body?.detailModal.isJoin ? (
                 <button onClick={handleCancleChallenge}>취소하기</button>
-              )}
+              ) : null}
             </StButtonGroup>
           </StSummeryContainer>
           <StChallengeInfoContainer>
@@ -214,7 +291,7 @@ function ModalBody({
           </StChallengeInfoContainer>
         </StModalContentsContainer>
       </StModalBody>
-      <ToastContainer autoClose={2000} position="bottom-right" />
+      {/* <ToastContainer /> */}
     </StModalContainer>
   );
 }
@@ -269,6 +346,9 @@ const StModalHeader = styled.div`
       height: 3rem;
       display: flex;
       align-items: center;
+      :nth-of-type(1) {
+        margin-right: 0.5rem;
+      }
     }
     .challenge_btn_container {
       button {
@@ -312,6 +392,7 @@ const StSummeryContainer = styled.div`
   .challenge_detail_thumbnail {
     width: 100%;
     height: 24rem;
+    object-fit: cover;
   }
 
   .footer_button_group {
@@ -352,6 +433,9 @@ const StSummeryContainer = styled.div`
       background-color: #e3e3e3;
       color: black;
     }
+    .challenge_end_button {
+      color: black;
+    }
   }
 `;
 
@@ -383,7 +467,7 @@ const StChallengeInfoContainer = styled.div`
   width: 80.1rem;
   height: 51rem;
   padding-left: 4rem;
-
+  word-break: break-all;
   display: flex;
   flex-direction: column;
   .detail_description {

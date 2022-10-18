@@ -86,7 +86,10 @@ const GlobalStyle = createGlobalStyle`
     border: 0.2rem solid red;
     animation: error 0.6s 2;
   }
-
+  .Toastify__toast-container--top-right {
+  top: 10rem;
+  right: 1em;
+}
   /* .video_container {
     width: 100%;
     height: 100%;
@@ -95,6 +98,17 @@ const GlobalStyle = createGlobalStyle`
   #is_not_long {
     width: 128rem !important;
     position: relative !important;
+  }
+  .challengeCard {
+    @keyframes mount {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+   animation: mount 500ms 1;
   }
 `;
 

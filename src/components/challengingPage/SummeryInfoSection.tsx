@@ -6,7 +6,7 @@ import { IoMdAlarm } from "react-icons/io";
 import UserListSection from "./UserListSection";
 import { BsDoorOpen } from "react-icons/bs";
 
-function SummeryInfoSection() {
+function SummeryInfoSection({ body }: { body: any }) {
   const navigate = useNavigate();
   const handleLeaveRoom = () => {
     navigate("/");
@@ -14,14 +14,15 @@ function SummeryInfoSection() {
   return (
     <>
       <StSummeyHeader>
-        <h1>챌린지 제목~</h1>
+        <h1>{body.detailModal.title}</h1>
         <div className="summery_footer">
           <div className="people_info">
             <BsFillPersonFill />
-            인원 19/30
+            인원 {body.detailModal.participatePeople}/
+            {body.detailModal.limitPeople}
           </div>
           <div className="rest_time_info">
-            12:00
+            {body.detailModal.targetTime}
             <IoMdAlarm />
           </div>
         </div>

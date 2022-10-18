@@ -42,7 +42,6 @@ function RegisterForm() {
       };
       const reImg = await imageCompression(fileList[0], options);
       setProfileImg(reImg);
-      console.log(reImg);
 
       const upload = new AWS.S3.ManagedUpload({
         params: {
@@ -59,7 +58,6 @@ function RegisterForm() {
           alert("이미지 업로드에 성공했습니다.");
           setUpload(data.Location);
           setIsimg(true);
-          console.log(data.Location);
         },
         function (err) {
           return alert(err);
@@ -171,75 +169,57 @@ function RegisterForm() {
   //   const
   // })
   const EmailCheck = useCallback(
-    async (e : React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
       try {
-        const response = await axios.post('https://ssggwan.site/api/emailcheck',{
-          email: email
-        })
-          setEmailCheck(true)
-          alert('가입 가능한 이메일입니다.')
-          console.log(response)
-      }catch (err) {
-        setEmailCheck(false)
-        alert('중복된 이메일입니다.')
+        const response = await axios.post(
+          "https://ssggwan.site/api/emailcheck",
+          {
+            email: email,
+          }
+        );
+        setEmailCheck(true);
+        alert("가입 가능한 이메일입니다.");
+      } catch (err) {
+        setEmailCheck(false);
+        alert("중복된 이메일입니다.");
+        console.error(err);
       }
-    },[email])
-
-  // const EmailCheck =  (
-  //   async (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     let result;
-  //     try {
-  //       result = await emailMutation();
-  //     } catch (error) {
-  //       console.log(error)
-  //       // error handler
-  //     }
-  //   });
-
+    },
+    [email]
+  );
   const NicknameCheck = useCallback(
-    async (e : React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
+    async (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
       try {
-       const response = await axios.post('https://ssggwan.site/api/nicknamecheck',{
-          nickname: nickname
-        })
-          setNickCheck(true)
-          alert('가입 가능한 닉네임입니다.')
-          console.log(response)
-      }catch (err) {
-        alert('중복된 닉네임 입니다.')
-        setNickCheck(false)
+        const response = await axios.post(
+          "https://ssggwan.site/api/nicknamecheck",
+          {
+            nickname: nickname,
+          }
+        );
+        setNickCheck(true);
+        alert("가입 가능한 닉네임입니다.");
+      } catch (err) {
+        alert("중복된 닉네임 입니다.");
+        setNickCheck(false);
       }
-    },[nickname])
-
-  // const NicknameCheck = useCallback(
-  //   (e: React.MouseEvent<HTMLButtonElement>) => {
-  //     e.preventDefault();
-  //     nickNameMutation.mutate(nickname);
-  //   },
-  //   [nickname]
-  // );
+    },
+    [nickname]
+  );
 
   const registerMutation = useMutation(apis.userRegister, {
-    onMutate: (payload) => {
-      console.log("onmutate", payload);
-    },
+    onMutate: (payload) => {},
     onError(error, variables, context) {
-      console.log(error)
       throw error;
     },
     onSuccess: (data, variables, context) => {
-      console.log("success", data, variables, context);
-      const rrs = "인증 메일이 발송되었습니다.\n"
-      const aar = "인증을 완료해 주십시오."
-      alert(rrs+aar);
+      const rrs = "인증 메일이 발송되었습니다.\n";
+      const aar = "인증을 완료해 주십시오.";
+      alert(rrs + aar);
       navigate("/login");
     },
-    onSettled: () => {
-      console.log("end");
-    },
+    onSettled: () => {},
   });
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -253,26 +233,6 @@ function RegisterForm() {
     },
     [email, nickname, password, upload]
   );
-
-  // const onSubmit = useCallback(
-  //   async (e: React.FormEvent<HTMLFormElement>) => {
-  //     e.preventDefault();
-  //     try {
-  //       const response = await axios.post("http://ssggwan.site/api/signup", {
-  //         email: email,
-  //         nickname: nickname,
-  //         password: password,
-  //         profileImg: upload,
-  //       });
-  //       alert("회원가입을 축하드립니다!");
-  //       navigate("/login")
-  //       console.log(response);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   },
-  //   [email, nickname, password, upload]
-  // );
 
   const toggleHidePassword = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -323,7 +283,9 @@ function RegisterForm() {
                     value={email}
                     onChange={onChangeEmail}
                   />
-                  <CheckBtn onClick={EmailCheck} disabled={!(isEmail)}>중복확인</CheckBtn>
+                  <CheckBtn onClick={EmailCheck} disabled={!isEmail}>
+                    중복확인
+                  </CheckBtn>
                   {email.length > 0 && (
                     <p className={`message ${isEmail ? "success" : "error"}`}>
                       {emailMessage}
@@ -339,7 +301,9 @@ function RegisterForm() {
                     value={nickname}
                     onChange={onChangeNick}
                   />
-                  <CheckBtn onClick={NicknameCheck} disabled={!(isNickname)}>중복확인</CheckBtn>
+                  <CheckBtn onClick={NicknameCheck} disabled={!isNickname}>
+                    중복확인
+                  </CheckBtn>
                   {nickname.length > 0 && (
                     <p
                       className={`message ${isNickname ? "success" : "error"}`}

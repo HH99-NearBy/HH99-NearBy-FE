@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { FullScreen, useFullScreenHandle } from "react-full-screen";
+import { toast } from "react-toastify";
 import { GetModalDetail } from "../api/challengeDetail/types";
 import { BsFillPersonFill } from "react-icons/bs";
 import VideoSection from "../components/challengingPage/VideoSection";
@@ -11,16 +12,17 @@ import { RoomContextProvider } from "../api/context/roomContext";
 import { getChallengeDetail } from "../api/challengeDetail/api";
 
 function ChallengingPage() {
+  const queryClient = useQueryClient();
   const fullScreenHandler = useFullScreenHandle();
   const { challengeId } = useParams();
   const navigate = useNavigate();
   const [info, setInfo] = useState<GetModalDetail | null>(null);
 
   useQuery(
-    ["CHALLENGE_DETAIL"],
+    ["CHALLENGING_DETAIL"],
     async () => {
       const res = await getChallengeDetail(Number(challengeId));
-     
+
       setInfo(res);
     },
     {
@@ -45,19 +47,12 @@ function ChallengingPage() {
   useEffect(() => {
     fullScreenHandler.enter();
     return () => {
-      fullScreenHandler.exit();
+      queryClient.clear();
     };
   }, []);
-  //웹소켓 연결 여기서
-  //채팅은 ChatSection에서 subscribe하고
-  //인원수는 어떡해야하나?
-  const handleFullScreen = (e: React.KeyboardEvent<HTMLDivElement>) => {
-  
-  };
- 
   return (
     <FullScreen handle={fullScreenHandler}>
-      <StPageLayout onKeyDown={handleFullScreen}>
+      <StPageLayout>
         <VideoSection />
         <RoomContextProvider>
           <SideContentsSection />
@@ -68,6 +63,9 @@ function ChallengingPage() {
 }
 
 const StPageLayout = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100vw;
   min-width: 160rem;
   height: 100vh;

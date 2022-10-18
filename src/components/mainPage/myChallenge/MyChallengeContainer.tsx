@@ -28,34 +28,23 @@ function MyChallengeContainer({
   useQuery(["MY_CHALLENGE"], async () => {
     const res = await apis.getMyChallengeList();
     setChallengeList(
-      res.filter(
+      res.data.filter(
         (post: ChallengeInfo) => Date.now() < Date.parse(`${post.endTime}`)
       )
     );
   });
   const [isMouseEnter, setIsMouseEnter] = useState<boolean>(false);
   const listRef = useRef<HTMLDivElement>(null);
+  const observeTarget = useRef<HTMLDivElement | null>(null);
   const flag = useRef<boolean>(false);
+  const handleScrolling = useCallback(
+    (e: React.WheelEvent<HTMLDivElement>) => {
+      const target = e.currentTarget;
+      target.scrollLeft += e.deltaY * 1.2;
+    },
+    [challengeList]
+  );
 
-  const handleScrolling = (e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const target = e.currentTarget;
-    // console.log(e.currentTarget.clientWidth);
-    // console.log(e.currentTarget.scrollWidth);
-    // console.log(Math.ceil(target.scrollLeft));
-
-    document.body.classList.add("block_scroll");
-    // if (
-    //   (target.scrollLeft === 0 && e.deltaY < 0) ||
-    //   (target.clientWidth + Math.ceil(target.scrollLeft) ===
-    //     target.scrollWidth &&
-    //     e.deltaY > 0)
-    // ) {
-    //   document.body.classList.remove("block_scroll");
-    // }
-
-    target.scrollLeft += e.deltaY * 2;
-  };
   const handleMouseEntering = () => {
     setIsMouseEnter(true);
     Ref?.classList.add("block_scroll");
@@ -67,24 +56,24 @@ function MyChallengeContainer({
   const handleAutoScrolling = useCallback(
     (bool: boolean) => {
       if (!bool && listRef.current !== null) {
-        listRef.current.scrollLeft += 10;
-        if (listRef.current.scrollLeft > 618) {
-          if (!flag.current) {
-            flag.current = true;
-            setChallengeList([
-              ...challengeList.filter((el, idx) => idx !== 0),
-              challengeList[0],
-            ]);
-            if (listRef.current !== null) {
-              listRef.current.classList.add("static_scroll");
-              listRef.current.scrollLeft = 0;
-              listRef.current.classList.remove("static_scroll");
-            }
-            setTimeout(function () {
-              flag.current = false;
-            }, 300);
-          }
-        }
+        listRef.current.scrollLeft += 8;
+        // if (listRef.current.scrollLeft > 618) {
+        //   if (!flag.current) {
+        //     flag.current = true;
+        //     setChallengeList([
+        //       ...challengeList.filter((el, idx) => idx !== 0),
+        //       challengeList[0],
+        //     ]);
+        //     if (listRef.current !== null) {
+        //       listRef.current.classList.add("static_scroll");
+        //       listRef.current.scrollLeft = 0;
+        //       listRef.current.classList.remove("static_scroll");
+        //     }
+        //     setTimeout(function () {
+        //       flag.current = false;
+        //     }, 300);
+        //   }
+        // }
       }
     },
     [challengeList]
@@ -92,7 +81,7 @@ function MyChallengeContainer({
   useEffect(() => {
     let interval = setInterval(() => {
       handleAutoScrolling(isMouseEnter);
-    }, 10);
+    }, 60);
     return () => {
       clearInterval(interval);
     };
@@ -112,6 +101,32 @@ function MyChallengeContainer({
       }
     };
   }, [challengeList]);
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        console.log(entries[0]);
+      } else {
+        setChallengeList([
+          ...challengeList.filter((el, idx) => idx !== 0),
+          challengeList[0],
+        ]);
+        if (listRef.current !== null) {
+          listRef.current.classList.add("static_scroll");
+          listRef.current.scrollLeft = 11;
+          listRef.current.classList.remove("static_scroll");
+        }
+      }
+    });
+    if (observeTarget.current !== null) {
+      observer.observe(observeTarget.current);
+    }
+    return () => {
+      if (observeTarget.current !== null) {
+        observer.unobserve(observeTarget.current);
+      }
+    };
+  }, [observeTarget, challengeList]);
+  console.log(challengeList);
   return (
     <StContentsWrapper>
       <h2>참여한 챌린지</h2>
@@ -134,20 +149,25 @@ function MyChallengeContainer({
           const startTime = Date.parse(`${post?.startDay}T${post?.startTime}`);
 
           return (
-            <ChallengeCard
-              key={post.id}
-              status={now < startTime ? "recruit" : "running"}
-              handleToggleModal={handleToggleModal}
-              challengeTitle={post.title}
-              limitPeople={post.limitPeople}
-              participatePeople={post.participatePeople}
-              startDay={post.startDay}
-              startTime={post.startTime}
-              targetTime={post.tagetTime}
-              thumbnailImg={post.challengeImg}
-              endTime={post.endTime}
-              challengeId={post.id}
-            />
+            <>
+              <ChallengeCard
+                key={post.id}
+                status={now < startTime ? "recruit" : "running"}
+                handleToggleModal={handleToggleModal}
+                challengeTitle={post.title}
+                limitPeople={post.limitPeople}
+                participatePeople={post.participatePeople}
+                startDay={post.startDay}
+                startTime={post.startTime}
+                targetTime={post.tagetTime}
+                thumbnailImg={post.challengeImg}
+                endTime={post.endTime}
+                challengeId={post.id}
+              />
+              {idx === 0 && (
+                <StObserveTarget key="observer" ref={observeTarget} />
+              )}
+            </>
           );
         })}
         {/* <ChallengeCard status="running" />
@@ -176,7 +196,8 @@ const StCardList = styled.div`
   width: 100vw;
   display: flex;
   flex-direction: row;
-  overflow-x: hidden;
+  overflow-x: scroll;
+  overflow-y: hidden;
   column-gap: 4rem;
   row-gap: 4rem;
   scroll-behavior: smooth;
@@ -191,6 +212,12 @@ const StCardList = styled.div`
       color: var(--purple-color);
     }
   }
+`;
+
+const StObserveTarget = styled.div`
+  position: absolute;
+  left: 63.1rem;
+  height: 1px;
 `;
 
 export default React.memo(MyChallengeContainer);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ChatCard from "./ChatCard";
 
@@ -7,9 +7,19 @@ interface ChatType {
   chat: string;
 }
 
-function ChatList({ chats }: { chats: ChatType[] }) {
+function ChatList({
+  chats,
+  Ref,
+}: {
+  chats: ChatType[];
+  Ref: React.MutableRefObject<HTMLDivElement | null>;
+}) {
+  useEffect(() => {
+    if (Ref.current !== null)
+      Ref.current.scrollTo(0, Ref.current?.scrollHeight);
+  }, [chats.length]);
   return (
-    <StChatListContainer>
+    <StChatListContainer ref={Ref}>
       {chats.map((chat) => {
         return (
           <ChatCard

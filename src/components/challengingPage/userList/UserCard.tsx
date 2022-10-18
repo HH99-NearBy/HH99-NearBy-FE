@@ -18,7 +18,6 @@ function UserCard({
   const runTimer = () => {
     const currDate = Date.now();
     const diff = currDate - joinAt;
-    console.log(diff);
     const mill = Math.floor((diff % 1000) / 100);
     const seconds = Math.floor((diff / 1000) % 60);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);

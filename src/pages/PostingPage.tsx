@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import apis from "../api/api";
@@ -8,16 +8,18 @@ import imageCompression from "browser-image-compression";
 import { getChallengeDetail } from "../api/challengeDetail/api";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Button from "../elements/Button";
-import AlertBody from "../components/alerts/NeedLoginAlert";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { ko } from "date-fns/esm/locale";
+import thumbnail_info_img from "../static/thumbnail_info_img.svg";
 
 function PostingPage() {
   const now = new Date();
   const { challengeId } = useParams();
   const [title, setTitle] = useState("");
-  const [month, setMonth] = useState("");
-  const [time, setTime] = useState("");
-  const [targetTime, setTargetTime] = useState(0);
+  const [month, setMonth] = useState(`${new Date()}`);
+  const [time, setTime] = useState("00:00");
+  const [targetTime, setTargetTime] = useState(30);
   const [desc, setDesc] = useState("");
   const [info, setInfo] = useState("");
   const [upload, setUpload] = useState<string>("https://ifh.cc/g/RCtOo7.png");
@@ -31,7 +33,7 @@ function PostingPage() {
     sexual: "",
   });
   const titleRef = useRef<HTMLInputElement | null>(null);
-  const monthRef = useRef<HTMLInputElement | null>(null);
+  const monthRef = useRef<DatePicker | null>(null);
   const timeRef = useRef<HTMLInputElement | null>(null);
   const targetTimeRef = useRef<HTMLInputElement | null>(null);
   const descRef = useRef<HTMLTextAreaElement | null>(null);
@@ -60,7 +62,6 @@ function PostingPage() {
       await queryClient.cancelQueries(["ALL_CHALLENGE"]);
     },
     onSuccess: (res) => {
-      console.log(res);
       navigate("/");
     },
     onError: (error) => {
@@ -94,8 +95,8 @@ function PostingPage() {
       switch (name) {
         case "title":
           return setTitle(value);
-        case "month":
-          return setMonth(value);
+        // case "month":
+        //   return setMonth(value);
         case "time":
           return setTime(value);
         case "targetTime":
@@ -110,11 +111,16 @@ function PostingPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (challengeId) {
-      console.log("modify!");
       modifyingMutation.mutate({
         title,
         challengeImg: upload,
-        startDay: month,
+        startDay: `${new Date(month).getFullYear()}-${
+          new Date(month).getMonth() + 1
+        }-${
+          new Date(month).getDate() < 10
+            ? `0${new Date(month).getDate()}`
+            : `${new Date(month).getDate()}`
+        }`,
         startTime: time,
         targetTime: targetTime,
         content: desc,
@@ -129,15 +135,14 @@ function PostingPage() {
         challengeId: Number(challengeId),
       });
     } else {
-      console.log("post!");
       if (title.length === 0) {
         titleRef.current?.classList.add("error_focus");
         setTimeout(() => {
           titleRef.current?.classList.remove("error_focus");
         }, 1200);
         toast.error("챌린지 제목을 입력해주세요.", {
-          position: toast.POSITION.BOTTOM_RIGHT,
-          autoClose: 1200,
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -148,15 +153,14 @@ function PostingPage() {
 
         return;
       }
-
-      if (month.length === 0) {
-        monthRef.current?.classList.add("error_focus");
-        setTimeout(() => {
-          monthRef.current?.classList.remove("error_focus");
-        }, 1200);
+      if (month !== null && `${month}`.length === 0) {
+        // monthRef.current?.classList.add("error_focus");
+        // setTimeout(() => {
+        //   monthRef.current?.classList.remove("error_focus");
+        // }, 1200);
         return toast.error("챌린지 시작일을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -169,13 +173,13 @@ function PostingPage() {
           }-${now.getDate()}T00:00`
         ) > Date.parse(`${month}T00:00`)
       ) {
-        monthRef.current?.classList.add("error_focus");
-        setTimeout(() => {
-          monthRef.current?.classList.remove("error_focus");
-        }, 1200);
+        // monthRef.current?.classList.add("error_focus");
+        // setTimeout(() => {
+        //   monthRef.current?.classList.remove("error_focus");
+        // }, 1200);
         return toast.error("과거날짜는 선택하실 수 없어요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -185,10 +189,9 @@ function PostingPage() {
         setTimeout(() => {
           timeRef.current?.classList.remove("error_focus");
         }, 1200);
-        console.log(Date.parse(`${month}T00:00`));
         return toast.error("챌린지 시작시간을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -199,7 +202,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("과거시각은 선택할 수 없어요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -211,7 +214,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 목표시간을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -220,9 +223,9 @@ function PostingPage() {
         setTimeout(() => {
           targetTimeRef.current?.classList.remove("error_focus");
         }, 1200);
-        return toast.error("챌린지 시간이 너무 짧아요!", {
+        return toast.error("챌린지 최소시간은 30분입니다!", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -234,7 +237,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 내용을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -246,7 +249,7 @@ function PostingPage() {
         }, 1200);
         return toast.error("챌린지 공지사항을 입력해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
@@ -260,15 +263,22 @@ function PostingPage() {
       ) {
         return toast.error("챌린지 옵션을 모두 선책해주세요.", {
           autoClose: 2000,
-          position: toast.POSITION.BOTTOM_RIGHT,
+          position: toast.POSITION.TOP_RIGHT,
           theme: "light",
           className: "toast_alert",
         });
       }
+
       postingMutation.mutate({
         title,
         challengeImg: upload,
-        startDay: month,
+        startDay: `${new Date(month).getFullYear()}-${
+          new Date(month).getMonth() + 1
+        }-${
+          new Date(month).getDate() < 10
+            ? `0${new Date(month).getDate()}`
+            : `${new Date(month).getDate()}`
+        }`,
         startTime: time,
         targetTime: targetTime,
         content: desc,
@@ -337,7 +347,6 @@ function PostingPage() {
           alert("이미지 업로드에 성공했습니다.");
           setUpload(data.Location);
           setIsimg(true);
-          
         },
         function (err) {
           return alert(err);
@@ -345,50 +354,43 @@ function PostingPage() {
       );
     }
   };
-  console.log(month);
-  console.log(now.getFullYear());
-  console.log(now.getMonth() + 1);
-  console.log(now.getDate());
-  console.log(time);
-  console.log(Date.parse(`${month}T${time}`));
-  useQuery(
-    "MP_DETAIL",
-    async () => {
-      if (challengeId) {
-        const res = await getChallengeDetail(Number(challengeId));
-        const target = res.detailModal;
-        const tags = target.challengeTag;
-        setTitle(target.title);
-        setDesc(target.content);
-        setMonth(target.startDay);
-        setTime(target.startTime);
-        setTargetTime(target.targetTime);
-        setInfo(target.notice);
-        setUpload(target.challengeImg);
-        setOptions({
-          ...options,
-          mic: tags[0],
-          cam: tags[1],
-          atmosphere: tags[2],
-          Character: tags[3],
-          sexual: tags[4],
-        });
-      }
-    },
-    {
-      retry: 2,
+
+  const getInitData = async () => {
+    const res = await getChallengeDetail(Number(challengeId));
+
+    const target = res.detailModal;
+    const tags = target.challengeTag;
+    setTitle(target.title);
+    setDesc(target.content);
+    setMonth(target.startDay);
+    setTime(target.startTime);
+    setTargetTime(target.targetTime);
+    setInfo(target.notice);
+    setUpload(target.challengeImg);
+    setOptions({
+      ...options,
+      mic: tags[0],
+      cam: tags[1],
+      atmosphere: tags[2],
+      Character: tags[3],
+      sexual: tags[4],
+    });
+  };
+  useEffect(() => {
+    if (challengeId) {
+      getInitData();
     }
-  );
+  }, [challengeId]);
   useEffect(() => {
     if (optionsRef.current && challengeId) {
       for (let i = 0; i < 5; i++) {
         const target = optionsRef.current.children[i];
-        
+
         const siblings = target.children;
         if (typeof siblings !== "undefined") {
           for (let i = 1; i < siblings.length; i++) {
             siblings[i].classList.remove("selected_option");
-            
+
             switch (siblings[i].classList[0]) {
               case "mic":
                 if (options.mic === siblings[i].innerHTML)
@@ -429,22 +431,32 @@ function PostingPage() {
               value={title}
               onChange={handleOnChange}
               ref={titleRef}
+              maxLength={30}
             />
           </div>
           <div className="day_input">
             <label htmlFor="startDate">시작일</label>
-            <input
+            <StDatePicker
+              selected={new Date(month)}
+              onChange={(date) => setMonth(`${date}`)}
+              locale={ko}
+              minDate={new Date()}
+              ref={monthRef}
+              dateFormat="yyyy년 MM월 dd일"
+            />
+            {/* <input
               type="date"
               name="month"
               onChange={handleOnChange}
               value={month}
               ref={monthRef}
-            />
+            /> */}
             <input
               type="time"
               name="time"
               onChange={handleOnChange}
               value={time}
+              step={600}
               ref={timeRef}
             />
           </div>
@@ -456,6 +468,8 @@ function PostingPage() {
               onChange={handleOnChange}
               value={targetTime}
               ref={targetTimeRef}
+              min={30}
+              max={1200}
             />
             <span>분</span>
           </div>
@@ -470,8 +484,9 @@ function PostingPage() {
                 rows={10}
                 onChange={handleOnChange}
                 value={desc}
-                placeholder="챌린지 목적, 내용을 작성해주세요 {300자 이내}"
+                placeholder="챌린지 목적, 내용을 작성해주세요 {250자 이내}"
                 ref={descRef}
+                maxLength={250}
               ></textarea>
             </div>
             <div className="info_section">
@@ -484,6 +499,7 @@ function PostingPage() {
                 value={info}
                 placeholder="챌린지 진행 시 유의 사항, 공지를 작성해주세요 {100자 이내}"
                 ref={infoRef}
+                maxLength={100}
               ></textarea>
             </div>
             <StOptionSelectContainer>
@@ -633,7 +649,7 @@ function PostingPage() {
             <button onClick={() => navigate("/")}>취소하기</button>
           )}
         </StBottomContentsWrapper>
-        <ToastContainer autoClose={2000} position="bottom-right" />
+        <ToastContainer />
       </StContentsWrapper>
     </>
   );
@@ -643,8 +659,9 @@ const StContentsWrapper = styled.form`
   min-height: 100vh;
   width: 128rem;
   margin: 0 auto;
+  margin-bottom: 5rem;
   background-color: white;
-  overflow: hidden;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -665,17 +682,6 @@ const StTopContentsWrapper = styled.div`
   label {
     padding-right: 3rem;
   }
-  input {
-    font-size: 2rem;
-    background-color: #f5f5f5;
-    border: 0.2rem solid transparent;
-    height: 3.8rem;
-    padding: 0.2rem;
-    ::placeholder {
-      font-size: 1.5rem;
-      font-weight: 300;
-    }
-  }
   div {
     display: flex;
     align-items: center;
@@ -683,15 +689,79 @@ const StTopContentsWrapper = styled.div`
   .title_input {
     input {
       width: 32rem;
+      font-size: 2rem;
+      background-color: #f5f5f5;
+      border: 0.2rem solid transparent;
+      height: 3.8rem;
+      padding: 0.2rem;
+      ::placeholder {
+        font-size: 1.5rem;
+        font-weight: 300;
+      }
     }
   }
   .day_input {
     padding-left: 8rem;
-    input {
+    /* input {
       font-size: 1.5rem;
       width: 13.5rem;
-      :nth-of-type(1) {
-        margin-right: 2rem;
+    } */
+    .react-datepicker-wrapper {
+      width: 13.5rem;
+      margin-right: 2rem;
+    }
+    .react-datepicker {
+      font-size: 2rem;
+    }
+    .react-datepicker__day--selected {
+      background-color: var(--purple-color);
+      border-radius: 50%;
+    }
+    .react-datepicker__header {
+      flex-direction: column;
+      padding-top: 0.8rem;
+      margin: 0.4rem 1rem;
+    }
+    .react-datepicker__month {
+      flex-direction: column;
+    }
+    .react-datepicker__month-container {
+      flex-direction: column;
+    }
+    .react-datepicker__day-name,
+    .react-datepicker__day {
+      width: 4.4rem;
+      line-height: 4.4rem;
+      margin: 0.166rem;
+      justify-content: center;
+    }
+    .react-datepicker__current-month {
+      font-size: 3rem;
+    }
+    .react-datepicker__navigation {
+      top: 1rem;
+      line-height: 1.7rem;
+      border: 0.45rem solid transparent;
+    }
+    .react-datepicker__navigation--previous {
+      border-right-color: #ccc;
+      left: 1rem;
+    }
+    .react-datepicker__navigation--next {
+      border-left-color: #ccc;
+      right: 1rem;
+    }
+    input[type="time"] {
+      font-size: 1.5rem;
+      width: 15rem;
+      font-size: 2rem;
+      background-color: #f5f5f5;
+      border: 0.2rem solid transparent;
+      height: 3.8rem;
+      padding: 0.2rem;
+      ::placeholder {
+        font-size: 1.5rem;
+        font-weight: 300;
       }
     }
   }
@@ -699,6 +769,15 @@ const StTopContentsWrapper = styled.div`
     padding-left: 12rem;
     input {
       width: 12.5rem;
+      font-size: 2rem;
+      background-color: #f5f5f5;
+      border: 0.2rem solid transparent;
+      height: 3.8rem;
+      padding: 0.2rem;
+      ::placeholder {
+        font-size: 1.5rem;
+        font-weight: 300;
+      }
     }
     span {
       padding-left: 1rem;
@@ -717,6 +796,7 @@ const StMainContentsWrapper = styled.div`
   textarea {
     outline: none;
     resize: none;
+    width: 80.3rem;
     :focus {
       outline: 0.1rem solid var(--purple-color);
     }
@@ -731,6 +811,15 @@ const StMainContentsWrapper = styled.div`
   .info_section {
     display: flex;
   }
+`;
+
+const StDatePicker = styled(DatePicker)`
+  width: 13.5rem;
+  font-size: 1.5rem;
+  background-color: #f5f5f5;
+  border: 0.2rem solid transparent;
+  height: 3.8rem;
+  padding: 0.2rem;
 `;
 
 const StOptionSelectContainer = styled.div`

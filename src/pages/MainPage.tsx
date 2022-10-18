@@ -4,6 +4,7 @@ import MyChallengeContainer from "../components/mainPage/myChallenge/MyChallenge
 import RecruitContainer from "../components/mainPage/recruit/RecruitContainer";
 import ModalPortal from "../components/mainPage/detailModal/ModalPortal";
 import { AppContext } from "../api/context";
+import { ToastContainer } from "react-toastify";
 import { useQuery } from "react-query";
 import apis from "../api/api";
 
@@ -15,7 +16,6 @@ function MainPage() {
     dispatch({ type: "TOGGLE_MODAL" });
   };
 
-
   const handleToScrollTop = () => {
     mainContainerRef.current?.scrollTo(0, 0);
   };
@@ -25,7 +25,6 @@ function MainPage() {
       dispatch({ type: "SYNC_USER_DATA", payload: -1, userName });
     }
   }, []);
-  console.log(mainContainerRef.current);
   return (
     <StMainContents ref={mainContainerRef}>
       <StContentsWrapper>
@@ -43,6 +42,7 @@ function MainPage() {
       )}
 
       <StTopBtn onClick={handleToScrollTop}>↑</StTopBtn>
+      <ToastContainer />
     </StMainContents>
   );
 }

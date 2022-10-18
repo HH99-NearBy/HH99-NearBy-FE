@@ -1,10 +1,9 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { BsFillPersonFill } from "react-icons/bs";
 import { BiCalendarCheck } from "react-icons/bi";
 import { IoMdAlarm } from "react-icons/io";
 import { MdOutlineTimer } from "react-icons/md";
-
 
 interface CardProps {
   title: string;
@@ -17,23 +16,15 @@ interface CardProps {
 }
 
 function MychallengCard({
-
   challeng,
   loading,
 }: {
   challeng: Array<CardProps>;
   loading: boolean;
 }) {
-
-
-  const [content, setContent] =useState<any>()
-
-  console.log(challeng);
   if (loading) {
     return <h2>Loading</h2>;
   }
-
-
 
   return (
     <>
@@ -46,7 +37,7 @@ function MychallengCard({
                 <div className="card_body">
                   <div className="header_info">
                     <BsFillPersonFill />
-                    "모집중 {challeng.participatePeople}/{challeng.limitPeople}"
+                    모집중 {challeng.participatePeople}/{challeng.limitPeople}
                   </div>
                   <div className="body_info">{challeng.title}</div>
                   <div className="footer_info">
@@ -64,7 +55,6 @@ function MychallengCard({
                     </span>
                   </div>
                 </div>
-             
               </CardContents>
             </CardContianer>
           );
@@ -80,7 +70,6 @@ const CardContianer = styled.div`
   height: 21.1rem;
   flex-direction: row;
   display: flex;
-  margin: 2rem 1rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   img {
     width: 21.1rem;
@@ -101,6 +90,7 @@ const CardContents = styled.div`
     width: 40rem;
     height: 16.1rem;
     padding: 0 1rem;
+    word-break: break-all;
     .header_info {
       display: flex;
       align-items: center;

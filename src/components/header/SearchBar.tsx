@@ -26,7 +26,7 @@ function SearchBar() {
     debouncer.current = setTimeout(async function () {
       if (e.target.value.length !== 0) {
         const reqRes = await apis.searchTitle(e.target.value);
-        setResult([...result, ...reqRes]);
+        setResult([...result, ...reqRes.data]);
       } else {
         setResult([]);
       }
@@ -38,7 +38,7 @@ function SearchBar() {
     dispatch({ type: "SET_SEARCH", searchParam: input });
     setInput("");
     setResult([]);
-    navigate("/search");
+    navigate(`/search/${input}`);
   };
   const handleToDetail = (e: React.MouseEvent<HTMLDivElement>) => {
     dispatch({

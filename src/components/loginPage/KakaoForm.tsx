@@ -3,10 +3,14 @@ import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
-
-
-function KakaoForm({kakaoId,profileImg}:{kakaoId:number;profileImg:string}) {
-  const navigate = useNavigate()
+function KakaoForm({
+  kakaoId,
+  profileImg,
+}: {
+  kakaoId: number;
+  profileImg: string;
+}) {
+  const navigate = useNavigate();
   // 닉네임 검사
 
   const [nickname, setNickname] = useState<string>("");
@@ -54,32 +58,29 @@ function KakaoForm({kakaoId,profileImg}:{kakaoId:number;profileImg:string}) {
     [nickname]
   );
 
-  
-
   const KakaoSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       try {
         const response = await axios.post(
-          "http://ssggwan.site/api/kakaosign",
+          "https://ssggwan.site/api/kakaosign",
           {
             kakaoId: kakaoId,
             profileImg: profileImg,
-            nickname: nickname
+            nickname: nickname,
           }
         );
         const { data, headers } = response;
-      sessionStorage.setItem("accessToken", headers.authorization);
-      sessionStorage.setItem("userName", data.nickname);
-      sessionStorage.setItem("userLevel", data.level);
-      sessionStorage.setItem("userProfile", data.profileImg);
-      sessionStorage?.setItem("userTime", data.data.totalTime);
+        sessionStorage.setItem("accessToken", headers.authorization);
+        sessionStorage.setItem("userName", data.data.nickname);
+        sessionStorage.setItem("userLevel", data.data.level);
+        sessionStorage.setItem("userProfile", data.data.profileImg);
+        sessionStorage?.setItem("userTime", data.data.totalTime);
+        sessionStorage?.setItem("remainTime", data.data.remainingTime);
         alert("로그인 완료");
         navigate("/");
-        
       } catch (err) {
         alert("로그인 실패");
-        
       }
     },
     [nickname]
@@ -157,6 +158,8 @@ const CheckBox = styled.div`
     height: 5rem;
     font-size: xx-large;
     font-weight: bold;
+    color: white;
+    border: none;
     background-color: #6627f5;
     &:disabled {
       background-color: gray;

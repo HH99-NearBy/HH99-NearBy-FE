@@ -1,7 +1,7 @@
 import axios from "axios";
 import apis from "../api";
 
-export const arr = axios.create({baseURL: process.env.REACT_APP_BASE_URI})
+export const arr = axios.create({ baseURL: process.env.REACT_APP_BASE_URI });
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URI,
@@ -28,7 +28,7 @@ instance.interceptors.response.use(
     console.log(error.response);
     const originalRequest = error.config;
     try {
-      switch (error.response.data.msg) {
+      switch (error.response.data.errorMsg) {
         case "만료된 JWT token 입니다.": {
           const requestRes = await apis.reissue();
           sessionStorage.setItem("accessToken", requestRes.authorization);
@@ -37,10 +37,10 @@ instance.interceptors.response.use(
           return await instance.request(originalRequest);
         }
       }
-    } catch (deepError) { 
+    } catch (deepError) {
       return console.log(deepError);
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
 );
 
